@@ -1,0 +1,500 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		84938730179F50DA001F80BF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8493872F179F50DA001F80BF /* UIKit.framework */; };
+		84938732179F50DA001F80BF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938731179F50DA001F80BF /* Foundation.framework */; };
+		84938734179F50DB001F80BF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938733179F50DA001F80BF /* CoreGraphics.framework */; };
+		84938736179F50DB001F80BF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938735179F50DB001F80BF /* CoreData.framework */; };
+		8493873C179F50DB001F80BF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8493873A179F50DB001F80BF /* InfoPlist.strings */; };
+		8493873E179F50DB001F80BF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8493873D179F50DB001F80BF /* main.m */; };
+		84938742179F50DB001F80BF /* AHPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938741179F50DB001F80BF /* AHPAppDelegate.m */; };
+		84938744179F50DB001F80BF /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 84938743179F50DB001F80BF /* Default.png */; };
+		84938746179F50DB001F80BF /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84938745179F50DB001F80BF /* Default@2x.png */; };
+		84938748179F50DB001F80BF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84938747179F50DB001F80BF /* Default-568h@2x.png */; };
+		8493874B179F50DB001F80BF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84938749179F50DB001F80BF /* MainStoryboard.storyboard */; };
+		8493874E179F50DB001F80BF /* AHParser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8493874C179F50DB001F80BF /* AHParser.xcdatamodeld */; };
+		84938751179F50DC001F80BF /* AHPMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938750179F50DC001F80BF /* AHPMasterViewController.m */; };
+		84938754179F50DC001F80BF /* AHPDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938753179F50DC001F80BF /* AHPDetailViewController.m */; };
+		8493875C179F50DD001F80BF /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8493875B179F50DD001F80BF /* SenTestingKit.framework */; };
+		8493875D179F50DD001F80BF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8493872F179F50DA001F80BF /* UIKit.framework */; };
+		8493875E179F50DD001F80BF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938731179F50DA001F80BF /* Foundation.framework */; };
+		8493875F179F50DD001F80BF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938735179F50DB001F80BF /* CoreData.framework */; };
+		84938767179F50DD001F80BF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84938765179F50DD001F80BF /* InfoPlist.strings */; };
+		8493876A179F50DD001F80BF /* AHParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938769179F50DD001F80BF /* AHParserTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		84938760179F50DD001F80BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 84938724179F50DA001F80BF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8493872B179F50DA001F80BF;
+			remoteInfo = AHParser;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		8493872C179F50DA001F80BF /* AHParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AHParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8493872F179F50DA001F80BF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		84938731179F50DA001F80BF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		84938733179F50DA001F80BF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		84938735179F50DB001F80BF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		84938739179F50DB001F80BF /* AHParser-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AHParser-Info.plist"; sourceTree = "<group>"; };
+		8493873B179F50DB001F80BF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8493873D179F50DB001F80BF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8493873F179F50DB001F80BF /* AHParser-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AHParser-Prefix.pch"; sourceTree = "<group>"; };
+		84938740179F50DB001F80BF /* AHPAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHPAppDelegate.h; sourceTree = "<group>"; };
+		84938741179F50DB001F80BF /* AHPAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHPAppDelegate.m; sourceTree = "<group>"; };
+		84938743179F50DB001F80BF /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		84938745179F50DB001F80BF /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		84938747179F50DB001F80BF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		8493874A179F50DB001F80BF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		8493874D179F50DB001F80BF /* AHParser.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AHParser.xcdatamodel; sourceTree = "<group>"; };
+		8493874F179F50DC001F80BF /* AHPMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHPMasterViewController.h; sourceTree = "<group>"; };
+		84938750179F50DC001F80BF /* AHPMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHPMasterViewController.m; sourceTree = "<group>"; };
+		84938752179F50DC001F80BF /* AHPDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHPDetailViewController.h; sourceTree = "<group>"; };
+		84938753179F50DC001F80BF /* AHPDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHPDetailViewController.m; sourceTree = "<group>"; };
+		8493875A179F50DD001F80BF /* AHParserTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AHParserTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8493875B179F50DD001F80BF /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		84938764179F50DD001F80BF /* AHParserTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AHParserTests-Info.plist"; sourceTree = "<group>"; };
+		84938766179F50DD001F80BF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		84938768179F50DD001F80BF /* AHParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHParserTests.h; sourceTree = "<group>"; };
+		84938769179F50DD001F80BF /* AHParserTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHParserTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		84938729179F50DA001F80BF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84938730179F50DA001F80BF /* UIKit.framework in Frameworks */,
+				84938732179F50DA001F80BF /* Foundation.framework in Frameworks */,
+				84938734179F50DB001F80BF /* CoreGraphics.framework in Frameworks */,
+				84938736179F50DB001F80BF /* CoreData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84938756179F50DD001F80BF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8493875C179F50DD001F80BF /* SenTestingKit.framework in Frameworks */,
+				8493875D179F50DD001F80BF /* UIKit.framework in Frameworks */,
+				8493875E179F50DD001F80BF /* Foundation.framework in Frameworks */,
+				8493875F179F50DD001F80BF /* CoreData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		84938723179F50DA001F80BF = {
+			isa = PBXGroup;
+			children = (
+				84938737179F50DB001F80BF /* AHParser */,
+				84938762179F50DD001F80BF /* AHParserTests */,
+				8493872E179F50DA001F80BF /* Frameworks */,
+				8493872D179F50DA001F80BF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8493872D179F50DA001F80BF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8493872C179F50DA001F80BF /* AHParser.app */,
+				8493875A179F50DD001F80BF /* AHParserTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8493872E179F50DA001F80BF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8493872F179F50DA001F80BF /* UIKit.framework */,
+				84938731179F50DA001F80BF /* Foundation.framework */,
+				84938733179F50DA001F80BF /* CoreGraphics.framework */,
+				84938735179F50DB001F80BF /* CoreData.framework */,
+				8493875B179F50DD001F80BF /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		84938737179F50DB001F80BF /* AHParser */ = {
+			isa = PBXGroup;
+			children = (
+				84938740179F50DB001F80BF /* AHPAppDelegate.h */,
+				84938741179F50DB001F80BF /* AHPAppDelegate.m */,
+				84938749179F50DB001F80BF /* MainStoryboard.storyboard */,
+				8493874F179F50DC001F80BF /* AHPMasterViewController.h */,
+				84938750179F50DC001F80BF /* AHPMasterViewController.m */,
+				84938752179F50DC001F80BF /* AHPDetailViewController.h */,
+				84938753179F50DC001F80BF /* AHPDetailViewController.m */,
+				8493874C179F50DB001F80BF /* AHParser.xcdatamodeld */,
+				84938738179F50DB001F80BF /* Supporting Files */,
+			);
+			path = AHParser;
+			sourceTree = "<group>";
+		};
+		84938738179F50DB001F80BF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				84938739179F50DB001F80BF /* AHParser-Info.plist */,
+				8493873A179F50DB001F80BF /* InfoPlist.strings */,
+				8493873D179F50DB001F80BF /* main.m */,
+				8493873F179F50DB001F80BF /* AHParser-Prefix.pch */,
+				84938743179F50DB001F80BF /* Default.png */,
+				84938745179F50DB001F80BF /* Default@2x.png */,
+				84938747179F50DB001F80BF /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		84938762179F50DD001F80BF /* AHParserTests */ = {
+			isa = PBXGroup;
+			children = (
+				84938768179F50DD001F80BF /* AHParserTests.h */,
+				84938769179F50DD001F80BF /* AHParserTests.m */,
+				84938763179F50DD001F80BF /* Supporting Files */,
+			);
+			path = AHParserTests;
+			sourceTree = "<group>";
+		};
+		84938763179F50DD001F80BF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				84938764179F50DD001F80BF /* AHParserTests-Info.plist */,
+				84938765179F50DD001F80BF /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8493872B179F50DA001F80BF /* AHParser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8493876D179F50DD001F80BF /* Build configuration list for PBXNativeTarget "AHParser" */;
+			buildPhases = (
+				84938728179F50DA001F80BF /* Sources */,
+				84938729179F50DA001F80BF /* Frameworks */,
+				8493872A179F50DA001F80BF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AHParser;
+			productName = AHParser;
+			productReference = 8493872C179F50DA001F80BF /* AHParser.app */;
+			productType = "com.apple.product-type.application";
+		};
+		84938759179F50DD001F80BF /* AHParserTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84938770179F50DD001F80BF /* Build configuration list for PBXNativeTarget "AHParserTests" */;
+			buildPhases = (
+				84938755179F50DD001F80BF /* Sources */,
+				84938756179F50DD001F80BF /* Frameworks */,
+				84938757179F50DD001F80BF /* Resources */,
+				84938758179F50DD001F80BF /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				84938761179F50DD001F80BF /* PBXTargetDependency */,
+			);
+			name = AHParserTests;
+			productName = AHParserTests;
+			productReference = 8493875A179F50DD001F80BF /* AHParserTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		84938724179F50DA001F80BF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = AHP;
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "Steven Jordan Kozmary";
+			};
+			buildConfigurationList = 84938727179F50DA001F80BF /* Build configuration list for PBXProject "AHParser" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 84938723179F50DA001F80BF;
+			productRefGroup = 8493872D179F50DA001F80BF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8493872B179F50DA001F80BF /* AHParser */,
+				84938759179F50DD001F80BF /* AHParserTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8493872A179F50DA001F80BF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8493873C179F50DB001F80BF /* InfoPlist.strings in Resources */,
+				84938744179F50DB001F80BF /* Default.png in Resources */,
+				84938746179F50DB001F80BF /* Default@2x.png in Resources */,
+				84938748179F50DB001F80BF /* Default-568h@2x.png in Resources */,
+				8493874B179F50DB001F80BF /* MainStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84938757179F50DD001F80BF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84938767179F50DD001F80BF /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		84938758179F50DD001F80BF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		84938728179F50DA001F80BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8493873E179F50DB001F80BF /* main.m in Sources */,
+				84938742179F50DB001F80BF /* AHPAppDelegate.m in Sources */,
+				8493874E179F50DB001F80BF /* AHParser.xcdatamodeld in Sources */,
+				84938751179F50DC001F80BF /* AHPMasterViewController.m in Sources */,
+				84938754179F50DC001F80BF /* AHPDetailViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84938755179F50DD001F80BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8493876A179F50DD001F80BF /* AHParserTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		84938761179F50DD001F80BF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8493872B179F50DA001F80BF /* AHParser */;
+			targetProxy = 84938760179F50DD001F80BF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		8493873A179F50DB001F80BF /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8493873B179F50DB001F80BF /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		84938749179F50DB001F80BF /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8493874A179F50DB001F80BF /* en */,
+			);
+			name = MainStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
+		84938765179F50DD001F80BF /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				84938766179F50DD001F80BF /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8493876B179F50DD001F80BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		8493876C179F50DD001F80BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8493876E179F50DD001F80BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AHParser/AHParser-Prefix.pch";
+				INFOPLIST_FILE = "AHParser/AHParser-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		8493876F179F50DD001F80BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AHParser/AHParser-Prefix.pch";
+				INFOPLIST_FILE = "AHParser/AHParser-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		84938771179F50DD001F80BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/AHParser.app/AHParser";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AHParser/AHParser-Prefix.pch";
+				INFOPLIST_FILE = "AHParserTests/AHParserTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		84938772179F50DD001F80BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/AHParser.app/AHParser";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AHParser/AHParser-Prefix.pch";
+				INFOPLIST_FILE = "AHParserTests/AHParserTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		84938727179F50DA001F80BF /* Build configuration list for PBXProject "AHParser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8493876B179F50DD001F80BF /* Debug */,
+				8493876C179F50DD001F80BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8493876D179F50DD001F80BF /* Build configuration list for PBXNativeTarget "AHParser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8493876E179F50DD001F80BF /* Debug */,
+				8493876F179F50DD001F80BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		84938770179F50DD001F80BF /* Build configuration list for PBXNativeTarget "AHParserTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84938771179F50DD001F80BF /* Debug */,
+				84938772179F50DD001F80BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		8493874C179F50DB001F80BF /* AHParser.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				8493874D179F50DB001F80BF /* AHParser.xcdatamodel */,
+			);
+			currentVersion = 8493874D179F50DB001F80BF /* AHParser.xcdatamodel */;
+			path = AHParser.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 84938724179F50DA001F80BF /* Project object */;
+}
