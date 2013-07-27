@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07DE46CB17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */; };
+		07DE46CC17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */; };
 		84938730179F50DA001F80BF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8493872F179F50DA001F80BF /* UIKit.framework */; };
 		84938732179F50DA001F80BF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938731179F50DA001F80BF /* Foundation.framework */; };
 		84938734179F50DB001F80BF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938733179F50DA001F80BF /* CoreGraphics.framework */; };
@@ -40,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "World-Of-Warcraft-Logo.jpg"; sourceTree = "<group>"; };
 		8493872C179F50DA001F80BF /* AHParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AHParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8493872F179F50DA001F80BF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		84938731179F50DA001F80BF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -177,6 +180,7 @@
 		84938738179F50DB001F80BF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */,
 				8493874C179F50DB001F80BF /* AHParser.xcdatamodeld */,
 				84938739179F50DB001F80BF /* AHParser-Info.plist */,
 				8493873A179F50DB001F80BF /* InfoPlist.strings */,
@@ -283,6 +287,7 @@
 				84938746179F50DB001F80BF /* Default@2x.png in Resources */,
 				84938748179F50DB001F80BF /* Default-568h@2x.png in Resources */,
 				8493874B179F50DB001F80BF /* MainStoryboard.storyboard in Resources */,
+				07DE46CB17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84938767179F50DD001F80BF /* InfoPlist.strings in Resources */,
+				07DE46CC17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

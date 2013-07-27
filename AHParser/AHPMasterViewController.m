@@ -219,4 +219,14 @@
     cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
 }
 
+#pragma mark UITableViewDelegate
+- (void)tableView: (UITableView*)tableView
+  willDisplayCell: (UITableViewCell*)cell
+forRowAtIndexPath: (NSIndexPath*)indexPath
+{
+    cell.backgroundColor = [UIColor blackColor];
+    cell.textLabel.backgroundColor = [UIColor clearColor];
+    cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+}
+
 @end
