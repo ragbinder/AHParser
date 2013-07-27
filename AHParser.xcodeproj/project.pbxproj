@@ -94,6 +94,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		07DE46C617A4579B001251F4 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				84938749179F50DB001F80BF /* MainStoryboard.storyboard */,
+			);
+			name = Storyboards;
+			sourceTree = "<group>";
+		};
+		07DE46C717A457A3001251F4 /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				84938740179F50DB001F80BF /* AHPAppDelegate.h */,
+				84938741179F50DB001F80BF /* AHPAppDelegate.m */,
+			);
+			name = "App Delegate";
+			sourceTree = "<group>";
+		};
+		07DE46C817A457AC001251F4 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8493874F179F50DC001F80BF /* AHPMasterViewController.h */,
+				84938750179F50DC001F80BF /* AHPMasterViewController.m */,
+				84938752179F50DC001F80BF /* AHPDetailViewController.h */,
+				84938753179F50DC001F80BF /* AHPDetailViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		07DE46C917A457BA001251F4 /* Splash Screens */ = {
+			isa = PBXGroup;
+			children = (
+				84938743179F50DB001F80BF /* Default.png */,
+				84938745179F50DB001F80BF /* Default@2x.png */,
+				84938747179F50DB001F80BF /* Default-568h@2x.png */,
+			);
+			name = "Splash Screens";
+			sourceTree = "<group>";
+		};
 		84938723179F50DA001F80BF = {
 			isa = PBXGroup;
 			children = (
@@ -128,14 +166,9 @@
 		84938737179F50DB001F80BF /* AHParser */ = {
 			isa = PBXGroup;
 			children = (
-				84938740179F50DB001F80BF /* AHPAppDelegate.h */,
-				84938741179F50DB001F80BF /* AHPAppDelegate.m */,
-				84938749179F50DB001F80BF /* MainStoryboard.storyboard */,
-				8493874F179F50DC001F80BF /* AHPMasterViewController.h */,
-				84938750179F50DC001F80BF /* AHPMasterViewController.m */,
-				84938752179F50DC001F80BF /* AHPDetailViewController.h */,
-				84938753179F50DC001F80BF /* AHPDetailViewController.m */,
-				8493874C179F50DB001F80BF /* AHParser.xcdatamodeld */,
+				07DE46C717A457A3001251F4 /* App Delegate */,
+				07DE46C617A4579B001251F4 /* Storyboards */,
+				07DE46C817A457AC001251F4 /* View Controllers */,
 				84938738179F50DB001F80BF /* Supporting Files */,
 			);
 			path = AHParser;
@@ -144,13 +177,12 @@
 		84938738179F50DB001F80BF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8493874C179F50DB001F80BF /* AHParser.xcdatamodeld */,
 				84938739179F50DB001F80BF /* AHParser-Info.plist */,
 				8493873A179F50DB001F80BF /* InfoPlist.strings */,
 				8493873D179F50DB001F80BF /* main.m */,
 				8493873F179F50DB001F80BF /* AHParser-Prefix.pch */,
-				84938743179F50DB001F80BF /* Default.png */,
-				84938745179F50DB001F80BF /* Default@2x.png */,
-				84938747179F50DB001F80BF /* Default-568h@2x.png */,
+				07DE46C917A457BA001251F4 /* Splash Screens */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -472,6 +504,7 @@
 				8493876F179F50DD001F80BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		84938770179F50DD001F80BF /* Build configuration list for PBXNativeTarget "AHParserTests" */ = {
 			isa = XCConfigurationList;
@@ -480,6 +513,7 @@
 				84938772179F50DD001F80BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
