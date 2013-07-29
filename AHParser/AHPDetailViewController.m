@@ -69,4 +69,16 @@
     self.masterPopoverController = nil;
 }
 
+- (IBAction)startButton:(id)sender {
+    NSURL *auctionURL = [NSURL URLWithString:@"http://us.battle.net/api/wow/auction/data/medivh"];
+    
+    NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:auctionURL];
+    NSData *response = [NSURLConnection sendSynchronousRequest:auctionAPIRequest returningResponse:nil error:nil];
+    NSString *jsonString = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+    NSLog(@"\n%@",jsonString);
+    NSArray *auctionLines = [NSArray arrayWithObject:[NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil]];
+    
+    NSLog(@"%@",auctionLines[0]);
+    
+}
 @end
