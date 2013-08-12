@@ -29,6 +29,7 @@
 		8493875F179F50DD001F80BF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938735179F50DB001F80BF /* CoreData.framework */; };
 		84938767179F50DD001F80BF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84938765179F50DD001F80BF /* InfoPlist.strings */; };
 		8493876A179F50DD001F80BF /* AHParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938769179F50DD001F80BF /* AHParserTests.m */; };
+		8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,8 @@
 		84938766179F50DD001F80BF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84938768179F50DD001F80BF /* AHParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHParserTests.h; sourceTree = "<group>"; };
 		84938769179F50DD001F80BF /* AHParserTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHParserTests.m; sourceTree = "<group>"; };
+		8499E32617B9822D00E9FCC5 /* AHPAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPAPIRequest.h; sourceTree = "<group>"; };
+		8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPAPIRequest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +172,7 @@
 		84938737179F50DB001F80BF /* AHParser */ = {
 			isa = PBXGroup;
 			children = (
+				8499E32517B981E200E9FCC5 /* API Requests */,
 				07DE46C717A457A3001251F4 /* App Delegate */,
 				07DE46C617A4579B001251F4 /* Storyboards */,
 				07DE46C817A457AC001251F4 /* View Controllers */,
@@ -208,6 +212,15 @@
 				84938765179F50DD001F80BF /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8499E32517B981E200E9FCC5 /* API Requests */ = {
+			isa = PBXGroup;
+			children = (
+				8499E32617B9822D00E9FCC5 /* AHPAPIRequest.h */,
+				8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */,
+			);
+			name = "API Requests";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -328,6 +341,7 @@
 				8493874E179F50DB001F80BF /* AHParser.xcdatamodeld in Sources */,
 				84938751179F50DC001F80BF /* AHPMasterViewController.m in Sources */,
 				84938754179F50DC001F80BF /* AHPDetailViewController.m in Sources */,
+				8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

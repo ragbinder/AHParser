@@ -7,6 +7,7 @@
 //
 
 #import "AHPDetailViewController.h"
+#import "AHPAppDelegate.h"
 
 @interface AHPDetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -70,15 +71,15 @@
 }
 
 - (IBAction)startButton:(id)sender {
-    NSURL *auctionURL = [NSURL URLWithString:@"http://us.battle.net/api/wow/auction/data/medivh"];
+    NSLog(@"Using URL: \n%@",@"http://battle.net/api/wow/auction/data/emerald-dream");
     
-    NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:auctionURL];
-    NSData *response = [NSURLConnection sendSynchronousRequest:auctionAPIRequest returningResponse:nil error:nil];
-    NSString *jsonString = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
-    NSLog(@"\n%@",jsonString);
-    NSArray *auctionLines = [NSArray arrayWithObject:[NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil]];
+    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
     
-    NSLog(@"%@",auctionLines[0]);
-    
+    //Find All auctions by player
+    for (NSDictionary *auction in auctionData.hordeAuctions)
+    {
+        //if([[auction objectForKey:@"owner"] isEqualToString: @"AllDayVape"])
+            NSLog(@"%@",auction );
+    }
 }
 @end

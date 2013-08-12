@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AHPAPIRequest.h"
 
 @interface AHPAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -15,6 +16,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property AHPAPIRequest *auctionData;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

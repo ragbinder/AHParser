@@ -7,12 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AHPAPIRequest.h"
+
+@class AHPAppDelegate;
 
 @interface AHPDetailViewController : UIViewController <UISplitViewControllerDelegate>
-
+{
+    AHPAppDelegate *delegate;
+}
 @property (strong, nonatomic) id detailItem;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+
 
 
 - (IBAction)startButton:(id)sender;
