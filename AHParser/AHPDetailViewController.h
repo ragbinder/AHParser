@@ -16,8 +16,9 @@
     AHPAppDelegate *delegate;
 }
 @property (strong, nonatomic) id detailItem;
-
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 
 

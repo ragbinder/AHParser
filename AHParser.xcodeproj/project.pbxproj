@@ -21,7 +21,6 @@
 		84938748179F50DB001F80BF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84938747179F50DB001F80BF /* Default-568h@2x.png */; };
 		8493874B179F50DB001F80BF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84938749179F50DB001F80BF /* MainStoryboard.storyboard */; };
 		8493874E179F50DB001F80BF /* AHParser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8493874C179F50DB001F80BF /* AHParser.xcdatamodeld */; };
-		84938751179F50DC001F80BF /* AHPMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938750179F50DC001F80BF /* AHPMasterViewController.m */; };
 		84938754179F50DC001F80BF /* AHPDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938753179F50DC001F80BF /* AHPDetailViewController.m */; };
 		8493875C179F50DD001F80BF /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8493875B179F50DD001F80BF /* SenTestingKit.framework */; };
 		8493875D179F50DD001F80BF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8493872F179F50DA001F80BF /* UIKit.framework */; };
@@ -30,6 +29,7 @@
 		84938767179F50DD001F80BF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84938765179F50DD001F80BF /* InfoPlist.strings */; };
 		8493876A179F50DD001F80BF /* AHParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938769179F50DD001F80BF /* AHParserTests.m */; };
 		8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */; };
+		84CA583517C414DD000C4DCF /* AHPMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583417C414DD000C4DCF /* AHPMasterViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,7 +61,6 @@
 		8493874A179F50DB001F80BF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		8493874D179F50DB001F80BF /* AHParser.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AHParser.xcdatamodel; sourceTree = "<group>"; };
 		8493874F179F50DC001F80BF /* AHPMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHPMasterViewController.h; sourceTree = "<group>"; };
-		84938750179F50DC001F80BF /* AHPMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHPMasterViewController.m; sourceTree = "<group>"; };
 		84938752179F50DC001F80BF /* AHPDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHPDetailViewController.h; sourceTree = "<group>"; };
 		84938753179F50DC001F80BF /* AHPDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHPDetailViewController.m; sourceTree = "<group>"; };
 		8493875A179F50DD001F80BF /* AHParserTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AHParserTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +71,7 @@
 		84938769179F50DD001F80BF /* AHParserTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHParserTests.m; sourceTree = "<group>"; };
 		8499E32617B9822D00E9FCC5 /* AHPAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPAPIRequest.h; sourceTree = "<group>"; };
 		8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPAPIRequest.m; sourceTree = "<group>"; };
+		84CA583417C414DD000C4DCF /* AHPMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPMasterViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,7 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				8493874F179F50DC001F80BF /* AHPMasterViewController.h */,
-				84938750179F50DC001F80BF /* AHPMasterViewController.m */,
+				84CA583417C414DD000C4DCF /* AHPMasterViewController.m */,
 				84938752179F50DC001F80BF /* AHPDetailViewController.h */,
 				84938753179F50DC001F80BF /* AHPDetailViewController.m */,
 			);
@@ -339,9 +339,9 @@
 				8493873E179F50DB001F80BF /* main.m in Sources */,
 				84938742179F50DB001F80BF /* AHPAppDelegate.m in Sources */,
 				8493874E179F50DB001F80BF /* AHParser.xcdatamodeld in Sources */,
-				84938751179F50DC001F80BF /* AHPMasterViewController.m in Sources */,
 				84938754179F50DC001F80BF /* AHPDetailViewController.m in Sources */,
 				8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */,
+				84CA583517C414DD000C4DCF /* AHPMasterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

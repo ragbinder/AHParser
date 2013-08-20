@@ -46,6 +46,17 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
+    
+    NSLog(@"Using URL: \n%@",@"http://battle.net/api/wow/auction/data/emerald-dream");
+    
+    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
+    
+    //Find All auctions by player
+    for (NSDictionary *auction in auctionData.hordeAuctions)
+    {
+        //if([[auction objectForKey:@"owner"] isEqualToString: @"AllDayVape"])
+        NSLog(@"%@",auction );
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -71,15 +82,6 @@
 }
 
 - (IBAction)startButton:(id)sender {
-    NSLog(@"Using URL: \n%@",@"http://battle.net/api/wow/auction/data/emerald-dream");
     
-    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
-    
-    //Find All auctions by player
-    for (NSDictionary *auction in auctionData.hordeAuctions)
-    {
-        //if([[auction objectForKey:@"owner"] isEqualToString: @"AllDayVape"])
-            NSLog(@"%@",auction );
-    }
 }
 @end
