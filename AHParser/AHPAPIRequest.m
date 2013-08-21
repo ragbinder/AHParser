@@ -25,6 +25,7 @@
     _lastModified = [[filesArray objectAtIndex:0] objectForKey:@"lastModified"];
     NSTimeInterval epoch = [_lastModified doubleValue];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:epoch/1000];
+    
     NSLog(@"%@",[NSDate date]);
     NSLog(@"Retreiving Auction Data From: \n%@",_auctionDataURL);
     NSLog(@"Auction Dump Last Generated: \n%@",[NSString stringWithFormat:@"%@",date]);

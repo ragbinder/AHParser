@@ -46,17 +46,37 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
+    delegate = (AHPAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSLog(@"Using URL: \n%@",@"http://battle.net/api/wow/auction/data/emerald-dream");
     
     AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
     
     //Find All auctions by player
+    /*
     for (NSDictionary *auction in auctionData.hordeAuctions)
     {
         //if([[auction objectForKey:@"owner"] isEqualToString: @"AllDayVape"])
         NSLog(@"%@",auction );
     }
+    */
+    //[auctionData storeAuctions: [delegate managedObjectContext]];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
+    
+    [fetchRequest setEntity:entityDescription];
+    NSError *error;
+    _auctionsArray = [[delegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+    /*
+    for(NSManagedObject *object in storedAuctions)
+    {
+        NSLog(@"%@",[object valueForKey:@"auc"]);
+        NSLog(@"%@",[object valueForKey:@"owner"]);
+        NSLog(@"%@",[object valueForKey:@"item"]);
+    }
+    */
+    [_auctionTable setDataSource:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -81,7 +101,33 @@
     self.masterPopoverController = nil;
 }
 
-- (IBAction)startButton:(id)sender {
+- (IBAction)startButton:(id)sender
+{
     
 }
+
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_auctionsArray count];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellIdentifier = @"SettingsCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    /*
+    if (cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+    }
+    */
+    NSString *tweet = [[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"owner"];
+    
+    [cell.textLabel setText:tweet];
+    [cell.detailTextLabel setText:@"Auction Data Here"];
+    return cell;
+}
+
+
 @end

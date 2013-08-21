@@ -11,7 +11,7 @@
 
 @class AHPAppDelegate;
 
-@interface AHPDetailViewController : UIViewController <UISplitViewControllerDelegate>
+@interface AHPDetailViewController : UIViewController <UISplitViewControllerDelegate, UITableViewDataSource>
 {
     AHPAppDelegate *delegate;
 }
@@ -19,11 +19,10 @@
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-
+@property (weak, nonatomic) IBOutlet UITableView *auctionTable;
+@property NSArray *auctionsArray;
 
 
 - (IBAction)startButton:(id)sender;
-
-
 
 @end

@@ -16,5 +16,6 @@
 @property (strong, nonatomic) NSArray *allianceAuctions, *hordeAuctions;
 
 -(id) initWithURL: (NSURL*) url;
+-(void) storeAuctions: (NSManagedObjectContext*) context;
 
 @end
