@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "AHPAPIRequest.h"
+#import "AHPAuctionTableCell.h"
+#import "AHPItemAPIRequest.h"
+#import "AHPImageRequest.h"
 
 @class AHPAppDelegate;
 

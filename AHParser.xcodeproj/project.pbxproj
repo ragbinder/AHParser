@@ -28,8 +28,11 @@
 		8493875F179F50DD001F80BF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938735179F50DB001F80BF /* CoreData.framework */; };
 		84938767179F50DD001F80BF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84938765179F50DD001F80BF /* InfoPlist.strings */; };
 		8493876A179F50DD001F80BF /* AHParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938769179F50DD001F80BF /* AHParserTests.m */; };
+		8496F1B117CC0E8A007C47D7 /* AHPItemAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */; };
+		8496F1B417CEB9D4007C47D7 /* AHPImageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */; };
 		8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */; };
 		84CA583517C414DD000C4DCF /* AHPMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583417C414DD000C4DCF /* AHPMasterViewController.m */; };
+		84CA583B17C58DB1000C4DCF /* AHPAuctionTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,9 +72,15 @@
 		84938766179F50DD001F80BF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84938768179F50DD001F80BF /* AHParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHParserTests.h; sourceTree = "<group>"; };
 		84938769179F50DD001F80BF /* AHParserTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHParserTests.m; sourceTree = "<group>"; };
+		8496F1AF17CC0E8A007C47D7 /* AHPItemAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPItemAPIRequest.h; sourceTree = "<group>"; };
+		8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPItemAPIRequest.m; sourceTree = "<group>"; };
+		8496F1B217CEB9D4007C47D7 /* AHPImageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPImageRequest.h; sourceTree = "<group>"; };
+		8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPImageRequest.m; sourceTree = "<group>"; };
 		8499E32617B9822D00E9FCC5 /* AHPAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPAPIRequest.h; sourceTree = "<group>"; };
 		8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPAPIRequest.m; sourceTree = "<group>"; };
 		84CA583417C414DD000C4DCF /* AHPMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPMasterViewController.m; sourceTree = "<group>"; };
+		84CA583917C58DB1000C4DCF /* AHPAuctionTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPAuctionTableCell.h; sourceTree = "<group>"; };
+		84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPAuctionTableCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +181,7 @@
 		84938737179F50DB001F80BF /* AHParser */ = {
 			isa = PBXGroup;
 			children = (
+				84CA583C17C58DBF000C4DCF /* Table Cells */,
 				8499E32517B981E200E9FCC5 /* API Requests */,
 				07DE46C717A457A3001251F4 /* App Delegate */,
 				07DE46C617A4579B001251F4 /* Storyboards */,
@@ -219,8 +229,21 @@
 			children = (
 				8499E32617B9822D00E9FCC5 /* AHPAPIRequest.h */,
 				8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */,
+				8496F1AF17CC0E8A007C47D7 /* AHPItemAPIRequest.h */,
+				8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */,
+				8496F1B217CEB9D4007C47D7 /* AHPImageRequest.h */,
+				8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */,
 			);
 			name = "API Requests";
+			sourceTree = "<group>";
+		};
+		84CA583C17C58DBF000C4DCF /* Table Cells */ = {
+			isa = PBXGroup;
+			children = (
+				84CA583917C58DB1000C4DCF /* AHPAuctionTableCell.h */,
+				84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */,
+			);
+			name = "Table Cells";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,6 +365,9 @@
 				84938754179F50DC001F80BF /* AHPDetailViewController.m in Sources */,
 				8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */,
 				84CA583517C414DD000C4DCF /* AHPMasterViewController.m in Sources */,
+				84CA583B17C58DB1000C4DCF /* AHPAuctionTableCell.m in Sources */,
+				8496F1B117CC0E8A007C47D7 /* AHPItemAPIRequest.m in Sources */,
+				8496F1B417CEB9D4007C47D7 /* AHPImageRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

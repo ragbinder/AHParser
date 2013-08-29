@@ -50,7 +50,7 @@
     
     NSLog(@"Using URL: \n%@",@"http://battle.net/api/wow/auction/data/emerald-dream");
     
-    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
+    //AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
     
     //Find All auctions by player
     /*
@@ -106,26 +106,72 @@
     
 }
 
-
+//Mandatory method for UITableView
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [_auctionsArray count];
 }
 
+//Second Mandatory method for UITableView. This handles constructing the individual cells as they are needed.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIdentifier = @"SettingsCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    AHPAuctionTableCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     /*
     if (cell == nil)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     */
-    NSString *tweet = [[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"owner"];
+    NSString *owner = [[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"owner"];
+    NSString *itemName = [NSString stringWithFormat:@"%@",[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"item"]];
+    NSString *timeLeft = [[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"timeLeft"];
+    NSString *bidG = [NSString stringWithFormat:@"%d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"bid"] integerValue]/10000];
+    NSString *bidS = [NSString stringWithFormat:@"%02d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"bid"] integerValue]/100 %100];
+    NSString *bidC = [NSString stringWithFormat:@"%02d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"bid"] integerValue]%100];
+    NSString *buyoutG = [NSString stringWithFormat:@"%d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"buyout"] integerValue]/10000];
+    NSString *buyoutS = [NSString stringWithFormat:@"%02d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"buyout"] integerValue]/100 %100];
+    NSString *buyoutC = [NSString stringWithFormat:@"%02d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"buyout"] integerValue]%100];
     
-    [cell.textLabel setText:tweet];
-    [cell.detailTextLabel setText:@"Auction Data Here"];
+    [cell.owner setText:owner];
+    [cell.bidG setText:bidG];
+    [cell.bidS setText:bidS];
+    [cell.bidC setText:bidC];
+    [cell.buyoutG setText:buyoutG];
+    [cell.buyoutS setText:buyoutS];
+    [cell.buyoutC setText:buyoutC];
+    [cell.timeLeft setText:timeLeft];
+    
+    AHPItemAPIRequest *itemReq = [AHPItemAPIRequest alloc];
+    NSDictionary *itemDictionary = [itemReq itemAPIRequest:[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"item"] integerValue]];
+    
+    [cell.level setText: [NSString stringWithFormat:@"%@",[itemDictionary valueForKey:@"itemLevel"]]];
+    [cell.itemName setText: [itemDictionary valueForKey:@"name"]];
+    NSArray *qualityColors = [NSArray arrayWithObjects:
+                              //Poor
+                              [UIColor colorWithRed:157.0/255.0 green:157.0/255.0 blue:157.0/255.0 alpha:1],
+                              //Common
+                              [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0],
+                              //Uncommon
+                              [UIColor colorWithRed:31.0/255.0 green:255.0/255.0 blue:0.0/255.0 alpha:1],
+                              //Rare
+                              [UIColor colorWithRed:0.0/255.0 green:112.0/255.0 blue:221.0/255.0 alpha:1],
+                              //Epic
+                              [UIColor colorWithRed:163.0/255.0 green:43.0/255.0 blue:238.0/255.0 alpha:1],
+                              //Legendary
+                              [UIColor colorWithRed:255.0/255.0 green:128.0/255.0 blue:0.0/255.0 alpha:1],
+                              //Artifact
+                              [UIColor colorWithRed:230.0/255.0 green:204.0/255.0 blue:128.0/255.0 alpha:1],
+                              //Heirloom
+                              [UIColor colorWithRed:230.0/255.0 green:204.0/255.0 blue:128.0/255.0 alpha:1],
+                            nil];
+    [cell.itemName setTextColor:[qualityColors objectAtIndex: [[itemDictionary valueForKey:@"quality"] intValue]]];
+    
+    NSData *thumbnailData = [AHPImageRequest imageRequestWithPath:[itemDictionary valueForKey:@"icon"]];
+    UIImage *thumbnailImage = [UIImage imageWithData:thumbnailData];
+    [cell.icon setImage:thumbnailImage];
+    
+    
     return cell;
 }
 
