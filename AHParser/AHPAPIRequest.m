@@ -46,9 +46,9 @@
 
 -(void) storeAuctions:(NSManagedObjectContext*) context
 {
+    NSError *error;
     for(NSDictionary *auction in _hordeAuctions)
     {
-        NSError *error;
         NSEntityDescription *description = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:context];
         NSManagedObject *aucData = [[NSManagedObject alloc] initWithEntity:description insertIntoManagedObjectContext:context];
         [aucData setValue:[auction valueForKey:@"auc"] forKey:@"auc"];
@@ -60,10 +60,16 @@
         [aucData setValue:[auction valueForKey:@"rand"] forKey:@"rand"];
         [aucData setValue:[auction valueForKey:@"seed"] forKey:@"seed"];
         [aucData setValue:[auction valueForKey:@"timeLeft"] forKey:@"timeLeft"];
+        /*
         if(![context save:&error])
         {
             NSLog(@"Error saving context: %@",error);
         }
+        */
+    }
+    if(![context save:&error])
+    {
+        NSLog(@"Error saving context: %@",error);
     }
 }
 

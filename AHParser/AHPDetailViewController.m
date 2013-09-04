@@ -50,32 +50,27 @@
     
     NSLog(@"Using URL: \n%@",@"http://battle.net/api/wow/auction/data/emerald-dream");
     
-    //AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
+    NSDate *apiReqStart = [[NSDate alloc] init];
+    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
+    NSDate *apiReqEnd = [[NSDate alloc] init];
+    //Store all of the auctions in the coreData database
+    [auctionData storeAuctions: [delegate managedObjectContext]];
     
-    //Find All auctions by player
-    /*
-    for (NSDictionary *auction in auctionData.hordeAuctions)
-    {
-        //if([[auction objectForKey:@"owner"] isEqualToString: @"AllDayVape"])
-        NSLog(@"%@",auction );
-    }
-    */
-    //[auctionData storeAuctions: [delegate managedObjectContext]];
+    NSTimeInterval diff = [apiReqEnd timeIntervalSinceDate:apiReqStart];
+    NSLog(@"API Request took %f",diff);
     
+    //Set the datasource for the UITableView
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
     
     [fetchRequest setEntity:entityDescription];
     NSError *error;
     _auctionsArray = [[delegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
-    /*
-    for(NSManagedObject *object in storedAuctions)
-    {
-        NSLog(@"%@",[object valueForKey:@"auc"]);
-        NSLog(@"%@",[object valueForKey:@"owner"]);
-        NSLog(@"%@",[object valueForKey:@"item"]);
-    }
-    */
+    NSDate *coreDataEnd = [[NSDate alloc] init];
+    diff = [coreDataEnd timeIntervalSinceDate:apiReqEnd];
+    NSLog(@"Core Data took: %f",diff);
+    //_auctionsArray = [auctionData hordeAuctions];
+    
     [_auctionTable setDataSource:self];
 }
 
@@ -124,7 +119,6 @@
     }
     */
     NSString *owner = [[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"owner"];
-    NSString *itemName = [NSString stringWithFormat:@"%@",[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"item"]];
     NSString *timeLeft = [[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"timeLeft"];
     NSString *bidG = [NSString stringWithFormat:@"%d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"bid"] integerValue]/10000];
     NSString *bidS = [NSString stringWithFormat:@"%02d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"bid"] integerValue]/100 %100];
@@ -142,11 +136,30 @@
     [cell.buyoutC setText:buyoutC];
     [cell.timeLeft setText:timeLeft];
     
-    AHPItemAPIRequest *itemReq = [AHPItemAPIRequest alloc];
-    NSDictionary *itemDictionary = [itemReq itemAPIRequest:[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"item"] integerValue]];
+    //WORKING HERE
+    NSFetchRequest *internalItemReq = [[NSFetchRequest alloc] init];
+    NSEntityDescription *item = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:[delegate managedObjectContext]];
+    [internalItemReq setEntity:item];
+    //Need to set a predicate here, item ID of cell is in coredata
+    
+    NSArray *result = [[delegate managedObjectContext] executeFetchRequest:internalItemReq error:nil];
+    NSDictionary *itemDictionary;
+    if([result count] != 0)
+    {
+        NSLog(@"Found: %d",[result count]);
+        //WRITE INTERFACE FOR TURNING FETCHED RESULT INTO NSDICTIONARY
+        //itemDictionary = result;
+    }
+    else
+    {
+        AHPItemAPIRequest *itemReq = [AHPItemAPIRequest alloc];
+        itemDictionary = [itemReq itemAPIRequest:[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"item"] integerValue]];
+    }
     
     [cell.level setText: [NSString stringWithFormat:@"%@",[itemDictionary valueForKey:@"itemLevel"]]];
     [cell.itemName setText: [itemDictionary valueForKey:@"name"]];
+    
+    //This changes the name color based on item quality
     NSArray *qualityColors = [NSArray arrayWithObjects:
                               //Poor
                               [UIColor colorWithRed:157.0/255.0 green:157.0/255.0 blue:157.0/255.0 alpha:1],
@@ -166,6 +179,7 @@
                               [UIColor colorWithRed:230.0/255.0 green:204.0/255.0 blue:128.0/255.0 alpha:1],
                             nil];
     [cell.itemName setTextColor:[qualityColors objectAtIndex: [[itemDictionary valueForKey:@"quality"] intValue]]];
+    [cell.itemName setHighlightedTextColor:[qualityColors objectAtIndex: [[itemDictionary valueForKey:@"quality"] intValue]]];
     
     NSData *thumbnailData = [AHPImageRequest imageRequestWithPath:[itemDictionary valueForKey:@"icon"]];
     UIImage *thumbnailImage = [UIImage imageWithData:thumbnailData];
