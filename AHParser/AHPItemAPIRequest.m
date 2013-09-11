@@ -22,8 +22,8 @@
     //NSLog(@"Response: %@",response);
     if(response)
     {
+        //Return a dictionary that has all of the item data in it.
         NSDictionary *itemDictionary = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil];
-        //NSLog(@"%@",itemDictionary);
         return itemDictionary;
     }
     else

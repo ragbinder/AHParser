@@ -37,41 +37,86 @@
     // Update the user interface for the detail item.
 
     if (self.detailItem) {
-        self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"timeStamp"] description];
+        self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"name"] description];
     }
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
     delegate = (AHPAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSLog(@"Using URL: \n%@",@"http://battle.net/api/wow/auction/data/emerald-dream");
     
     NSDate *apiReqStart = [[NSDate alloc] init];
     AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
     NSDate *apiReqEnd = [[NSDate alloc] init];
-    //Store all of the auctions in the coreData database
-    [auctionData storeAuctions: [delegate managedObjectContext]];
     
+    
+    if([auctionData getLastDumpInContext:[delegate managedObjectContext]] != [[auctionData lastModified] doubleValue])
+    {
+        NSLog(@"Auction Data last Generated: %f \n Auction Data in persistent store last generated: %f", [[auctionData lastModified] doubleValue],[auctionData getLastDumpInContext:[delegate managedObjectContext]]);
+        
+        NSFetchRequest *fetchAllAuctions = [[NSFetchRequest alloc] init];
+        [fetchAllAuctions setEntity:[NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]]];
+        [fetchAllAuctions setIncludesPropertyValues:NO];
+        
+        NSError *error = nil;
+        NSArray *allAuctions = [[delegate managedObjectContext] executeFetchRequest:fetchAllAuctions error:&error];
+        
+        for(NSManagedObject *auction in allAuctions)
+        {
+            [[delegate managedObjectContext] deleteObject:auction];
+        }
+        if(![[delegate managedObjectContext] save:&error])
+        {
+            NSLog(@"Error clearing store: %@",error);
+        }
+        [auctionData storeAuctions: [delegate managedObjectContext]];
+    }
     NSTimeInterval diff = [apiReqEnd timeIntervalSinceDate:apiReqStart];
     NSLog(@"API Request took %f",diff);
     
-    //Set the datasource for the UITableView
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
+    //Test predicate set for Trillium Bars
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(owner = 'Makecents')"];
+    //Set the datasource for the UITableView. Initially you get all auctions by using filterAuctionTable with a nil predicate.
+    [self filterAuctionTable:nil];
     
-    [fetchRequest setEntity:entityDescription];
-    NSError *error;
-    _auctionsArray = [[delegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+    //Optimization test
     NSDate *coreDataEnd = [[NSDate alloc] init];
     diff = [coreDataEnd timeIntervalSinceDate:apiReqEnd];
     NSLog(@"Core Data took: %f",diff);
-    //_auctionsArray = [auctionData hordeAuctions];
     
     [_auctionTable setDataSource:self];
+}
+
+
+//Prints out the stored items in coredata
+-(void) printStoredItems
+{
+    NSFetchRequest *fetchItems = [[NSFetchRequest alloc] init];
+    [fetchItems setEntity:[NSEntityDescription entityForName:@"Item" inManagedObjectContext:[delegate managedObjectContext]]];
+    NSArray *fetchedItems = [[delegate managedObjectContext] executeFetchRequest:fetchItems error:nil];
+    for(NSManagedObject *object in fetchedItems)
+    {
+        NSLog(@"%@ - %@",[object valueForKey:@"itemID"],[object valueForKey:@"name"]);
+    }
+}
+
+//This method changes the contents of the UITableView in the detail view to only contain auctions matching the predicate you pass in.
+//Sample Predicate: "(item == 72095)"
+- (void)filterAuctionTable: (NSPredicate *) predicate
+{
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
+    [fetch setEntity:entityDescription];
+    [fetch setPredicate:predicate];
+    NSError *error;
+    _auctionsArray = [[delegate managedObjectContext] executeFetchRequest:fetch error:&error];
+    if(error)
+    {
+        NSLog(@"Error filtering auction table: %@",error);
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -118,6 +163,12 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     */
+    
+    //#######################################
+    //
+    //Set all of the information that is contained in the auction lines JSON
+    //
+    //#######################################
     NSString *owner = [[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"owner"];
     NSString *timeLeft = [[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"timeLeft"];
     NSString *bidG = [NSString stringWithFormat:@"%d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"bid"] integerValue]/10000];
@@ -126,6 +177,9 @@
     NSString *buyoutG = [NSString stringWithFormat:@"%d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"buyout"] integerValue]/10000];
     NSString *buyoutS = [NSString stringWithFormat:@"%02d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"buyout"] integerValue]/100 %100];
     NSString *buyoutC = [NSString stringWithFormat:@"%02d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"buyout"] integerValue]%100];
+    NSString *quantity = [NSString stringWithFormat:@"%d",[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"quantity"] integerValue]];
+    if([quantity isEqualToString:@"1"])
+    {    quantity = @"";}
     
     [cell.owner setText:owner];
     [cell.bidG setText:bidG];
@@ -134,32 +188,52 @@
     [cell.buyoutG setText:buyoutG];
     [cell.buyoutS setText:buyoutS];
     [cell.buyoutC setText:buyoutC];
-    [cell.timeLeft setText:timeLeft];
+    [cell.timeLeft setText:[AHPDetailViewController timeLeftFormat:timeLeft]];
+    [cell.quantity setText:quantity];
     
-    //WORKING HERE
+    //#######################################
+    //
+    //Set the Item name, quality, and level from the item database
+    //
+    //#######################################
+    //Check if the item needed by the next cell is in the internal item database. If it is, then load it from there. Else get it from the WoW web API and store it in the internal database.
     NSFetchRequest *internalItemReq = [[NSFetchRequest alloc] init];
     NSEntityDescription *item = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:[delegate managedObjectContext]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(itemID == %@)", [[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"item"]];
     [internalItemReq setEntity:item];
-    //Need to set a predicate here, item ID of cell is in coredata
-    
+    [internalItemReq setPredicate:predicate];
+    //NSLog(@"Predicate: %@", predicate);
     NSArray *result = [[delegate managedObjectContext] executeFetchRequest:internalItemReq error:nil];
+    
     NSDictionary *itemDictionary;
     if([result count] != 0)
     {
-        NSLog(@"Found: %d",[result count]);
-        //WRITE INTERFACE FOR TURNING FETCHED RESULT INTO NSDICTIONARY
-        //itemDictionary = result;
+        //If there is an existing item with the itemID we want, use that as the itemDictionary.
+        itemDictionary = result[0];
     }
     else
     {
+        //If an existing item with the desired itemID can't be found, fetch the data from the web and make a new coredata object for it.
         AHPItemAPIRequest *itemReq = [AHPItemAPIRequest alloc];
         itemDictionary = [itemReq itemAPIRequest:[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"item"] integerValue]];
+        
+        NSError *error;
+        NSManagedObject *itemData = [[NSManagedObject alloc] initWithEntity:item insertIntoManagedObjectContext:[delegate managedObjectContext]];
+        [itemData setValue:[itemDictionary valueForKey:@"itemClass"] forKey:@"itemClass"];
+        [itemData setValue:[itemDictionary valueForKey:@"id"] forKey:@"itemID"];
+        [itemData setValue:[itemDictionary valueForKey:@"itemLevel"] forKey:@"itemLevel"];
+        [itemData setValue:[itemDictionary valueForKey:@"itemSubClass"] forKey:@"itemSubClass"];
+        [itemData setValue:[itemDictionary valueForKey:@"name"] forKey:@"name"];
+        [itemData setValue:[itemDictionary valueForKey:@"quality"] forKey:@"quality"];
+        [itemData setValue:[itemDictionary valueForKey:@"requiredLevel"] forKey:@"requiredLevel"];
+        [itemData setValue:[itemDictionary valueForKey:@"icon"] forKey:@"icon"];
+        if(![[delegate managedObjectContext] save:&error])
+        {
+            NSLog(@"Error saving new item: %@", error);
+        }
     }
     
-    [cell.level setText: [NSString stringWithFormat:@"%@",[itemDictionary valueForKey:@"itemLevel"]]];
-    [cell.itemName setText: [itemDictionary valueForKey:@"name"]];
-    
-    //This changes the name color based on item quality
+    //This array lets us change the name color based on item quality (given as a number from the JSON)
     NSArray *qualityColors = [NSArray arrayWithObjects:
                               //Poor
                               [UIColor colorWithRed:157.0/255.0 green:157.0/255.0 blue:157.0/255.0 alpha:1],
@@ -180,13 +254,61 @@
                             nil];
     [cell.itemName setTextColor:[qualityColors objectAtIndex: [[itemDictionary valueForKey:@"quality"] intValue]]];
     [cell.itemName setHighlightedTextColor:[qualityColors objectAtIndex: [[itemDictionary valueForKey:@"quality"] intValue]]];
+    [cell.level setText: [NSString stringWithFormat:@"%@",[itemDictionary valueForKey:@"itemLevel"]]];
+    [cell.itemName setText: [itemDictionary valueForKey:@"name"]];
+
     
-    NSData *thumbnailData = [AHPImageRequest imageRequestWithPath:[itemDictionary valueForKey:@"icon"]];
-    UIImage *thumbnailImage = [UIImage imageWithData:thumbnailData];
-    [cell.icon setImage:thumbnailImage];
+    
+    //#######################################
+    //
+    // Set Icons and Thumbnails
+    //
+    //#######################################
+    NSFetchRequest *fetchIcon = [[NSFetchRequest alloc] init];
+    [fetchIcon setEntity:[NSEntityDescription entityForName:@"Icon" inManagedObjectContext:[delegate managedObjectContext]]];
+    [fetchIcon setPredicate:[NSPredicate predicateWithFormat:@"icon == %@",[itemDictionary valueForKey:@"icon"]]];
+    NSError *error = nil;
+    NSArray *fetchedIcons = [[delegate managedObjectContext] executeFetchRequest:fetchIcon error:&error];
+    if([fetchedIcons count] > 0)
+    {
+        NSData *thumbnailData = [fetchedIcons[0] valueForKey:@"thumbnail"];
+        UIImage *thumbnailImage = [UIImage imageWithData:thumbnailData];
+        [cell.icon setImage:thumbnailImage];
+    }
+    else
+    {
+        NSData *thumbnailData = [AHPImageRequest imageRequestWithPath:[itemDictionary valueForKey:@"icon"]];
+        UIImage *thumbnailImage = [UIImage imageWithData:thumbnailData];
+        [cell.icon setImage:thumbnailImage];
+        
+        NSManagedObject *newIcon = [NSEntityDescription insertNewObjectForEntityForName:@"Icon" inManagedObjectContext:[delegate managedObjectContext]];
+        [newIcon setValue:thumbnailData forKey:@"thumbnail"];
+        [newIcon setValue:[itemDictionary valueForKey:@"icon"] forKey:@"icon"];
+        if(![[delegate managedObjectContext] save:&error])
+        {
+            NSLog(@"Error Saving Thumbnail: %@",error);
+        }
+        else
+        {
+            //NSLog(@"New thumbnail saved as: %@",[itemDictionary valueForKey:@"icon"]);
+        }
+    }
     
     
     return cell;
+}
+
++(NSString*)timeLeftFormat:(NSString*)timeLeft
+{
+    if([timeLeft isEqualToString:@"SHORT"])
+        return @"Short";
+    if([timeLeft isEqualToString:@"MEDIUM"])
+        return @"Medium";
+    if([timeLeft isEqualToString:@"LONG"])
+        return @"Long";
+    if([timeLeft isEqualToString:@"VERY_LONG"])
+        return @"Very Long";
+    return @"ERROR";
 }
 
 

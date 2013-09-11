@@ -30,7 +30,7 @@
                         <rect key="frame" x="0.0" y="64" width="703" height="704"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2bI-Le-GoH">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" dataMode="prototypes" style="plain" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2bI-Le-GoH">
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -124,6 +124,17 @@
                                                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="15"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="20" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m8y-8p-r2b">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="0cw-fR-hbN"/>
+                                                        <constraint firstAttribute="width" constant="34" id="SQ8-NO-Q9d"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="18"/>
+                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <size key="shadowOffset" width="2" height="2"/>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -155,11 +166,13 @@
                                             <constraint firstItem="9EI-wn-l0i" firstAttribute="baseline" secondItem="G5y-mG-FYc" secondAttribute="baseline" type="default" id="no6-cJ-i5J"/>
                                             <constraint firstItem="Nil-hL-sC8" firstAttribute="baseline" secondItem="hFn-V3-DOg" secondAttribute="baseline" type="default" id="oKp-cg-92T"/>
                                             <constraint firstAttribute="trailing" secondItem="JoS-RA-NwR" secondAttribute="trailing" constant="85" id="p9V-Vb-pAA"/>
+                                            <constraint firstItem="m8y-8p-r2b" firstAttribute="bottom" secondItem="6ND-f3-JjF" secondAttribute="bottom" type="default" id="pHf-qA-zh1"/>
                                             <constraint firstItem="Nil-hL-sC8" firstAttribute="top" secondItem="hFn-V3-DOg" secondAttribute="top" type="default" id="peD-Sr-B6J"/>
                                             <constraint firstItem="9EI-wn-l0i" firstAttribute="baseline" secondItem="cQd-TC-7zJ" secondAttribute="baseline" type="default" id="po4-Fc-5Pm"/>
                                             <constraint firstItem="cQd-TC-7zJ" firstAttribute="leading" secondItem="9EI-wn-l0i" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="rhL-jF-ReO"/>
                                             <constraint firstItem="hFn-V3-DOg" firstAttribute="leading" secondItem="Nil-hL-sC8" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="sqT-Lb-6YB"/>
                                             <constraint firstItem="A0F-o3-zJ8" firstAttribute="leading" secondItem="dF6-3L-a2a" secondAttribute="leading" constant="297" id="xaE-bD-VBN"/>
+                                            <constraint firstItem="Ma7-Ni-33J" firstAttribute="leading" secondItem="m8y-8p-r2b" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="xnJ-Bp-8Ng"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="bidC" destination="VEg-tt-CW7" id="pIW-ZN-h1n"/>
@@ -172,6 +185,7 @@
                                             <outlet property="itemName" destination="Ma7-Ni-33J" id="gcT-Rf-6lG"/>
                                             <outlet property="level" destination="Nil-hL-sC8" id="JyF-ju-Tta"/>
                                             <outlet property="owner" destination="hFn-V3-DOg" id="knu-it-XPo"/>
+                                            <outlet property="quantity" destination="m8y-8p-r2b" id="eCv-1W-wEb"/>
                                             <outlet property="timeLeft" destination="A0F-o3-zJ8" id="zqT-de-T2H"/>
                                         </connections>
                                     </tableViewCell>
@@ -218,32 +232,21 @@
         <scene sceneID="24">
             <objects>
                 <tableViewController storyboardIdentifier="" title="Master" clearsSelectionOnViewWillAppear="NO" id="19" customClass="AHPMasterViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="20">
-                        <rect key="frame" x="0.0" y="64" width="320" height="704"/>
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="white" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="20">
+                        <rect key="frame" x="0.0" y="64" width="320" height="748"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <color key="separatorColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="tIi-5l-S0i" style="IBUITableViewCellStyleDefault" id="ZSw-0O-9Pw">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="ZSw-0O-9Pw">
                                 <rect key="frame" x="0.0" y="34" width="320" height="46"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="10" y="1" width="300" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tIi-5l-S0i">
-                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                            <color key="textColor" red="0.9828941123353111" green="0.98838514089584351" blue="0.97740308377477858" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="highlightedColor" red="1" green="0.9223663434255458" blue="0.22718917564003172" alpha="1" colorSpace="calibratedRGB"/>
-                                        </label>
-                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                                <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -291,6 +294,7 @@
                 <relationship kind="outlet" name="itemName" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="level" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="owner" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="quantity" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="timeLeft" candidateClass="UILabel"/>
             </relationships>
         </class>

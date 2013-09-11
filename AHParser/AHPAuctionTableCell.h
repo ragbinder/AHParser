@@ -20,5 +20,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *buyoutG;
 @property (weak, nonatomic) IBOutlet UILabel *buyoutS;
 @property (weak, nonatomic) IBOutlet UILabel *buyoutC;
+@property (weak, nonatomic) IBOutlet UILabel *quantity;
 
 @end

@@ -17,5 +17,7 @@
 
 -(id) initWithURL: (NSURL*) url;
 -(void) storeAuctions: (NSManagedObjectContext*) context;
+-(void) setLastDumpInContext: (NSManagedObjectContext*)context;
+-(double) getLastDumpInContext:(NSManagedObjectContext*)context;
 
 @end

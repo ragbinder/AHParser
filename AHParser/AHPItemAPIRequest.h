@@ -10,6 +10,8 @@
 
 @interface AHPItemAPIRequest : NSObject
 
+@property NSManagedObject *itemData;
+
 -(NSDictionary*) itemAPIRequest: (NSInteger) itemID;
 
 @end

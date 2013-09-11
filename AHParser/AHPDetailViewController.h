@@ -27,5 +27,7 @@
 
 
 - (IBAction)startButton:(id)sender;
+- (void)filterAuctionTable:(NSPredicate*)predicate;
++ (NSString*)timeLeftFormat:(NSString*)timeLeft;
 
 @end
