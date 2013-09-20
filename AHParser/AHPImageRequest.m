@@ -6,6 +6,11 @@
 //  Copyright (c) 2013 Steven Jordan Kozmary. All rights reserved.
 //
 
+/*
+ While technically not a request to the WoW web API, this handles retrieving item icons from the blizzard media server. Since multiple items share the same icon, the icons are stored with path strings like "inv_bracers_15" and the items have the path string in their dictionary.
+ I am currently using 56x56 icons for the table view. There are multiple sizes of each icon available, including 72x72, 18x18, and 36x36.
+*/
+
 #import "AHPImageRequest.h"
 
 @implementation AHPImageRequest

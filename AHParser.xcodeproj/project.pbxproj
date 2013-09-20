@@ -31,6 +31,8 @@
 		8496F1B117CC0E8A007C47D7 /* AHPItemAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */; };
 		8496F1B417CEB9D4007C47D7 /* AHPImageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */; };
 		8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */; };
+		84A0105117E90213005A33E7 /* AHPCategoryLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A0105017E90213005A33E7 /* AHPCategoryLoader.m */; };
+		84A0105317E9039F005A33E7 /* AuctionCategories.JSON in Resources */ = {isa = PBXBuildFile; fileRef = 84A0105217E9039F005A33E7 /* AuctionCategories.JSON */; };
 		84CA583517C414DD000C4DCF /* AHPMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583417C414DD000C4DCF /* AHPMasterViewController.m */; };
 		84CA583B17C58DB1000C4DCF /* AHPAuctionTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */; };
 /* End PBXBuildFile section */
@@ -78,6 +80,9 @@
 		8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPImageRequest.m; sourceTree = "<group>"; };
 		8499E32617B9822D00E9FCC5 /* AHPAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPAPIRequest.h; sourceTree = "<group>"; };
 		8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPAPIRequest.m; sourceTree = "<group>"; };
+		84A0104F17E90213005A33E7 /* AHPCategoryLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPCategoryLoader.h; sourceTree = "<group>"; };
+		84A0105017E90213005A33E7 /* AHPCategoryLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPCategoryLoader.m; sourceTree = "<group>"; };
+		84A0105217E9039F005A33E7 /* AuctionCategories.JSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = AuctionCategories.JSON; path = ../../../AuctionCategories.JSON; sourceTree = "<group>"; };
 		84CA583417C414DD000C4DCF /* AHPMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPMasterViewController.m; sourceTree = "<group>"; };
 		84CA583917C58DB1000C4DCF /* AHPAuctionTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPAuctionTableCell.h; sourceTree = "<group>"; };
 		84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPAuctionTableCell.m; sourceTree = "<group>"; };
@@ -129,10 +134,8 @@
 		07DE46C817A457AC001251F4 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8493874F179F50DC001F80BF /* AHPMasterViewController.h */,
-				84CA583417C414DD000C4DCF /* AHPMasterViewController.m */,
-				84938752179F50DC001F80BF /* AHPDetailViewController.h */,
-				84938753179F50DC001F80BF /* AHPDetailViewController.m */,
+				84A0105717EBBF33005A33E7 /* Left Side */,
+				84A0105817EBBF48005A33E7 /* Right Side */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -181,6 +184,7 @@
 		84938737179F50DB001F80BF /* AHParser */ = {
 			isa = PBXGroup;
 			children = (
+				84A0104E17E40D6F005A33E7 /* Master View Categories */,
 				84CA583C17C58DBF000C4DCF /* Table Cells */,
 				8499E32517B981E200E9FCC5 /* API Requests */,
 				07DE46C717A457A3001251F4 /* App Delegate */,
@@ -235,6 +239,34 @@
 				8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */,
 			);
 			name = "API Requests";
+			sourceTree = "<group>";
+		};
+		84A0104E17E40D6F005A33E7 /* Master View Categories */ = {
+			isa = PBXGroup;
+			children = (
+				84A0105217E9039F005A33E7 /* AuctionCategories.JSON */,
+				84A0104F17E90213005A33E7 /* AHPCategoryLoader.h */,
+				84A0105017E90213005A33E7 /* AHPCategoryLoader.m */,
+			);
+			name = "Master View Categories";
+			sourceTree = "<group>";
+		};
+		84A0105717EBBF33005A33E7 /* Left Side */ = {
+			isa = PBXGroup;
+			children = (
+				8493874F179F50DC001F80BF /* AHPMasterViewController.h */,
+				84CA583417C414DD000C4DCF /* AHPMasterViewController.m */,
+			);
+			name = "Left Side";
+			sourceTree = "<group>";
+		};
+		84A0105817EBBF48005A33E7 /* Right Side */ = {
+			isa = PBXGroup;
+			children = (
+				84938752179F50DC001F80BF /* AHPDetailViewController.h */,
+				84938753179F50DC001F80BF /* AHPDetailViewController.m */,
+			);
+			name = "Right Side";
 			sourceTree = "<group>";
 		};
 		84CA583C17C58DBF000C4DCF /* Table Cells */ = {
@@ -324,6 +356,7 @@
 				84938748179F50DB001F80BF /* Default-568h@2x.png in Resources */,
 				8493874B179F50DB001F80BF /* MainStoryboard.storyboard in Resources */,
 				07DE46CB17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */,
+				84A0105317E9039F005A33E7 /* AuctionCategories.JSON in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,6 +401,7 @@
 				84CA583B17C58DB1000C4DCF /* AHPAuctionTableCell.m in Sources */,
 				8496F1B117CC0E8A007C47D7 /* AHPItemAPIRequest.m in Sources */,
 				8496F1B417CEB9D4007C47D7 /* AHPImageRequest.m in Sources */,
+				84A0105117E90213005A33E7 /* AHPCategoryLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

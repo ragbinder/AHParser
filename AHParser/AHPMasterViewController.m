@@ -27,11 +27,44 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    //Default Code
+    
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
+    
     self.detailViewController = (AHPDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    
+    //Setup the filter categories on the left hand side, if it hasn't been done already
+    NSFetchRequest *fetchCategories = [[NSFetchRequest alloc] init];
+    NSEntityDescription *categoryEntity = [NSEntityDescription entityForName:@"Category" inManagedObjectContext:[self.fetchedResultsController managedObjectContext]];
+    [fetchCategories setEntity:categoryEntity];
+    NSArray *categories = [[self.fetchedResultsController managedObjectContext] executeFetchRequest:fetchCategories error:nil];
+    for(NSManagedObject *object in categories)
+    {
+        [[self.fetchedResultsController managedObjectContext] deleteObject:object];
+    }
+    
+    NSDictionary *categoriesDictionary = [AHPCategoryLoader importCategories];
+    
+    for(NSDictionary *dict in [categoriesDictionary objectForKey:@"classes"])
+    {
+        NSString *predicateStringTop = [NSString stringWithFormat:@"itemRelationship.itemClass == %@",[dict objectForKey:@"class"]];
+        [self insertNewCategory:[dict objectForKey:@"name"] withPredicateString:predicateStringTop];
+        
+        for(NSDictionary *subDict in [dict objectForKey:@"subclasses"])
+        {
+            NSString *predicateStringMid = [NSString stringWithFormat:@"itemRelationship.itemClass == %@ && itemRelationship.itemSubClass == %@",[dict objectForKey:@"class"], [subDict objectForKey:@"subclass"]];
+            [self insertNewCategory:[subDict objectForKey:@"name"] withPredicateString:predicateStringMid];
+            for(NSDictionary *subSubDict in [subDict objectForKey:@"subcategories"])
+            {
+                NSString *predicateStringBot = [NSString stringWithFormat:@"itemRelationship.itemClass == %@ && itemRelationship.itemSubClass == %@ && itemRelationship.inventoryType == %@",[dict objectForKey:@"class"], [subDict objectForKey:@"subclass"],[subSubDict objectForKey:@"inventoryType"]];
+                [self insertNewCategory:[subSubDict objectForKey:@"name"] withPredicateString:predicateStringBot];
+            }
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,12 +82,34 @@
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
     [newManagedObject setValue:@"default" forKey:@"name"];
+    [newManagedObject setValue:@"item == 72095" forKey:@"predicate"];
     
     // Save the context.
     NSError *error = nil;
     if (![context save:&error]) {
          // Replace this implementation with code to handle the error appropriately.
          // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+}
+
+- (void)insertNewCategory:(NSString*) name withPredicateString:(NSString*)predicateString
+{
+    NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+    NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
+    NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:[entity name] inManagedObjectContext:context];
+    
+    // If appropriate, configure the new managed object.
+    // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
+    [newManagedObject setValue:name forKey:@"name"];
+    [newManagedObject setValue:predicateString forKey:@"predicate"];
+    
+    // Save the context.
+    NSError *error = nil;
+    if (![context save:&error]) {
+        // Replace this implementation with code to handle the error appropriately.
+        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
@@ -111,7 +166,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    [self.detailViewController filterAuctionTable:[object valueForKey:@"predicate"]];
+    [self.detailViewController filterAuctionTableByString:[object valueForKey:@"predicate"]];
 }
 
 #pragma mark - Fetched results controller
@@ -131,7 +186,7 @@
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"predicate" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];

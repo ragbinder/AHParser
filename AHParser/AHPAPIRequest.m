@@ -14,35 +14,52 @@
 //Still need to implement the error and url responses.
 -(id) initWithURL:(NSURL *)url
 {
-    NSLog(@"Initializing APIRequest");
+    NSLog(@"Initializing APIRequest with URL: %@",url);
     //Fetch the Location of the auction house data
     NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:url];
-    NSData *response = [NSURLConnection sendSynchronousRequest:auctionAPIRequest returningResponse:nil error:nil];
-    NSArray *auctionLines = [NSArray arrayWithObject:[NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil]];
-    NSArray *filesArray = [auctionLines[0] objectForKey:@"files"];
-    
-    //Store the location of the AH data and the last modified date
-    _auctionDataURL = [NSURL URLWithString:[[filesArray objectAtIndex:0] objectForKey:@"url"]];
-    lastModified = [[filesArray objectAtIndex:0] objectForKey:@"lastModified"];
-    NSTimeInterval epoch = [lastModified doubleValue];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:epoch/1000];
-    
-    NSLog(@"Current Time: %@",[NSDate date]);
-    NSLog(@"Retreiving Auction Data From: \n%@",_auctionDataURL);
-    NSLog(@"Auction Dump Last Generated: \n%@",[NSString stringWithFormat:@"%@",date]);
-    
-    //Fetch the data from the URL provided by the API
-    NSURLRequest *auctionDataRequest = [NSURLRequest requestWithURL:_auctionDataURL];
-    NSData *dataResponse = [NSURLConnection sendSynchronousRequest:auctionDataRequest returningResponse:nil error:nil];
-    NSDictionary *auctionData = [NSJSONSerialization JSONObjectWithData:dataResponse options:NSJSONReadingMutableContainers error:nil];
-    NSDictionary *allianceData = [auctionData objectForKey:@"alliance"];
-    NSDictionary *hordeData = [auctionData objectForKey:@"horde"];
-    
-    //Store the Alliance and Horde Auctions for this server
-    _allianceAuctions = [allianceData objectForKey:@"auctions"];
-    _hordeAuctions = [hordeData objectForKey:@"auctions"];
-    
-    return self;
+    NSError *error = nil;
+    NSData *response = [NSURLConnection sendSynchronousRequest:auctionAPIRequest returningResponse:nil error:&error];
+    if(response)
+    {
+        NSArray *auctionLines = [NSArray arrayWithObject:[NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil]];
+        NSArray *filesArray = [auctionLines[0] objectForKey:@"files"];
+        
+        //Store the location of the AH data and the last modified date
+        _auctionDataURL = [NSURL URLWithString:[[filesArray objectAtIndex:0] objectForKey:@"url"]];
+        lastModified = [[filesArray objectAtIndex:0] objectForKey:@"lastModified"];
+        //NSDate *date = [AHPAPIRequest convertWOWTime: [lastModified doubleValue]];
+        /*
+        NSLog(@"Current Time: %@",[NSDate date]);
+        NSLog(@"Retreiving Auction Data From: \n%@",_auctionDataURL);
+        NSLog(@"Auction Dump Last Generated: \n%@",[NSString stringWithFormat:@"%@",date]);
+        */
+        //Fetch the data from the URL provided by the API
+        NSMutableURLRequest *auctionDataRequest = [NSURLRequest requestWithURL:_auctionDataURL];
+        //[auctionDataRequest setHTTPMethod:@"POST"];
+        NSData *dataResponse = [NSURLConnection sendSynchronousRequest:auctionDataRequest returningResponse:nil error:&error];
+        if(dataResponse)
+        {
+            NSDictionary *auctionData = [NSJSONSerialization JSONObjectWithData:dataResponse options:NSJSONReadingMutableContainers error:nil];
+            NSDictionary *allianceData = [auctionData objectForKey:@"alliance"];
+            NSDictionary *hordeData = [auctionData objectForKey:@"horde"];
+            
+            //Store the Alliance and Horde Auctions for this server
+            _allianceAuctions = [allianceData objectForKey:@"auctions"];
+            _hordeAuctions = [hordeData objectForKey:@"auctions"];
+            
+            return self;
+        }
+        else
+        {
+            NSLog(@"Error getting data from web dump: %@ \n %@",auctionDataRequest, error);
+            return self;
+        }
+    }
+    else
+    {
+        NSLog(@"Error getting data from web API: %@",error);
+        return self;
+    }
 }
 
 -(void) storeAuctions:(NSManagedObjectContext*) context
@@ -62,15 +79,27 @@
         [aucData setValue:[auction valueForKey:@"rand"] forKey:@"rand"];
         [aucData setValue:[auction valueForKey:@"seed"] forKey:@"seed"];
         [aucData setValue:[auction valueForKey:@"timeLeft"] forKey:@"timeLeft"];
+        
         //Set the item relationship for each auction
         NSFetchRequest *fetchItem = [[NSFetchRequest alloc] init];
-        [fetchItem setEntity:[NSEntityDescription entityForName:@"Item" inManagedObjectContext:context]];
-        [fetchItem setPredicate:[NSPredicate predicateWithFormat:@"itemID == %d",[auction valueForKey:@"item"]]];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"itemID == %d",[[auction valueForKey:@"item"] intValue]];
+        NSLog(@"%@",predicate);
+        [fetchItem setEntity:entity];
+        [fetchItem setPredicate:predicate];
         NSArray *fetchedItem = [context executeFetchRequest:fetchItem error:&error];
         if([fetchedItem count] > 0)
         {
             NSLog(@"Auction %@ has item ID %@",[auction valueForKey:@"auc"],[auction valueForKey:@"item"]);
-            [aucData setValue:fetchedItem[0] forKey:@"itemID"];
+            [aucData setValue:fetchedItem[0] forKey:@"itemRelationship"];
+        }
+        else
+        {
+            //NSLog(@"Could not find item in database for ID: %d",[[auction valueForKey:@"item"] intValue]);
+        }
+        if(error)
+        {
+            NSLog(@"Error linking Item ID: %@",error);
         }
     }
     if(![context save:&error])
@@ -101,7 +130,7 @@
     NSEntityDescription *description = [NSEntityDescription entityForName:@"AuctionDumpDate" inManagedObjectContext:context];
     NSManagedObject *time = [[NSManagedObject alloc] initWithEntity:description insertIntoManagedObjectContext:context];
     [time setValue:[NSNumber numberWithDouble:[lastModified doubleValue]] forKey:@"date"];
-    NSLog(@"Last Dump Date set as: %@",[time valueForKey:@"date"]);
+    NSLog(@"Last Dump Date set as: %@",[AHPAPIRequest convertWOWTime: [lastModified doubleValue]]);
 }
 
 -(double)getLastDumpInContext:(NSManagedObjectContext*)context
@@ -119,6 +148,12 @@
         NSLog(@"%d dates found",[dates count]);
         return -1;
     }
+}
+
+//This function converts the time number given by the wow server to an NSDate object, so that it's human-readable. The wow API returns times in unix time (seconds since 1/1/1970), in milliseconds.
++(NSDate*) convertWOWTime:(double)time
+{
+    return [NSDate dateWithTimeIntervalSince1970:time/1000];
 }
 
 @end

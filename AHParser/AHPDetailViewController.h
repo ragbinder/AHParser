@@ -25,9 +25,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *auctionTable;
 @property NSArray *auctionsArray;
 
-
-- (IBAction)startButton:(id)sender;
 - (void)filterAuctionTable:(NSPredicate*)predicate;
+- (void)filterAuctionTableByString:(NSString*)predicateString;
 + (NSString*)timeLeftFormat:(NSString*)timeLeft;
 
 @end

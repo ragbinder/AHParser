@@ -11,11 +11,11 @@
 @class AHPDetailViewController;
 
 #import <CoreData/CoreData.h>
+#import "AHPCategoryLoader.h"
 
 @interface AHPMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) AHPDetailViewController *detailViewController;
-
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 

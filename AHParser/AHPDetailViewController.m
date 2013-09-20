@@ -41,22 +41,25 @@
     }
 }
 
+//For now, all of the set-up is handled in this method. I.E. importing the auction data, checking if it is up to date
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self configureView];
     delegate = (AHPAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    
+    //Grab the link to the JSON file and its lastModified date.
     NSDate *apiReqStart = [[NSDate alloc] init];
     AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
     NSDate *apiReqEnd = [[NSDate alloc] init];
     
+    //If the auction data dump is more recent than the one in coredata, delete all of the coredata Auction objects and repopulate the database.
+    //TODO: Look into whether or not it would be faster to check if an auctionID is still there, and not delete that one.
+    NSLog(@"\nAuction Data last Generated: %@\nAuction Data in persistent store last generated: %@", [AHPAPIRequest convertWOWTime:[[auctionData lastModified] doubleValue]],[AHPAPIRequest convertWOWTime:[auctionData getLastDumpInContext:[delegate managedObjectContext]]]);
     
     if([auctionData getLastDumpInContext:[delegate managedObjectContext]] != [[auctionData lastModified] doubleValue])
     {
-        NSLog(@"Auction Data last Generated: %f \n Auction Data in persistent store last generated: %f", [[auctionData lastModified] doubleValue],[auctionData getLastDumpInContext:[delegate managedObjectContext]]);
-        
+        NSLog(@"Refreshing Auction Database");
         NSFetchRequest *fetchAllAuctions = [[NSFetchRequest alloc] init];
         [fetchAllAuctions setEntity:[NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]]];
         [fetchAllAuctions setIncludesPropertyValues:NO];
@@ -77,46 +80,98 @@
     NSTimeInterval diff = [apiReqEnd timeIntervalSinceDate:apiReqStart];
     NSLog(@"API Request took %f",diff);
     
-    //Test predicate set for Trillium Bars
+    //Set the datasource for the UITableView. Initially you get all auctions by using filterAuctionTable with a nil predicate. The filterAuctionTable method is used primarily for setting filters from the masterView.
     //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(owner = 'Makecents')"];
-    //Set the datasource for the UITableView. Initially you get all auctions by using filterAuctionTable with a nil predicate.
     [self filterAuctionTable:nil];
     
-    //Optimization test
+    //Optimization code, lets you know how long coreData is taking.
     NSDate *coreDataEnd = [[NSDate alloc] init];
     diff = [coreDataEnd timeIntervalSinceDate:apiReqEnd];
     NSLog(@"Core Data took: %f",diff);
     
     [_auctionTable setDataSource:self];
+    //Debug line to print out the current ITEM database
+    //[self printStoredItems];
 }
 
 
-//Prints out the stored items in coredata
+//Prints out the stored Items in coredata
 -(void) printStoredItems
 {
     NSFetchRequest *fetchItems = [[NSFetchRequest alloc] init];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"itemClass" ascending:YES];
+    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"itemSubClass" ascending:YES];
     [fetchItems setEntity:[NSEntityDescription entityForName:@"Item" inManagedObjectContext:[delegate managedObjectContext]]];
+    [fetchItems setSortDescriptors: [NSArray arrayWithObjects:sortDescriptor1,sortDescriptor2,nil]];
+
     NSArray *fetchedItems = [[delegate managedObjectContext] executeFetchRequest:fetchItems error:nil];
     for(NSManagedObject *object in fetchedItems)
     {
-        NSLog(@"%@ - %@",[object valueForKey:@"itemID"],[object valueForKey:@"name"]);
+        NSLog(@"[%@-%@] %@ - %@",[object valueForKey:@"itemClass"],[object valueForKey:@"itemSubClass"],[object valueForKey:@"itemID"],[object valueForKey:@"name"]);
     }
 }
 
 //This method changes the contents of the UITableView in the detail view to only contain auctions matching the predicate you pass in.
-//Sample Predicate: "(item == 72095)"
+//Sample Predicate: "(item == 72095)" for trillium ore
 - (void)filterAuctionTable: (NSPredicate *) predicate
 {
+    NSLog(@"Filtering Table By Predicate: %@",predicate);
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"itemRelationship.itemClass" ascending:YES];
+    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"itemRelationship.itemSubClass" ascending:YES];
     [fetch setEntity:entityDescription];
     [fetch setPredicate:predicate];
+    [fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1,sortDescriptor2, nil]];
+    
     NSError *error;
     _auctionsArray = [[delegate managedObjectContext] executeFetchRequest:fetch error:&error];
     if(error)
     {
         NSLog(@"Error filtering auction table: %@",error);
     }
+    
+    [_auctionTable reloadData];
+}
+
+- (void)filterAuctionTableByString: (NSString*) predicateString
+{
+    NSArray *predicateParts = [predicateString componentsSeparatedByString:@" "];
+    NSPredicate *predicate;
+    if([predicateParts count] == 3)
+    {
+        predicate = [NSPredicate predicateWithFormat:@"(%K == %d)",predicateParts[0],[predicateParts[2] intValue]];
+    }
+    else if([predicateParts count] == 7)
+    {
+        predicate = [NSPredicate predicateWithFormat:@"(%K == %d) && (%K == %d)",predicateParts[0],[predicateParts[2] intValue],predicateParts[4],[predicateParts[6] intValue]];
+    }
+    else if([predicateParts count] == 11)
+    {
+        predicate = [NSPredicate predicateWithFormat:@"(%K == %d) && (%K == %d)",predicateParts[0],[predicateParts[2] intValue],predicateParts[4],[predicateParts[6] intValue],predicateParts[8],[predicateParts[10] intValue]];
+    }
+    else
+    {
+        NSLog(@"Invalid Predicate Used: %@",predicateString);
+        return;
+    }
+    NSLog(@"Filtering Table By Predicate (String): %@",predicate);
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"itemRelationship.itemClass" ascending:YES];
+    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"itemRelationship.itemSubClass" ascending:YES];
+    [fetch setEntity:entityDescription];
+    [fetch setPredicate:predicate];
+    [fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1,sortDescriptor2, nil]];
+    
+    NSError *error;
+    _auctionsArray = [[delegate managedObjectContext] executeFetchRequest:fetch error:&error];
+    if(error)
+    {
+        NSLog(@"Error filtering auction table: %@",error);
+    }
+    
+    [_auctionTable reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -139,11 +194,6 @@
     // Called when the view is shown again in the split view, invalidating the button and popover controller.
     [self.navigationItem setLeftBarButtonItem:nil animated:YES];
     self.masterPopoverController = nil;
-}
-
-- (IBAction)startButton:(id)sender
-{
-    
 }
 
 //Mandatory method for UITableView
@@ -214,6 +264,7 @@
     else
     {
         //If an existing item with the desired itemID can't be found, fetch the data from the web and make a new coredata object for it.
+        //This code should be obsolete by launch, as we will be using a pre-populated item database. Keeping this in so that the app will still function without an update to the database when new items are added.
         AHPItemAPIRequest *itemReq = [AHPItemAPIRequest alloc];
         itemDictionary = [itemReq itemAPIRequest:[[[self.auctionsArray objectAtIndex:indexPath.row] valueForKey:@"item"] integerValue]];
         
@@ -298,6 +349,13 @@
     return cell;
 }
 
+//Not working yet
+- (void)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"Selected Cell: %@",indexPath);
+}
+
+//This is a function for formatting the timeLeft value returned from the JSON so that it is more readable.
 +(NSString*)timeLeftFormat:(NSString*)timeLeft
 {
     if([timeLeft isEqualToString:@"SHORT"])
