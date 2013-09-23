@@ -32,6 +32,7 @@
     </entity>
     <entity name="Item" syncable="YES">
         <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="inventoryType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="itemClass" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="itemID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="itemLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -47,6 +48,6 @@
         <element name="Category" positionX="160" positionY="192" width="128" height="75"/>
         <element name="Event" positionX="261" positionY="189" width="128" height="60"/>
         <element name="Icon" positionX="160" positionY="192" width="128" height="90"/>
-        <element name="Item" positionX="180" positionY="270" width="128" height="180"/>
+        <element name="Item" positionX="180" positionY="270" width="128" height="195"/>
     </elements>
 </model>

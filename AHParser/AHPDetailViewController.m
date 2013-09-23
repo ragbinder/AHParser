@@ -278,6 +278,7 @@
         [itemData setValue:[itemDictionary valueForKey:@"quality"] forKey:@"quality"];
         [itemData setValue:[itemDictionary valueForKey:@"requiredLevel"] forKey:@"requiredLevel"];
         [itemData setValue:[itemDictionary valueForKey:@"icon"] forKey:@"icon"];
+        [itemData setValue:[itemDictionary valueForKey:@"inventoryType"] forKey:@"inventoryType"];
         if(![[delegate managedObjectContext] save:&error])
         {
             NSLog(@"Error saving new item: %@", error);
@@ -349,10 +350,25 @@
     return cell;
 }
 
-//Not working yet
-- (void)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//Fixed- needed to set the delegate for the UITableView
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Selected Cell: %@",indexPath);
+    NSManagedObject *auction = [self.auctionsArray objectAtIndex:indexPath.row];
+    //Code to fetch item dictionary from internal item database
+    /*
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:[delegate managedObjectContext]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"itemID == %@",[auction valueForKey:@"item"]];
+    [fetch setEntity:entity];
+    [fetch setPredicate:predicate];
+    [fetch setReturnsObjectsAsFaults:NO];
+    NSArray *result = [[delegate managedObjectContext] executeFetchRequest:fetch error:nil];
+    */
+    //Code to fetch item dictionary from web API
+    AHPItemAPIRequest *item = [[AHPItemAPIRequest alloc] init];
+    NSDictionary *result = [item itemAPIRequest:[[auction valueForKey:@"item"] intValue]];
+    
+    NSLog(@"Selected Cell: %@",result);
 }
 
 //This is a function for formatting the timeLeft value returned from the JSON so that it is more readable.

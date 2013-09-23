@@ -7,7 +7,6 @@
 //
 
 #import "AHPMasterViewController.h"
-
 #import "AHPDetailViewController.h"
 
 @interface AHPMasterViewController ()
@@ -38,33 +37,36 @@
     self.detailViewController = (AHPDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
     //Setup the filter categories on the left hand side, if it hasn't been done already
-    NSFetchRequest *fetchCategories = [[NSFetchRequest alloc] init];
-    NSEntityDescription *categoryEntity = [NSEntityDescription entityForName:@"Category" inManagedObjectContext:[self.fetchedResultsController managedObjectContext]];
-    [fetchCategories setEntity:categoryEntity];
-    NSArray *categories = [[self.fetchedResultsController managedObjectContext] executeFetchRequest:fetchCategories error:nil];
-    for(NSManagedObject *object in categories)
-    {
-        [[self.fetchedResultsController managedObjectContext] deleteObject:object];
-    }
-    
-    NSDictionary *categoriesDictionary = [AHPCategoryLoader importCategories];
-    
-    for(NSDictionary *dict in [categoriesDictionary objectForKey:@"classes"])
-    {
-        NSString *predicateStringTop = [NSString stringWithFormat:@"itemRelationship.itemClass == %@",[dict objectForKey:@"class"]];
-        [self insertNewCategory:[dict objectForKey:@"name"] withPredicateString:predicateStringTop];
-        
-        for(NSDictionary *subDict in [dict objectForKey:@"subclasses"])
+        //Clear the old categories -- Will be obsolete one I implement the navigation controller.
+        NSFetchRequest *fetchCategories = [[NSFetchRequest alloc] init];
+        NSEntityDescription *categoryEntity = [NSEntityDescription entityForName:@"Category" inManagedObjectContext:[self.fetchedResultsController managedObjectContext]];
+        [fetchCategories setEntity:categoryEntity];
+        NSArray *categories = [[self.fetchedResultsController managedObjectContext] executeFetchRequest:fetchCategories error:nil];
+        for(NSManagedObject *object in categories)
         {
-            NSString *predicateStringMid = [NSString stringWithFormat:@"itemRelationship.itemClass == %@ && itemRelationship.itemSubClass == %@",[dict objectForKey:@"class"], [subDict objectForKey:@"subclass"]];
-            [self insertNewCategory:[subDict objectForKey:@"name"] withPredicateString:predicateStringMid];
-            for(NSDictionary *subSubDict in [subDict objectForKey:@"subcategories"])
-            {
-                NSString *predicateStringBot = [NSString stringWithFormat:@"itemRelationship.itemClass == %@ && itemRelationship.itemSubClass == %@ && itemRelationship.inventoryType == %@",[dict objectForKey:@"class"], [subDict objectForKey:@"subclass"],[subSubDict objectForKey:@"inventoryType"]];
-                [self insertNewCategory:[subSubDict objectForKey:@"name"] withPredicateString:predicateStringBot];
-            }
+            [[self.fetchedResultsController managedObjectContext] deleteObject:object];
         }
-    }
+        
+        //Bring in the categories list from the JSON file included with the app.
+        NSDictionary *categoriesDictionary = [AHPCategoryLoader importCategories];
+        
+        for(NSDictionary *dict in [categoriesDictionary objectForKey:@"classes"])
+        {
+            NSString *predicateStringTop = [NSString stringWithFormat:@"itemRelationship.itemClass == %@",[dict objectForKey:@"class"]];
+            [self insertNewCategory:[dict objectForKey:@"name"] withPredicateString:predicateStringTop];
+            /*
+            for(NSDictionary *subDict in [dict objectForKey:@"subclasses"])
+            {
+                NSString *predicateStringMid = [NSString stringWithFormat:@"itemRelationship.itemClass == %@ && itemRelationship.itemSubClass == %@",[dict objectForKey:@"class"], [subDict objectForKey:@"subclass"]];
+                [self insertNewCategory:[subDict objectForKey:@"name"] withPredicateString:predicateStringMid];
+                for(NSDictionary *subSubDict in [subDict objectForKey:@"subcategories"])
+                {
+                    NSString *predicateStringBot = [NSString stringWithFormat:@"itemRelationship.itemClass == %@ && itemRelationship.itemSubClass == %@ && itemRelationship.inventoryType == %@",[dict objectForKey:@"class"], [subDict objectForKey:@"subclass"],[subSubDict objectForKey:@"inventoryType"]];
+                    [self insertNewCategory:[subSubDict objectForKey:@"name"] withPredicateString:predicateStringBot];
+                }
+            }
+            */
+        }
 }
 
 - (void)didReceiveMemoryWarning

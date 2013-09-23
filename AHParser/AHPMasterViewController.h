@@ -15,6 +15,7 @@
 
 @interface AHPMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
+@property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) AHPDetailViewController *detailViewController;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
