@@ -11,5 +11,6 @@
 @interface AHPCategoryLoader : NSObject
 
 +(NSDictionary*)importCategories;
++(NSDictionary*)findDictionaryWithValue:(NSString*)value forKey:(NSString*)key inArray:(NSArray*)array;
 
 @end

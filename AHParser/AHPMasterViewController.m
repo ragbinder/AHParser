@@ -22,21 +22,38 @@
     [super awakeFromNib];
 }
 
+- (id)initWithTitle:(NSString*)title andDictionary:(NSDictionary*)dictionary
+{
+    NSArray *arr = [dictionary objectForKey:@"subclasses"];
+    if([arr count] != 0)
+        self.categories = arr;
+    else
+        self.categories = [dictionary objectForKey:@"subcategories"];
+    
+    self.title = title;
+    self.navigationController.title = title;
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"Master View did Load with title: %@",self.title);
 	// Do any additional setup after loading the view, typically from a nib.
     
     //Default Code
-    
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
     
     self.detailViewController = (AHPDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    NSLog(@"Master View did set detail controller");
     
     //Setup the filter categories on the left hand side, if it hasn't been done already
+    //if(self.navigationController.title == nil)
+    {
         //Clear the old categories -- Will be obsolete one I implement the navigation controller.
         NSFetchRequest *fetchCategories = [[NSFetchRequest alloc] init];
         NSEntityDescription *categoryEntity = [NSEntityDescription entityForName:@"Category" inManagedObjectContext:[self.fetchedResultsController managedObjectContext]];
@@ -46,9 +63,13 @@
         {
             [[self.fetchedResultsController managedObjectContext] deleteObject:object];
         }
+        NSLog(@"Master View did clear old categories");
         
         //Bring in the categories list from the JSON file included with the app.
         NSDictionary *categoriesDictionary = [AHPCategoryLoader importCategories];
+        
+        if(![self.title isEqualToString:@""])
+            NSLog(@"Title is: %@",self.title);
         
         for(NSDictionary *dict in [categoriesDictionary objectForKey:@"classes"])
         {
@@ -67,6 +88,7 @@
             }
             */
         }
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -169,6 +191,9 @@
 {
     NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     [self.detailViewController filterAuctionTableByString:[object valueForKey:@"predicate"]];
+    
+    AHPMasterViewController *newView = [[AHPMasterViewController alloc] initWithTitle:[object valueForKey:@"name"] andDictionary:[AHPCategoryLoader findDictionaryWithValue:[object valueForKey:@"name"] forKey:@"name" inArray:_categories]];
+    [self.navigationController pushViewController:newView animated:YES];
 }
 
 #pragma mark - Fetched results controller
