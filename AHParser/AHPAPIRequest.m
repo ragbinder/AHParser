@@ -65,6 +65,7 @@
 -(void) storeAuctions:(NSManagedObjectContext*) context
 {
     NSError *error;
+    NSLog(@"Storing Horde Auctions");
     for(NSDictionary *auction in _hordeAuctions)
     {
         NSEntityDescription *description = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:context];
@@ -84,13 +85,13 @@
         NSFetchRequest *fetchItem = [[NSFetchRequest alloc] init];
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"itemID == %d",[[auction valueForKey:@"item"] intValue]];
-        NSLog(@"%@",predicate);
+        //NSLog(@"%@",predicate);
         [fetchItem setEntity:entity];
         [fetchItem setPredicate:predicate];
         NSArray *fetchedItem = [context executeFetchRequest:fetchItem error:&error];
         if([fetchedItem count] > 0)
         {
-            NSLog(@"Auction %@ has item ID %@",[auction valueForKey:@"auc"],[auction valueForKey:@"item"]);
+            //NSLog(@"Auction %@ has item ID %@",[auction valueForKey:@"auc"],[auction valueForKey:@"item"]);
             [aucData setValue:fetchedItem[0] forKey:@"itemRelationship"];
         }
         else
@@ -131,6 +132,10 @@
     NSManagedObject *time = [[NSManagedObject alloc] initWithEntity:description insertIntoManagedObjectContext:context];
     [time setValue:[NSNumber numberWithDouble:[lastModified doubleValue]] forKey:@"date"];
     NSLog(@"Last Dump Date set as: %@",[AHPAPIRequest convertWOWTime: [lastModified doubleValue]]);
+    if(![context save:&error])
+    {
+        NSLog(@"Error Saving Auction Dump Date: %@",error);
+    }
 }
 
 -(double)getLastDumpInContext:(NSManagedObjectContext*)context

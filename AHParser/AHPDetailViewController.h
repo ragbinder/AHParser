@@ -23,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (weak, nonatomic) IBOutlet UITableView *auctionTable;
-@property NSArray *auctionsArray;
+//@property NSArray *auctionsArray;
 
 - (void)filterAuctionTable:(NSPredicate*)predicate;
 - (void)filterAuctionTableByString:(NSString*)predicateString;

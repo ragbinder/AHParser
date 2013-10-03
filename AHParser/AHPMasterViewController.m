@@ -55,14 +55,16 @@
     //if(self.navigationController.title == nil)
     {
         //Clear the old categories -- Will be obsolete one I implement the navigation controller.
+        
         NSFetchRequest *fetchCategories = [[NSFetchRequest alloc] init];
-        NSEntityDescription *categoryEntity = [NSEntityDescription entityForName:@"Category" inManagedObjectContext:[self.fetchedResultsController managedObjectContext]];
+        NSEntityDescription *categoryEntity = [NSEntityDescription entityForName:@"Category" inManagedObjectContext:self.managedObjectContext];
         [fetchCategories setEntity:categoryEntity];
         NSArray *categories = [[self.fetchedResultsController managedObjectContext] executeFetchRequest:fetchCategories error:nil];
         for(NSManagedObject *object in categories)
         {
             [[self.fetchedResultsController managedObjectContext] deleteObject:object];
         }
+        
         NSLog(@"Master View did clear old categories");
         
         //Bring in the categories list from the JSON file included with the app.
@@ -193,6 +195,7 @@
     [self.detailViewController filterAuctionTableByString:[object valueForKey:@"predicate"]];
     
     AHPMasterViewController *newView = [[AHPMasterViewController alloc] initWithTitle:[object valueForKey:@"name"] andDictionary:[AHPCategoryLoader findDictionaryWithValue:[object valueForKey:@"name"] forKey:@"name" inArray:_categories]];
+    [newView setManagedObjectContext:_managedObjectContext];
     [self.navigationController pushViewController:newView animated:YES];
 }
 
@@ -297,6 +300,7 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    //NSLog(@"Configuring Cell at index path: %@",indexPath);
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [[object valueForKey:@"name"] description];
 }
