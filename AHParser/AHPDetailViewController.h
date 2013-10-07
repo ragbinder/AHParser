@@ -14,7 +14,7 @@
 
 @class AHPAppDelegate;
 
-@interface AHPDetailViewController : UIViewController <UISplitViewControllerDelegate, UITableViewDataSource>
+@interface AHPDetailViewController : UIViewController <UISplitViewControllerDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
 {
     AHPAppDelegate *delegate;
 }

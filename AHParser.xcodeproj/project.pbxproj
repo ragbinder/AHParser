@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		07DE46CB17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */; };
 		07DE46CC17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */; };
+		845CA7B41803623E00E9E2F1 /* AuctionCategories.JSON in Resources */ = {isa = PBXBuildFile; fileRef = 845CA7B31803623E00E9E2F1 /* AuctionCategories.JSON */; };
 		84938730179F50DA001F80BF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8493872F179F50DA001F80BF /* UIKit.framework */; };
 		84938732179F50DA001F80BF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938731179F50DA001F80BF /* Foundation.framework */; };
 		84938734179F50DB001F80BF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938733179F50DA001F80BF /* CoreGraphics.framework */; };
@@ -50,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "World-Of-Warcraft-Logo.jpg"; sourceTree = "<group>"; };
+		845CA7B31803623E00E9E2F1 /* AuctionCategories.JSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AuctionCategories.JSON; sourceTree = "<group>"; };
 		8493872C179F50DA001F80BF /* AHParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AHParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8493872F179F50DA001F80BF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		84938731179F50DA001F80BF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -160,6 +162,7 @@
 				84938762179F50DD001F80BF /* AHParserTests */,
 				8493872E179F50DA001F80BF /* Frameworks */,
 				8493872D179F50DA001F80BF /* Products */,
+				84A0104E17E40D6F005A33E7 /* Master View Categories */,
 			);
 			sourceTree = "<group>";
 		};
@@ -187,7 +190,6 @@
 		84938737179F50DB001F80BF /* AHParser */ = {
 			isa = PBXGroup;
 			children = (
-				84A0104E17E40D6F005A33E7 /* Master View Categories */,
 				84CA583C17C58DBF000C4DCF /* Table Cells */,
 				8499E32517B981E200E9FCC5 /* API Requests */,
 				07DE46C717A457A3001251F4 /* App Delegate */,
@@ -201,6 +203,7 @@
 		84938738179F50DB001F80BF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				845CA7B31803623E00E9E2F1 /* AuctionCategories.JSON */,
 				07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */,
 				8493874C179F50DB001F80BF /* AHParser.xcdatamodeld */,
 				84938739179F50DB001F80BF /* AHParser-Info.plist */,
@@ -252,6 +255,7 @@
 				84A0105017E90213005A33E7 /* AHPCategoryLoader.m */,
 			);
 			name = "Master View Categories";
+			path = AHParser;
 			sourceTree = "<group>";
 		};
 		84A0105717EBBF33005A33E7 /* Left Side */ = {
@@ -362,6 +366,7 @@
 				8493874B179F50DB001F80BF /* MainStoryboard.storyboard in Resources */,
 				07DE46CB17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */,
 				84A0105317E9039F005A33E7 /* AuctionCategories.JSON in Resources */,
+				845CA7B41803623E00E9E2F1 /* AuctionCategories.JSON in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

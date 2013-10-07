@@ -199,7 +199,7 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"owner" ascending:YES];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
     [fetchRequest setFetchBatchSize:20];
@@ -406,7 +406,9 @@
     AHPItemAPIRequest *item = [[AHPItemAPIRequest alloc] init];
     NSDictionary *result = [item itemAPIRequest:[[auction valueForKey:@"item"] intValue]];
     
-    NSLog(@"Selected Cell: %@",result);
+    //NSLog(@"Selected Cell: %@",result);
+
+    NSLog(@"%@",[[[auction valueForKey:@"itemName"] objectAtIndex:0] valueForKey:@"name"]);
 }
 
 //This is a function for formatting the timeLeft value returned from the JSON so that it is more readable.

@@ -88,6 +88,7 @@
         //NSLog(@"%@",predicate);
         [fetchItem setEntity:entity];
         [fetchItem setPredicate:predicate];
+        [fetchItem setIncludesPropertyValues:NO];
         NSArray *fetchedItem = [context executeFetchRequest:fetchItem error:&error];
         if([fetchedItem count] > 0)
         {
@@ -102,6 +103,7 @@
         {
             NSLog(@"Error linking Item ID: %@",error);
         }
+        
     }
     if(![context save:&error])
     {
@@ -109,6 +111,8 @@
     }
     
     [self setLastDumpInContext:context];
+    
+    NSLog(@"%d auctions in horde auctions",[_hordeAuctions count]);
 }
 
 //Call this method to set the Last Dumped date to the current dump generation date (from the JSON), formatted as an NSDate Object. Will remove all other saved dump dates.

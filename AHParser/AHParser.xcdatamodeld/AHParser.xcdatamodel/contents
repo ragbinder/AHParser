@@ -10,7 +10,10 @@
         <attribute name="rand" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="seed" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="timeLeft" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="itemRelationship" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Item" syncable="YES"/>
+        <relationship name="itemRelationship" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="auctionRelationship" inverseEntity="Item" syncable="YES"/>
+        <fetchedProperty name="itemFetch" optional="YES" syncable="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Item" predicateString="itemID = $FETCH_SOURCE.item"/>
+        </fetchedProperty>
     </entity>
     <entity name="AuctionDumpDate" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -40,14 +43,15 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="quality" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="requiredLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="auctionRelationship" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Auction" inverseName="itemRelationship" inverseEntity="Auction" syncable="YES"/>
         <relationship name="iconRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Icon" inverseName="itemRelationship" inverseEntity="Icon" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Auction" positionX="88" positionY="189" width="128" height="195"/>
-        <element name="AuctionDumpDate" positionX="160" positionY="192" width="128" height="60"/>
-        <element name="Category" positionX="160" positionY="192" width="128" height="75"/>
-        <element name="Event" positionX="261" positionY="189" width="128" height="60"/>
-        <element name="Icon" positionX="160" positionY="192" width="128" height="90"/>
-        <element name="Item" positionX="180" positionY="270" width="128" height="195"/>
+        <element name="Auction" positionX="72" positionY="244" width="128" height="224"/>
+        <element name="AuctionDumpDate" positionX="133" positionY="90" width="128" height="60"/>
+        <element name="Category" positionX="385" positionY="297" width="128" height="75"/>
+        <element name="Event" positionX="378" positionY="135" width="128" height="60"/>
+        <element name="Icon" positionX="394" positionY="450" width="128" height="90"/>
+        <element name="Item" positionX="234" positionY="171" width="128" height="210"/>
     </elements>
 </model>

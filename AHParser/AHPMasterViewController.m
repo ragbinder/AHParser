@@ -26,9 +26,15 @@
 {
     NSArray *arr = [dictionary objectForKey:@"subclasses"];
     if([arr count] != 0)
+    {
         self.categories = arr;
+        NSLog(@"1Categories for %@ are: %@",title, self.categories);
+    }
     else
+    {
         self.categories = [dictionary objectForKey:@"subcategories"];
+        NSLog(@"2Categories for %@ are: %@",title, self.categories);
+    }
     
     self.title = title;
     self.navigationController.title = title;
@@ -44,10 +50,10 @@
     //Default Code
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     //self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
+    /*
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
-    
+    */
     self.detailViewController = (AHPDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     NSLog(@"Master View did set detail controller");
     
@@ -77,7 +83,6 @@
         {
             NSString *predicateStringTop = [NSString stringWithFormat:@"itemRelationship.itemClass == %@",[dict objectForKey:@"class"]];
             [self insertNewCategory:[dict objectForKey:@"name"] withPredicateString:predicateStringTop];
-            /*
             for(NSDictionary *subDict in [dict objectForKey:@"subclasses"])
             {
                 NSString *predicateStringMid = [NSString stringWithFormat:@"itemRelationship.itemClass == %@ && itemRelationship.itemSubClass == %@",[dict objectForKey:@"class"], [subDict objectForKey:@"subclass"]];
@@ -88,7 +93,6 @@
                     [self insertNewCategory:[subSubDict objectForKey:@"name"] withPredicateString:predicateStringBot];
                 }
             }
-            */
         }
     }
 }
@@ -300,7 +304,7 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    //NSLog(@"Configuring Cell at index path: %@",indexPath);
+    NSLog(@"Configuring Cell at index path: %@",indexPath);
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [[object valueForKey:@"name"] description];
 }
