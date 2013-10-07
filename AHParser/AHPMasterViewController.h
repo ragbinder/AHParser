@@ -18,6 +18,7 @@
 
 @property NSString *title;
 @property NSArray *categories;
+@property NSManagedObject *topLevelObject;
 @property (strong, nonatomic) AHPDetailViewController *detailViewController;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

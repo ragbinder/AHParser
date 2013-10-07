@@ -132,12 +132,12 @@
     [NSFetchedResultsController deleteCacheWithName:@"Root"];	
     [[self fetchedResultsController].fetchRequest setPredicate:predicate];
     [[self fetchedResultsController] performFetch:&error];
+    NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
+    NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);
     if(error)
     {
         NSLog(@"Error filtering auction table: %@",error);
     }
-    
-    //NSLog(@"Fetch Request: %@",[_fetchedResultsController fetchedObjects]);
     
     [_auctionTable reloadData];
 }
@@ -146,7 +146,11 @@
 {
     NSArray *predicateParts = [predicateString componentsSeparatedByString:@" "];
     NSPredicate *predicate;
-    if([predicateParts count] == 3)
+    if([predicateParts count] == 0)
+    {
+        predicate = nil;
+    }
+    else if([predicateParts count] == 3)
     {
         predicate = [NSPredicate predicateWithFormat:@"(%K == %d)",predicateParts[0],[predicateParts[2] intValue]];
     }
@@ -156,7 +160,7 @@
     }
     else if([predicateParts count] == 11)
     {
-        predicate = [NSPredicate predicateWithFormat:@"(%K == %d) && (%K == %d)",predicateParts[0],[predicateParts[2] intValue],predicateParts[4],[predicateParts[6] intValue],predicateParts[8],[predicateParts[10] intValue]];
+        predicate = [NSPredicate predicateWithFormat:@"(%K == %d) && (%K == %d) && (%K == %d)",predicateParts[0],[predicateParts[2] intValue],predicateParts[4],[predicateParts[6] intValue],predicateParts[8],[predicateParts[10] intValue]];
     }
     else
     {
@@ -176,6 +180,8 @@
     [NSFetchedResultsController deleteCacheWithName:@"Root"];
     [_fetchedResultsController.fetchRequest setPredicate:predicate];
     [_fetchedResultsController performFetch:&error];
+    NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
+    NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);
     if(error)
     {
         NSLog(@"Error filtering auction table: %@",error);
@@ -407,8 +413,7 @@
     NSDictionary *result = [item itemAPIRequest:[[auction valueForKey:@"item"] intValue]];
     
     //NSLog(@"Selected Cell: %@",result);
-
-    NSLog(@"%@",[[[auction valueForKey:@"itemName"] objectAtIndex:0] valueForKey:@"name"]);
+    NSLog(@"[%@ - %@] %@",[[[auction valueForKey:@"itemFetch"] objectAtIndex:0] valueForKey:@"itemClass"],[[[auction valueForKey:@"itemFetch"] objectAtIndex:0] valueForKey:@"itemSubClass"],[[[auction valueForKey:@"itemFetch"] objectAtIndex:0] valueForKey:@"name"]);
 }
 
 //This is a function for formatting the timeLeft value returned from the JSON so that it is more readable.

@@ -44,6 +44,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.title = [_topLevelObject valueForKey:@"name"];
+    
     NSLog(@"Master View did Load with title: %@",self.title);
 	// Do any additional setup after loading the view, typically from a nib.
     
@@ -82,17 +84,25 @@
         for(NSDictionary *dict in [categoriesDictionary objectForKey:@"classes"])
         {
             NSString *predicateStringTop = [NSString stringWithFormat:@"itemRelationship.itemClass == %@",[dict objectForKey:@"class"]];
-            [self insertNewCategory:[dict objectForKey:@"name"] withPredicateString:predicateStringTop];
+            NSManagedObject *topObject = [self insertNewCategory:[dict objectForKey:@"name"] withPredicateString:predicateStringTop];
+            /*
             for(NSDictionary *subDict in [dict objectForKey:@"subclasses"])
             {
                 NSString *predicateStringMid = [NSString stringWithFormat:@"itemRelationship.itemClass == %@ && itemRelationship.itemSubClass == %@",[dict objectForKey:@"class"], [subDict objectForKey:@"subclass"]];
-                [self insertNewCategory:[subDict objectForKey:@"name"] withPredicateString:predicateStringMid];
+                NSManagedObject *midObject = [self insertNewCategory:[subDict objectForKey:@"name"] withPredicateString:predicateStringMid];
+                NSMutableSet *topSet = [topObject mutableSetValueForKey:@"child"];
+                [topSet addObject:midObject];
+                [midObject setValue:topObject forKey:@"parent"];
                 for(NSDictionary *subSubDict in [subDict objectForKey:@"subcategories"])
                 {
                     NSString *predicateStringBot = [NSString stringWithFormat:@"itemRelationship.itemClass == %@ && itemRelationship.itemSubClass == %@ && itemRelationship.inventoryType == %@",[dict objectForKey:@"class"], [subDict objectForKey:@"subclass"],[subSubDict objectForKey:@"inventoryType"]];
-                    [self insertNewCategory:[subSubDict objectForKey:@"name"] withPredicateString:predicateStringBot];
+                    NSManagedObject *botObject = [self insertNewCategory:[subSubDict objectForKey:@"name"] withPredicateString:predicateStringBot];
+                    NSMutableSet *midSet = [midObject mutableSetValueForKey:@"child"];
+                    [midSet addObject:botObject];
+                    [botObject setValue:midObject forKey:@"parent"];
                 }
             }
+             */
         }
     }
 }
@@ -124,7 +134,7 @@
     }
 }
 
-- (void)insertNewCategory:(NSString*) name withPredicateString:(NSString*)predicateString
+- (NSManagedObject*)insertNewCategory:(NSString*) name withPredicateString:(NSString*)predicateString
 {
     NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
     NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
@@ -143,6 +153,8 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
+    
+    return newManagedObject;
 }
 
 #pragma mark - Table View
@@ -196,10 +208,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    [self.detailViewController filterAuctionTableByString:[object valueForKey:@"predicate"]];
-    
     AHPMasterViewController *newView = [[AHPMasterViewController alloc] initWithTitle:[object valueForKey:@"name"] andDictionary:[AHPCategoryLoader findDictionaryWithValue:[object valueForKey:@"name"] forKey:@"name" inArray:_categories]];
     [newView setManagedObjectContext:_managedObjectContext];
+    [newView setTopLevelObject:object];
+    [self.detailViewController filterAuctionTableByString:[object valueForKey:@"predicate"]];
     [self.navigationController pushViewController:newView animated:YES];
 }
 
@@ -304,7 +316,7 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Configuring Cell at index path: %@",indexPath);
+    //NSLog(@"Configuring Cell at index path: %@",indexPath);
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [[object valueForKey:@"name"] description];
 }
