@@ -12,15 +12,15 @@
 
 #import <CoreData/CoreData.h>
 #import "AHPCategoryLoader.h"
-#import "AHPCategoryViewController.h"
 
-@interface AHPMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface AHPMasterViewController : UITableViewController <UITableViewDataSource>
 
-@property NSString *title;
-@property NSArray *categories;
-@property NSManagedObject *topLevelObject;
+@property (strong, nonatomic) NSDictionary *dictionary;
+@property (strong, nonatomic) NSMutableArray *rows;
 @property (strong, nonatomic) AHPDetailViewController *detailViewController;
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+
+-(id)initWithTitle:(NSString*)title andDictionary:(NSDictionary*)dictionary;
+-(IBAction)applyFilters:(id)sender;
 
 @end

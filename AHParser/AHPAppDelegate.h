@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "AHPAPIRequest.h"
+#import "AHPMasterViewController.h"
+#import "AHPCategoryLoader.h"
 
 @interface AHPAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -17,6 +19,8 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property AHPAPIRequest *auctionData;
+@property (strong, nonatomic) NSString *faction;
+@property (strong, nonatomic) NSString *realm;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

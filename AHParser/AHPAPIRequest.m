@@ -26,6 +26,7 @@
         
         //Store the location of the AH data and the last modified date
         _auctionDataURL = [NSURL URLWithString:[[filesArray objectAtIndex:0] objectForKey:@"url"]];
+        NSLog(@"Retrieving Auction Cache from: %@",_auctionDataURL);
         lastModified = [[filesArray objectAtIndex:0] objectForKey:@"lastModified"];
         //NSDate *date = [AHPAPIRequest convertWOWTime: [lastModified doubleValue]];
         /*
@@ -36,22 +37,32 @@
         //Fetch the data from the URL provided by the API
         NSMutableURLRequest *auctionDataRequest = [NSURLRequest requestWithURL:_auctionDataURL];
         //[auctionDataRequest setHTTPMethod:@"POST"];
-        NSData *dataResponse = [NSURLConnection sendSynchronousRequest:auctionDataRequest returningResponse:nil error:&error];
-        if(dataResponse)
+        NSHTTPURLResponse *APIResponse = [[NSHTTPURLResponse alloc] init];
+        NSData *dataResponse = [NSURLConnection sendSynchronousRequest:auctionDataRequest returningResponse:&APIResponse error:&error];
+        //NSLog(@"%@",APIResponse);
+        if([APIResponse statusCode] == 200)
         {
-            NSDictionary *auctionData = [NSJSONSerialization JSONObjectWithData:dataResponse options:NSJSONReadingMutableContainers error:nil];
-            NSDictionary *allianceData = [auctionData objectForKey:@"alliance"];
-            NSDictionary *hordeData = [auctionData objectForKey:@"horde"];
-            
-            //Store the Alliance and Horde Auctions for this server
-            _allianceAuctions = [allianceData objectForKey:@"auctions"];
-            _hordeAuctions = [hordeData objectForKey:@"auctions"];
-            
-            return self;
+            if(dataResponse)
+            {
+                NSDictionary *auctionData = [NSJSONSerialization JSONObjectWithData:dataResponse options:NSJSONReadingMutableContainers error:nil];
+                NSDictionary *allianceData = [auctionData objectForKey:@"alliance"];
+                NSDictionary *hordeData = [auctionData objectForKey:@"horde"];
+                
+                //Store the Alliance and Horde Auctions for this server
+                _allianceAuctions = [allianceData objectForKey:@"auctions"];
+                _hordeAuctions = [hordeData objectForKey:@"auctions"];
+                
+                return self;
+            }
+            else
+            {
+                NSLog(@"Error getting data from web dump: %@ \n %@",auctionDataRequest, error);
+                return self;
+            }
         }
         else
         {
-            NSLog(@"Error getting data from web dump: %@ \n %@",auctionDataRequest, error);
+            NSLog(@"Error in API Request to Auction House: %d",[APIResponse statusCode]);
             return self;
         }
     }
@@ -80,6 +91,9 @@
         [aucData setValue:[auction valueForKey:@"rand"] forKey:@"rand"];
         [aucData setValue:[auction valueForKey:@"seed"] forKey:@"seed"];
         [aucData setValue:[auction valueForKey:@"timeLeft"] forKey:@"timeLeft"];
+        [aucData setValue:[auction valueForKey:@"petSpeciesId"] forKey:@"petSpeciesID"];
+        [aucData setValue:[auction valueForKey:@"petQualityId"] forKey:@"petQualityID"];
+        [aucData setValue:[auction valueForKey:@"petLevel"] forKey:@"petLevel"];
         
         //Set the item relationship for each auction
         NSFetchRequest *fetchItem = [[NSFetchRequest alloc] init];
@@ -97,7 +111,8 @@
         }
         else
         {
-            //NSLog(@"Could not find item in database for ID: %d",[[auction valueForKey:@"item"] intValue]);
+            NSLog(@"Could not find item in database for ID: %d",[[auction valueForKey:@"item"] intValue]);
+            [aucData setValue:[AHPItemAPIRequest storeItem:[[auction valueForKey:@"item"] integerValue] inContext:context] forKey:@"itemRelationship"];
         }
         if(error)
         {

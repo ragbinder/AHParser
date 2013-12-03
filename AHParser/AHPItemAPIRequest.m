@@ -33,4 +33,27 @@
     }
 }
 
++ (NSManagedObject*)storeItem:(NSInteger) itemID inContext:(NSManagedObjectContext*) context
+{
+    AHPItemAPIRequest *itemReq = [AHPItemAPIRequest alloc];
+    NSDictionary *itemDictionary = [itemReq itemAPIRequest:itemID];
+    NSEntityDescription *item = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
+    NSError *error;
+    NSManagedObject *itemData = [[NSManagedObject alloc] initWithEntity:item insertIntoManagedObjectContext:context];
+    [itemData setValue:[itemDictionary valueForKey:@"itemClass"] forKey:@"itemClass"];
+    [itemData setValue:[itemDictionary valueForKey:@"id"] forKey:@"itemID"];
+    [itemData setValue:[itemDictionary valueForKey:@"itemLevel"] forKey:@"itemLevel"];
+    [itemData setValue:[itemDictionary valueForKey:@"itemSubClass"] forKey:@"itemSubClass"];
+    [itemData setValue:[itemDictionary valueForKey:@"name"] forKey:@"name"];
+    [itemData setValue:[itemDictionary valueForKey:@"quality"] forKey:@"quality"];
+    [itemData setValue:[itemDictionary valueForKey:@"requiredLevel"] forKey:@"requiredLevel"];
+    [itemData setValue:[itemDictionary valueForKey:@"icon"] forKey:@"icon"];
+    [itemData setValue:[itemDictionary valueForKey:@"inventoryType"] forKey:@"inventoryType"];
+    if(![context save:&error])
+    {
+        NSLog(@"Error saving new item %d: %@",itemID, error);
+    }
+    return itemData;
+}
+
 @end

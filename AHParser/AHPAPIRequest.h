@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AHPItemAPIRequest.h"
 
 @interface AHPAPIRequest : UIResponder
 

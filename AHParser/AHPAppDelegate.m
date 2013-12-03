@@ -8,25 +8,30 @@
 
 #import "AHPAppDelegate.h"
 
-#import "AHPMasterViewController.h"
-
 @implementation AHPAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize auctionData = _auctionData;
+@synthesize faction = _faction;
+@synthesize realm = _realm;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    _realm = @"emerald-dream";
+    
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     splitViewController.delegate = (id)navigationController.topViewController;
 
     UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
     AHPMasterViewController *controller = (AHPMasterViewController *)masterNavigationController.topViewController;
-    controller.managedObjectContext = self.managedObjectContext;
+    
+    NSDictionary *dict = [AHPCategoryLoader importCategories];
+    //NSLog(@"Dictionary for categories: %@",dict);
+    [controller initWithTitle:@"All" andDictionary:dict];
     
     return YES;
 }

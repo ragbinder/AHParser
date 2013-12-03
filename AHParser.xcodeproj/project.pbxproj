@@ -9,7 +9,15 @@
 /* Begin PBXBuildFile section */
 		07DE46CB17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */; };
 		07DE46CC17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */; };
-		845CA7B41803623E00E9E2F1 /* AuctionCategories.JSON in Resources */ = {isa = PBXBuildFile; fileRef = 845CA7B31803623E00E9E2F1 /* AuctionCategories.JSON */; };
+		84071B72183CF442005C644B /* AHPCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84071B71183CF442005C644B /* AHPCategoryCell.m */; };
+		84071B75183D2636005C644B /* AHPSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84071B74183D2636005C644B /* AHPSplitViewController.m */; };
+		84071B78183E6242005C644B /* AHPPetAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84071B77183E6242005C644B /* AHPPetAPIRequest.m */; };
+		84071B7C184257AB005C644B /* Copper.png in Resources */ = {isa = PBXBuildFile; fileRef = 84071B79184257AB005C644B /* Copper.png */; };
+		84071B7D184257AB005C644B /* Gold.png in Resources */ = {isa = PBXBuildFile; fileRef = 84071B7A184257AB005C644B /* Gold.png */; };
+		84071B7E184257AB005C644B /* Silver.png in Resources */ = {isa = PBXBuildFile; fileRef = 84071B7B184257AB005C644B /* Silver.png */; };
+		845CA7B7180C9B2100E9E2F1 /* AHPRealmSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 845CA7B6180C9B2100E9E2F1 /* AHPRealmSelectCell.m */; };
+		845CA7BA180C9CB000E9E2F1 /* AHPRealmStatusRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 845CA7B9180C9CB000E9E2F1 /* AHPRealmStatusRequest.m */; };
+		845CA7BD180CA06400E9E2F1 /* AHPRealmSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845CA7BC180CA06400E9E2F1 /* AHPRealmSelectViewController.m */; };
 		84938730179F50DA001F80BF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8493872F179F50DA001F80BF /* UIKit.framework */; };
 		84938732179F50DA001F80BF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938731179F50DA001F80BF /* Foundation.framework */; };
 		84938734179F50DB001F80BF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938733179F50DA001F80BF /* CoreGraphics.framework */; };
@@ -34,7 +42,6 @@
 		8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */; };
 		84A0105117E90213005A33E7 /* AHPCategoryLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A0105017E90213005A33E7 /* AHPCategoryLoader.m */; };
 		84A0105317E9039F005A33E7 /* AuctionCategories.JSON in Resources */ = {isa = PBXBuildFile; fileRef = 84A0105217E9039F005A33E7 /* AuctionCategories.JSON */; };
-		84A0105B17FB7237005A33E7 /* AHPCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A0105A17FB7237005A33E7 /* AHPCategoryViewController.m */; };
 		84CA583517C414DD000C4DCF /* AHPMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583417C414DD000C4DCF /* AHPMasterViewController.m */; };
 		84CA583B17C58DB1000C4DCF /* AHPAuctionTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */; };
 /* End PBXBuildFile section */
@@ -51,7 +58,21 @@
 
 /* Begin PBXFileReference section */
 		07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "World-Of-Warcraft-Logo.jpg"; sourceTree = "<group>"; };
-		845CA7B31803623E00E9E2F1 /* AuctionCategories.JSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AuctionCategories.JSON; sourceTree = "<group>"; };
+		84071B70183CF442005C644B /* AHPCategoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPCategoryCell.h; sourceTree = "<group>"; };
+		84071B71183CF442005C644B /* AHPCategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPCategoryCell.m; sourceTree = "<group>"; };
+		84071B73183D2636005C644B /* AHPSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPSplitViewController.h; sourceTree = "<group>"; };
+		84071B74183D2636005C644B /* AHPSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPSplitViewController.m; sourceTree = "<group>"; };
+		84071B76183E6242005C644B /* AHPPetAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPPetAPIRequest.h; sourceTree = "<group>"; };
+		84071B77183E6242005C644B /* AHPPetAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPPetAPIRequest.m; sourceTree = "<group>"; };
+		84071B79184257AB005C644B /* Copper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Copper.png; path = ../../../../Downloads/Copper.png; sourceTree = "<group>"; };
+		84071B7A184257AB005C644B /* Gold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Gold.png; path = ../../../../Downloads/Gold.png; sourceTree = "<group>"; };
+		84071B7B184257AB005C644B /* Silver.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Silver.png; path = ../../../../Downloads/Silver.png; sourceTree = "<group>"; };
+		845CA7B5180C9B2100E9E2F1 /* AHPRealmSelectCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPRealmSelectCell.h; sourceTree = "<group>"; };
+		845CA7B6180C9B2100E9E2F1 /* AHPRealmSelectCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPRealmSelectCell.m; sourceTree = "<group>"; };
+		845CA7B8180C9CB000E9E2F1 /* AHPRealmStatusRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPRealmStatusRequest.h; sourceTree = "<group>"; };
+		845CA7B9180C9CB000E9E2F1 /* AHPRealmStatusRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPRealmStatusRequest.m; sourceTree = "<group>"; };
+		845CA7BB180CA06400E9E2F1 /* AHPRealmSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPRealmSelectViewController.h; sourceTree = "<group>"; };
+		845CA7BC180CA06400E9E2F1 /* AHPRealmSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPRealmSelectViewController.m; sourceTree = "<group>"; };
 		8493872C179F50DA001F80BF /* AHParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AHParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8493872F179F50DA001F80BF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		84938731179F50DA001F80BF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -86,8 +107,6 @@
 		84A0104F17E90213005A33E7 /* AHPCategoryLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPCategoryLoader.h; sourceTree = "<group>"; };
 		84A0105017E90213005A33E7 /* AHPCategoryLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPCategoryLoader.m; sourceTree = "<group>"; };
 		84A0105217E9039F005A33E7 /* AuctionCategories.JSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = AuctionCategories.JSON; path = ../../../AuctionCategories.JSON; sourceTree = "<group>"; };
-		84A0105917FB7237005A33E7 /* AHPCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPCategoryViewController.h; sourceTree = "<group>"; };
-		84A0105A17FB7237005A33E7 /* AHPCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPCategoryViewController.m; sourceTree = "<group>"; };
 		84CA583417C414DD000C4DCF /* AHPMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPMasterViewController.m; sourceTree = "<group>"; };
 		84CA583917C58DB1000C4DCF /* AHPAuctionTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPAuctionTableCell.h; sourceTree = "<group>"; };
 		84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPAuctionTableCell.m; sourceTree = "<group>"; };
@@ -139,8 +158,12 @@
 		07DE46C817A457AC001251F4 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				84071B73183D2636005C644B /* AHPSplitViewController.h */,
+				84071B74183D2636005C644B /* AHPSplitViewController.m */,
 				84A0105717EBBF33005A33E7 /* Left Side */,
 				84A0105817EBBF48005A33E7 /* Right Side */,
+				845CA7BB180CA06400E9E2F1 /* AHPRealmSelectViewController.h */,
+				845CA7BC180CA06400E9E2F1 /* AHPRealmSelectViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -162,7 +185,6 @@
 				84938762179F50DD001F80BF /* AHParserTests */,
 				8493872E179F50DA001F80BF /* Frameworks */,
 				8493872D179F50DA001F80BF /* Products */,
-				84A0104E17E40D6F005A33E7 /* Master View Categories */,
 			);
 			sourceTree = "<group>";
 		};
@@ -190,6 +212,7 @@
 		84938737179F50DB001F80BF /* AHParser */ = {
 			isa = PBXGroup;
 			children = (
+				84A0104E17E40D6F005A33E7 /* Master View Categories */,
 				84CA583C17C58DBF000C4DCF /* Table Cells */,
 				8499E32517B981E200E9FCC5 /* API Requests */,
 				07DE46C717A457A3001251F4 /* App Delegate */,
@@ -203,8 +226,10 @@
 		84938738179F50DB001F80BF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				845CA7B31803623E00E9E2F1 /* AuctionCategories.JSON */,
 				07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */,
+				84071B79184257AB005C644B /* Copper.png */,
+				84071B7A184257AB005C644B /* Gold.png */,
+				84071B7B184257AB005C644B /* Silver.png */,
 				8493874C179F50DB001F80BF /* AHParser.xcdatamodeld */,
 				84938739179F50DB001F80BF /* AHParser-Info.plist */,
 				8493873A179F50DB001F80BF /* InfoPlist.strings */,
@@ -241,8 +266,12 @@
 				8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */,
 				8496F1AF17CC0E8A007C47D7 /* AHPItemAPIRequest.h */,
 				8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */,
+				84071B76183E6242005C644B /* AHPPetAPIRequest.h */,
+				84071B77183E6242005C644B /* AHPPetAPIRequest.m */,
 				8496F1B217CEB9D4007C47D7 /* AHPImageRequest.h */,
 				8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */,
+				845CA7B8180C9CB000E9E2F1 /* AHPRealmStatusRequest.h */,
+				845CA7B9180C9CB000E9E2F1 /* AHPRealmStatusRequest.m */,
 			);
 			name = "API Requests";
 			sourceTree = "<group>";
@@ -255,7 +284,6 @@
 				84A0105017E90213005A33E7 /* AHPCategoryLoader.m */,
 			);
 			name = "Master View Categories";
-			path = AHParser;
 			sourceTree = "<group>";
 		};
 		84A0105717EBBF33005A33E7 /* Left Side */ = {
@@ -263,8 +291,6 @@
 			children = (
 				8493874F179F50DC001F80BF /* AHPMasterViewController.h */,
 				84CA583417C414DD000C4DCF /* AHPMasterViewController.m */,
-				84A0105917FB7237005A33E7 /* AHPCategoryViewController.h */,
-				84A0105A17FB7237005A33E7 /* AHPCategoryViewController.m */,
 			);
 			name = "Left Side";
 			sourceTree = "<group>";
@@ -283,6 +309,10 @@
 			children = (
 				84CA583917C58DB1000C4DCF /* AHPAuctionTableCell.h */,
 				84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */,
+				845CA7B5180C9B2100E9E2F1 /* AHPRealmSelectCell.h */,
+				845CA7B6180C9B2100E9E2F1 /* AHPRealmSelectCell.m */,
+				84071B70183CF442005C644B /* AHPCategoryCell.h */,
+				84071B71183CF442005C644B /* AHPCategoryCell.m */,
 			);
 			name = "Table Cells";
 			sourceTree = "<group>";
@@ -359,14 +389,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84071B7D184257AB005C644B /* Gold.png in Resources */,
 				8493873C179F50DB001F80BF /* InfoPlist.strings in Resources */,
+				84071B7E184257AB005C644B /* Silver.png in Resources */,
 				84938744179F50DB001F80BF /* Default.png in Resources */,
 				84938746179F50DB001F80BF /* Default@2x.png in Resources */,
 				84938748179F50DB001F80BF /* Default-568h@2x.png in Resources */,
 				8493874B179F50DB001F80BF /* MainStoryboard.storyboard in Resources */,
 				07DE46CB17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */,
+				84071B7C184257AB005C644B /* Copper.png in Resources */,
 				84A0105317E9039F005A33E7 /* AuctionCategories.JSON in Resources */,
-				845CA7B41803623E00E9E2F1 /* AuctionCategories.JSON in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,6 +436,7 @@
 			files = (
 				8493873E179F50DB001F80BF /* main.m in Sources */,
 				84938742179F50DB001F80BF /* AHPAppDelegate.m in Sources */,
+				84071B78183E6242005C644B /* AHPPetAPIRequest.m in Sources */,
 				8493874E179F50DB001F80BF /* AHParser.xcdatamodeld in Sources */,
 				84938754179F50DC001F80BF /* AHPDetailViewController.m in Sources */,
 				8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */,
@@ -412,7 +445,11 @@
 				8496F1B117CC0E8A007C47D7 /* AHPItemAPIRequest.m in Sources */,
 				8496F1B417CEB9D4007C47D7 /* AHPImageRequest.m in Sources */,
 				84A0105117E90213005A33E7 /* AHPCategoryLoader.m in Sources */,
-				84A0105B17FB7237005A33E7 /* AHPCategoryViewController.m in Sources */,
+				845CA7B7180C9B2100E9E2F1 /* AHPRealmSelectCell.m in Sources */,
+				84071B75183D2636005C644B /* AHPSplitViewController.m in Sources */,
+				845CA7BA180C9CB000E9E2F1 /* AHPRealmStatusRequest.m in Sources */,
+				845CA7BD180CA06400E9E2F1 /* AHPRealmSelectViewController.m in Sources */,
+				84071B72183CF442005C644B /* AHPCategoryCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,5 +21,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *buyoutS;
 @property (weak, nonatomic) IBOutlet UILabel *buyoutC;
 @property (weak, nonatomic) IBOutlet UILabel *quantity;
+@property (weak, nonatomic) IBOutlet UIImageView *buyoutGImage;
+@property (weak, nonatomic) IBOutlet UIImageView *buyoutSImage;
+@property (weak, nonatomic) IBOutlet UIImageView *buyoutCImage;
 
 @end

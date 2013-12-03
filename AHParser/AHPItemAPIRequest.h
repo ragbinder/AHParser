@@ -13,5 +13,5 @@
 @property NSManagedObject *itemData;
 
 -(NSDictionary*) itemAPIRequest: (NSInteger) itemID;
-
++(NSManagedObject*) storeItem:(NSInteger)item inContext:(NSManagedObjectContext*)context;
 @end

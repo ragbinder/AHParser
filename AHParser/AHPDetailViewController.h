@@ -11,6 +11,7 @@
 #import "AHPAuctionTableCell.h"
 #import "AHPItemAPIRequest.h"
 #import "AHPImageRequest.h"
+#import "AHPPetAPIRequest.h"
 
 @class AHPAppDelegate;
 
@@ -28,5 +29,6 @@
 - (void)filterAuctionTable:(NSPredicate*)predicate;
 - (void)filterAuctionTableByString:(NSString*)predicateString;
 + (NSString*)timeLeftFormat:(NSString*)timeLeft;
+- (IBAction)searchButton:(id)sender;
 
 @end

@@ -46,13 +46,36 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setNeedsStatusBarAppearanceUpdate];
     [self configureView];
     delegate = (AHPAppDelegate *)[[UIApplication sharedApplication] delegate];
     _managedObjectContext = [delegate managedObjectContext];
     
+    //Set the datasource for the UITableView. Initially you get all auctions by using filterAuctionTable with a nil predicate. The filterAuctionTable method is used primarily for setting filters from the masterView.
+    [_auctionTable setDataSource:self];
+    
+    
+    //Set the upper right buttons - refresh table and return to realm/faction select
+    UIBarButtonItem *realmSelect = [[UIBarButtonItem alloc] initWithTitle:@"Realm" style:UIBarButtonItemStyleBordered target:self action:@selector(realmSelect:)];
+    UIBarButtonItem *factionSelect = [[UIBarButtonItem alloc] initWithTitle:@"Faction" style:UIBarButtonItemStyleBordered target:self action:@selector(factionSelect:)];
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButton:)];
+    UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(forceRefreshAuctionDatabase)];
+    NSArray *array = [[NSArray alloc] initWithObjects: realmSelect, factionSelect,searchButton,refreshButton, nil];
+    
+    [self.navigationItem setRightBarButtonItems:array animated:YES];
+    
+    //Remove this code later
+    [self refreshAuctionDatabase];
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"item ==54443"];
+    [self filterAuctionTable:pred];
+}
+
+//Will refresh the auction database if it is out of date.
+-(void) refreshAuctionDatabase
+{
     //Grab the link to the JSON file and its lastModified date.
     NSDate *apiReqStart = [[NSDate alloc] init];
-    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:@"http://battle.net/api/wow/auction/data/emerald-dream"]];
+    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://battle.net/api/wow/auction/data/%@",[delegate realm]]]];
     NSDate *apiReqEnd = [[NSDate alloc] init];
     
     //If the auction data dump is more recent than the one in coredata, delete all of the coredata Auction objects and repopulate the database.
@@ -85,18 +108,59 @@
     NSTimeInterval diff = [apiReqEnd timeIntervalSinceDate:apiReqStart];
     NSLog(@"API Request took %f",diff);
     
-    //Set the datasource for the UITableView. Initially you get all auctions by using filterAuctionTable with a nil predicate. The filterAuctionTable method is used primarily for setting filters from the masterView.
-    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(owner = 'Makecents')"];
-    [self filterAuctionTable:nil];
-    
     //Optimization code, lets you know how long coreData is taking.
     NSDate *coreDataEnd = [[NSDate alloc] init];
     diff = [coreDataEnd timeIntervalSinceDate:apiReqEnd];
     NSLog(@"Core Data took: %f",diff);
     
-    [_auctionTable setDataSource:self];
+    
     //Debug line to print out the current ITEM database
     //[self printStoredItems];
+    
+    //NSLog(@"Printing Horde Auctions: /n%@",[auctionData hordeAuctions]);
+    NSLog(@"Stored Horde Auctions: %d",[[auctionData hordeAuctions] count]);
+    
+    [_auctionTable reloadData];
+}
+
+//Will refresh the auction database, even if it is up to date
+-(void) forceRefreshAuctionDatabase
+{
+    //Grab the link to the JSON file and its lastModified date.
+    NSDate *apiReqStart = [[NSDate alloc] init];
+    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://battle.net/api/wow/auction/data/%@",[delegate realm]]]];
+    NSDate *apiReqEnd = [[NSDate alloc] init];
+    
+    NSLog(@"Refreshing Auction Database");
+    NSFetchRequest *fetchAllAuctions = [[NSFetchRequest alloc] init];
+    [fetchAllAuctions setEntity:[NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]]];
+    [fetchAllAuctions setIncludesPropertyValues:NO];
+    
+    NSError *error = nil;
+    NSArray *allAuctions = [[delegate managedObjectContext] executeFetchRequest:fetchAllAuctions error:&error];
+    int num = 0;
+    for(NSManagedObject *auction in allAuctions)
+    {
+        [[delegate managedObjectContext] deleteObject:auction];
+        num++;
+    }
+    if(![[delegate managedObjectContext] save:&error])
+    {
+        NSLog(@"Error clearing store: %@",error);
+    }
+    NSLog(@"Deleted %d Old Auctions",num);
+    //Insert the new auctions into the persistent store
+    [auctionData storeAuctions: [delegate managedObjectContext]];
+    NSTimeInterval diff = [apiReqEnd timeIntervalSinceDate:apiReqStart];
+    NSLog(@"API Request took %f",diff);
+    
+    //Optimization code, lets you know how long coreData is taking.
+    NSDate *coreDataEnd = [[NSDate alloc] init];
+    diff = [coreDataEnd timeIntervalSinceDate:apiReqEnd];
+    NSLog(@"Core Data took: %f",diff);
+    NSLog(@"Stored Horde Auctions: %d",[[auctionData hordeAuctions] count]);
+    
+    [_auctionTable reloadData];
 }
 
 //Prints out the stored Items in coredata
@@ -120,16 +184,17 @@
 - (void)filterAuctionTable: (NSPredicate *) predicate
 {
     NSLog(@"Filtering Table By Predicate: %@",predicate);
+    NSLog(@"Context: %@",[delegate managedObjectContext]);
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
-    //NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
-    //NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"itemRelationship.itemClass" ascending:YES];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
+    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"itemRelationship.itemClass" ascending:YES];
     [fetch setEntity:entityDescription];
     [fetch setPredicate:predicate];
-    //[fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1,sortDescriptor2, nil]];
+    [fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1,sortDescriptor2, nil]];
     
     NSError *error;
-    [NSFetchedResultsController deleteCacheWithName:@"Root"];	
+    [NSFetchedResultsController deleteCacheWithName:@"Root"];
     [[self fetchedResultsController].fetchRequest setPredicate:predicate];
     [[self fetchedResultsController] performFetch:&error];
     NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
@@ -138,7 +203,8 @@
     {
         NSLog(@"Error filtering auction table: %@",error);
     }
-    
+    NSArray *entities = [_managedObjectContext executeFetchRequest:[_fetchedResultsController fetchRequest] error:&error];
+    NSLog(@"Entities Count: %d",[entities count]);
     [_auctionTable reloadData];
 }
 
@@ -170,15 +236,17 @@
     NSLog(@"Filtering Table By Predicate (String): %@",predicate);
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
+    NSSortDescriptor *sortDescriptor0 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
     NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"itemRelationship.itemClass" ascending:YES];
     NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"itemRelationship.itemSubClass" ascending:YES];
     [fetch setEntity:entityDescription];
     [fetch setPredicate:predicate];
-    [fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1,sortDescriptor2, nil]];
+    [fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1,sortDescriptor2,sortDescriptor0, nil]];
     
     NSError *error;
-    [NSFetchedResultsController deleteCacheWithName:@"Root"];
+    //[NSFetchedResultsController deleteCacheWithName:@"Root"];
     [_fetchedResultsController.fetchRequest setPredicate:predicate];
+    [_fetchedResultsController.fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1,sortDescriptor2,nil]];
     [_fetchedResultsController performFetch:&error];
     NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
     NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);
@@ -186,7 +254,8 @@
     {
         NSLog(@"Error filtering auction table: %@",error);
     }
-    
+    NSArray *entities = [_managedObjectContext executeFetchRequest:[_fetchedResultsController fetchRequest] error:&error];
+    NSLog(@"Entities Count: %d",[entities count]);
     [_auctionTable reloadData];
 }
 
@@ -205,12 +274,13 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"owner" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
     [fetchRequest setFetchBatchSize:20];
     
-    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:_managedObjectContext sectionNameKeyPath:nil cacheName:@"Root"];
+    //NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:_managedObjectContext sectionNameKeyPath:nil cacheName:@"Root"];
+    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:_managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     self.fetchedResultsController = frc;
     _fetchedResultsController.delegate = self;
     
@@ -221,7 +291,7 @@
 
 - (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
 {
-    barButtonItem.title = NSLocalizedString(@"Master", @"Master");
+    barButtonItem.title = NSLocalizedString(@"Category Filters", @"Category Filters");
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;
 }
@@ -287,48 +357,14 @@
     [cell.timeLeft setText:[AHPDetailViewController timeLeftFormat:timeLeft]];
     [cell.quantity setText:quantity];
     
-    //#######################################
-    //
-    //Set the Item name, quality, and level from the item database
-    //
-    //#######################################
-    //Check if the item needed by the next cell is in the internal item database. If it is, then load it from there. Else get it from the WoW web API and store it in the internal database.
-    NSFetchRequest *internalItemReq = [[NSFetchRequest alloc] init];
-    NSEntityDescription *item = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:[delegate managedObjectContext]];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(itemID == %@)", [[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"item"]];
-    [internalItemReq setEntity:item];
-    [internalItemReq setPredicate:predicate];
-    //NSLog(@"Predicate: %@", predicate);
-    NSArray *result = [[delegate managedObjectContext] executeFetchRequest:internalItemReq error:nil];
-    
-    NSDictionary *itemDictionary;
-    if([result count] != 0)
+    if([[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue] == 0)
     {
-        //If there is an existing item with the itemID we want, use that as the itemDictionary.
-        itemDictionary = result[0];
-    }
-    else
-    {
-        //If an existing item with the desired itemID can't be found, fetch the data from the web and make a new coredata object for it.
-        //This code should be obsolete by launch, as we will be using a pre-populated item database. Keeping this in so that the app will still function without an update to the database when new items are added.
-        AHPItemAPIRequest *itemReq = [AHPItemAPIRequest alloc];
-        itemDictionary = [itemReq itemAPIRequest:[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"item"] integerValue]];
-        
-        NSError *error;
-        NSManagedObject *itemData = [[NSManagedObject alloc] initWithEntity:item insertIntoManagedObjectContext:[delegate managedObjectContext]];
-        [itemData setValue:[itemDictionary valueForKey:@"itemClass"] forKey:@"itemClass"];
-        [itemData setValue:[itemDictionary valueForKey:@"id"] forKey:@"itemID"];
-        [itemData setValue:[itemDictionary valueForKey:@"itemLevel"] forKey:@"itemLevel"];
-        [itemData setValue:[itemDictionary valueForKey:@"itemSubClass"] forKey:@"itemSubClass"];
-        [itemData setValue:[itemDictionary valueForKey:@"name"] forKey:@"name"];
-        [itemData setValue:[itemDictionary valueForKey:@"quality"] forKey:@"quality"];
-        [itemData setValue:[itemDictionary valueForKey:@"requiredLevel"] forKey:@"requiredLevel"];
-        [itemData setValue:[itemDictionary valueForKey:@"icon"] forKey:@"icon"];
-        [itemData setValue:[itemDictionary valueForKey:@"inventoryType"] forKey:@"inventoryType"];
-        if(![[delegate managedObjectContext] save:&error])
-        {
-            NSLog(@"Error saving new item: %@", error);
-        }
+        [cell.buyoutC setHidden:YES];
+        [cell.buyoutS setHidden:YES];
+        [cell.buyoutG setHidden:YES];
+        [cell.buyoutCImage setHidden:YES];
+        [cell.buyoutGImage setHidden:YES];
+        [cell.buyoutSImage setHidden:YES];
     }
     
     //This array lets us change the name color based on item quality (given as a number from the JSON)
@@ -350,11 +386,54 @@
                               //Heirloom
                               [UIColor colorWithRed:230.0/255.0 green:204.0/255.0 blue:128.0/255.0 alpha:1],
                               nil];
+    
+    
+    //Blizz handles pets differently from normal items in the auction API, so this code deals with correctly displaying them. Otherwise, they'd all display as Pet Cages (Item ID 82800).
+    NSDictionary *itemDictionary;
+    if([[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"item"] integerValue] == 82800)
+    {
+        itemDictionary = [AHPPetAPIRequest petAPIRequest:[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"petSpeciesID"] integerValue]];
+        
+        [cell.itemName setTextColor:[qualityColors objectAtIndex: [[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"petQualityID"] integerValue]]];
+        [cell.itemName setHighlightedTextColor:[qualityColors objectAtIndex: [[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"petQualityID"] integerValue]]];
+        [cell.level setText: [NSString stringWithFormat:@"%@",[itemDictionary valueForKey:@"itemLevel"]]];
+        [cell.itemName setText: [itemDictionary valueForKey:@"name"]];
+        [cell.level setText: [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"petLevel"] integerValue]]];
+    }
+    else{
+    //#######################################
+    //
+    //Set the Item name, quality, and level from the item database
+    //
+    //#######################################
+    //Check if the item needed by the next cell is in the internal item database. If it is, then load it from there. Else get it from the WoW web API and store it in the internal database.
+    NSFetchRequest *internalItemReq = [[NSFetchRequest alloc] init];
+    NSEntityDescription *item = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:[delegate managedObjectContext]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(itemID == %@)", [[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"item"]];
+    [internalItemReq setEntity:item];
+    [internalItemReq setPredicate:predicate];
+    //NSLog(@"Predicate: %@", predicate);
+    NSArray *result = [[delegate managedObjectContext] executeFetchRequest:internalItemReq error:nil];
+    
+    //NSDictionary *itemDictionary;
+    if([result count] != 0)
+    {
+        //If there is an existing item with the itemID we want, use that as the itemDictionary.
+        itemDictionary = result[0];
+    }
+    else
+    {
+        //If an existing item with the desired itemID can't be found, fetch the data from the web and make a new coredata object for it.
+        //This code should be obsolete by launch, as we will be using a pre-populated item database. Keeping this in so that the app will still function without an update to the database when new items are added.
+        [AHPItemAPIRequest storeItem:[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"item"] integerValue] inContext:[delegate managedObjectContext]];
+    }
+    
+    
     [cell.itemName setTextColor:[qualityColors objectAtIndex: [[itemDictionary valueForKey:@"quality"] intValue]]];
     [cell.itemName setHighlightedTextColor:[qualityColors objectAtIndex: [[itemDictionary valueForKey:@"quality"] intValue]]];
     [cell.level setText: [NSString stringWithFormat:@"%@",[itemDictionary valueForKey:@"itemLevel"]]];
     [cell.itemName setText: [itemDictionary valueForKey:@"name"]];
-    
+    }
     
     
     //#######################################
@@ -391,7 +470,14 @@
             //NSLog(@"New thumbnail saved as: %@",[itemDictionary valueForKey:@"icon"]);
         }
     }
+}
 
+- (void)printItemsOfSameClass:(NSInteger) class
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest alloc];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    [self.fetchedResultsController fetchRequest];
 }
 
 //Fixed- needed to set the delegate for the UITableView
@@ -409,11 +495,12 @@
     NSArray *result = [[delegate managedObjectContext] executeFetchRequest:fetch error:nil];
     */
     //Code to fetch item dictionary from web API
-    AHPItemAPIRequest *item = [[AHPItemAPIRequest alloc] init];
-    NSDictionary *result = [item itemAPIRequest:[[auction valueForKey:@"item"] intValue]];
+    //AHPItemAPIRequest *item = [[AHPItemAPIRequest alloc] init];
+    //NSDictionary *result = [item itemAPIRequest:[[auction valueForKey:@"item"] intValue]];
     
     //NSLog(@"Selected Cell: %@",result);
-    NSLog(@"[%@ - %@] %@",[[[auction valueForKey:@"itemFetch"] objectAtIndex:0] valueForKey:@"itemClass"],[[[auction valueForKey:@"itemFetch"] objectAtIndex:0] valueForKey:@"itemSubClass"],[[[auction valueForKey:@"itemFetch"] objectAtIndex:0] valueForKey:@"name"]);
+    if([[auction valueForKey:@"itemFetch"] count] != 0)
+    NSLog(@"[%@ - %@] %@: %@",[[[auction valueForKey:@"itemFetch"] objectAtIndex:0] valueForKey:@"itemClass"],[[[auction valueForKey:@"itemFetch"] objectAtIndex:0] valueForKey:@"itemSubClass"],[[[auction valueForKey:@"itemFetch"] objectAtIndex:0] valueForKey:@"itemID"],[[[auction valueForKey:@"itemFetch"] objectAtIndex:0] valueForKey:@"name"]);
 }
 
 //This is a function for formatting the timeLeft value returned from the JSON so that it is more readable.
@@ -430,5 +517,11 @@
     return @"ERROR";
 }
 
+- (IBAction)searchButton:(id)sender {
+    [self filterAuctionTableByString:nil];
+}
 
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
 @end
