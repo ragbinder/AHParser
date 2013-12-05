@@ -93,6 +93,7 @@
         [aucData setValue:[auction valueForKey:@"timeLeft"] forKey:@"timeLeft"];
         [aucData setValue:[auction valueForKey:@"petSpeciesId"] forKey:@"petSpeciesID"];
         [aucData setValue:[auction valueForKey:@"petQualityId"] forKey:@"petQualityID"];
+        [aucData setValue:[auction valueForKey:@"petBreedId"] forKey:@"petBreedID"];
         [aucData setValue:[auction valueForKey:@"petLevel"] forKey:@"petLevel"];
         
         //Set the item relationship for each auction
@@ -126,6 +127,109 @@
     }
     
     [self setLastDumpInContext:context];
+    
+    NSLog(@"%d auctions in horde auctions",[_hordeAuctions count]);
+}
+
+-(void) storeAuctions:(NSManagedObjectContext *)context1 withProgress:(UIProgressView *)progressBar withTableView:(UITableView *)tableView
+{
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [progressBar setHidden:NO];
+    });
+    
+    NSError *error;
+    NSLog(@"Storing Horde Auctions");
+    int numAuctions = [_hordeAuctions count];
+    float currentAuction = 0;
+    
+    NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
+    [context setUndoManager:nil];
+    [context setPersistentStoreCoordinator:[context1 persistentStoreCoordinator]];
+    NSEntityDescription *description = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:context];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
+    
+    //Fetch All old auctions for deletion, but do not delete until after the new auctions are ready to be imported
+    NSFetchRequest *fetchAllAuctions = [[NSFetchRequest alloc] init];
+    [fetchAllAuctions setEntity:[NSEntityDescription entityForName:@"Auction" inManagedObjectContext: context]];
+    [fetchAllAuctions setIncludesPropertyValues:NO];
+    NSArray *allAuctions = [context executeFetchRequest:fetchAllAuctions error:&error];
+    
+    for(NSDictionary *auction in _hordeAuctions)
+    {
+        NSManagedObject *aucData =
+        [[NSManagedObject alloc]
+         initWithEntity:description
+         insertIntoManagedObjectContext:context];
+        //Set the properties of each auction
+        if(aucData)
+        {
+            [aucData setValue:[auction valueForKey:@"auc"] forKey:@"auc"];
+            [aucData setValue:[auction valueForKey:@"bid"] forKey:@"bid"];
+            [aucData setValue:[auction valueForKey:@"buyout"] forKey:@"buyout"];
+            [aucData setValue:[auction valueForKey:@"item"] forKey:@"item"];
+            [aucData setValue:[auction valueForKey:@"owner"] forKey:@"owner"];
+            [aucData setValue:[auction valueForKey:@"quantity"] forKey:@"quantity"];
+            [aucData setValue:[auction valueForKey:@"rand"] forKey:@"rand"];
+            [aucData setValue:[auction valueForKey:@"seed"] forKey:@"seed"];
+            [aucData setValue:[auction valueForKey:@"timeLeft"] forKey:@"timeLeft"];
+            [aucData setValue:[auction valueForKey:@"petSpeciesId"] forKey:@"petSpeciesID"];
+            [aucData setValue:[auction valueForKey:@"petQualityId"] forKey:@"petQualityID"];
+            [aucData setValue:[auction valueForKey:@"petBreedId"] forKey:@"petBreedID"];
+            [aucData setValue:[auction valueForKey:@"petLevel"] forKey:@"petLevel"];
+            
+            //Set the item relationship for each auction
+            NSFetchRequest *fetchItem = [[NSFetchRequest alloc] init];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"itemID == %d",[[auction valueForKey:@"item"] intValue]];
+            [fetchItem setEntity:entity];
+            [fetchItem setPredicate:predicate];
+            [fetchItem setIncludesPropertyValues:NO];
+            NSArray *fetchedItem = [context executeFetchRequest:fetchItem error:&error];
+            if([fetchedItem count] > 0)
+            {
+                [aucData setValue:fetchedItem[0] forKey:@"itemRelationship"];
+            }
+            else
+            {
+                NSLog(@"Could not find item in database for ID: %d",[[auction valueForKey:@"item"] intValue]);
+                [aucData setValue:[AHPItemAPIRequest storeItem:[[auction valueForKey:@"item"] integerValue] inContext:context] forKey:@"itemRelationship"];
+            }
+            if(error)
+            {
+                NSLog(@"Error linking Item ID: %@",error);
+            }
+            
+        }
+        currentAuction++;
+        float progress = currentAuction/numAuctions;
+        NSLog(@"%f - %f \n%@",currentAuction,progress,aucData);
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [progressBar setProgress:progress animated:YES];
+        });
+        
+        //[context refreshObject:aucData mergeChanges:YES];
+    }
+    
+    int num = 0;
+    for(NSManagedObject *auction in allAuctions)
+    {
+        [context deleteObject:auction];
+        num++;
+    }
+    NSLog(@"Deleted %d Old Auctions",num);
+    
+    if(![context save:&error])
+    {
+        NSLog(@"Error saving context: %@",error);
+    }
+    
+    [tableView reloadData];
+    [self setLastDumpInContext:context];
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [progressBar setHidden:YES];
+    });
     
     NSLog(@"%d auctions in horde auctions",[_hordeAuctions count]);
 }

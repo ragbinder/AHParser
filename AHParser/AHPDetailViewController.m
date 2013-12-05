@@ -64,6 +64,8 @@
     
     [self.navigationItem setRightBarButtonItems:array animated:YES];
     
+    [self.progressBar setHidden:YES];
+    
     //Remove this code later
     [self refreshAuctionDatabase];
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"item ==54443"];
@@ -73,10 +75,10 @@
 //Will refresh the auction database if it is out of date.
 -(void) refreshAuctionDatabase
 {
+    [self.progressBar setHidden:NO];
+    
     //Grab the link to the JSON file and its lastModified date.
-    NSDate *apiReqStart = [[NSDate alloc] init];
     AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://battle.net/api/wow/auction/data/%@",[delegate realm]]]];
-    NSDate *apiReqEnd = [[NSDate alloc] init];
     
     //If the auction data dump is more recent than the one in coredata, delete all of the coredata Auction objects and repopulate the database.
     //TODO: Look into whether or not it would be faster to check if an auctionID is still there, and not delete that one.
@@ -105,33 +107,27 @@
         //Insert the new auctions into the persistent store
         [auctionData storeAuctions: [delegate managedObjectContext]];
     }
-    NSTimeInterval diff = [apiReqEnd timeIntervalSinceDate:apiReqStart];
-    NSLog(@"API Request took %f",diff);
     
-    //Optimization code, lets you know how long coreData is taking.
-    NSDate *coreDataEnd = [[NSDate alloc] init];
-    diff = [coreDataEnd timeIntervalSinceDate:apiReqEnd];
-    NSLog(@"Core Data took: %f",diff);
-    
-    
-    //Debug line to print out the current ITEM database
-    //[self printStoredItems];
-    
-    //NSLog(@"Printing Horde Auctions: /n%@",[auctionData hordeAuctions]);
     NSLog(@"Stored Horde Auctions: %d",[[auctionData hordeAuctions] count]);
     
     [_auctionTable reloadData];
+    
+    [self.progressBar setHidden:YES];
 }
 
 //Will refresh the auction database, even if it is up to date
 -(void) forceRefreshAuctionDatabase
 {
-    //Grab the link to the JSON file and its lastModified date.
-    NSDate *apiReqStart = [[NSDate alloc] init];
-    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://battle.net/api/wow/auction/data/%@",[delegate realm]]]];
-    NSDate *apiReqEnd = [[NSDate alloc] init];
+    //Disable the button until the refresh is completed.
+    UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:3];
+    [refreshButton setEnabled:NO];
     
-    NSLog(@"Refreshing Auction Database");
+    //Grab the link to the JSON file and its lastModified date.
+    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://battle.net/api/wow/auction/data/%@",[delegate realm]]]];
+    
+    NSLog(@"Force Refreshing Auction Database");
+    //Moving this functionality into the background thread below, so the user can browse old auctions while refreshing
+    /*
     NSFetchRequest *fetchAllAuctions = [[NSFetchRequest alloc] init];
     [fetchAllAuctions setEntity:[NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]]];
     [fetchAllAuctions setIncludesPropertyValues:NO];
@@ -149,18 +145,20 @@
         NSLog(@"Error clearing store: %@",error);
     }
     NSLog(@"Deleted %d Old Auctions",num);
+    */
+    
     //Insert the new auctions into the persistent store
-    [auctionData storeAuctions: [delegate managedObjectContext]];
-    NSTimeInterval diff = [apiReqEnd timeIntervalSinceDate:apiReqStart];
-    NSLog(@"API Request took %f",diff);
-    
-    //Optimization code, lets you know how long coreData is taking.
-    NSDate *coreDataEnd = [[NSDate alloc] init];
-    diff = [coreDataEnd timeIntervalSinceDate:apiReqEnd];
-    NSLog(@"Core Data took: %f",diff);
-    NSLog(@"Stored Horde Auctions: %d",[[auctionData hordeAuctions] count]);
-    
-    [_auctionTable reloadData];
+    dispatch_queue_t backgroundQueue;
+    backgroundQueue = dispatch_queue_create("com.ragbinder.AHParser.background", NULL);
+    dispatch_async(backgroundQueue, ^(void){
+        [auctionData storeAuctions: [delegate managedObjectContext] withProgress:[self progressBar] withTableView:[self auctionTable]];
+        
+        //Re-enable the refresh button after the data operation is complete.
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [refreshButton setEnabled:YES];
+            [self filterAuctionTable:nil];
+        });
+    });
 }
 
 //Prints out the stored Items in coredata
@@ -183,8 +181,6 @@
 //Sample Predicate: "(item == 72095)" for trillium bar
 - (void)filterAuctionTable: (NSPredicate *) predicate
 {
-    NSLog(@"Filtering Table By Predicate: %@",predicate);
-    NSLog(@"Context: %@",[delegate managedObjectContext]);
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
     NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
@@ -208,6 +204,7 @@
     [_auctionTable reloadData];
 }
 
+//Shouldn't be using this method in the future
 - (void)filterAuctionTableByString: (NSString*) predicateString
 {
     NSArray *predicateParts = [predicateString componentsSeparatedByString:@" "];
@@ -246,7 +243,7 @@
     NSError *error;
     //[NSFetchedResultsController deleteCacheWithName:@"Root"];
     [_fetchedResultsController.fetchRequest setPredicate:predicate];
-    [_fetchedResultsController.fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1,sortDescriptor2,nil]];
+    [_fetchedResultsController.fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor0,nil]];
     [_fetchedResultsController performFetch:&error];
     NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
     NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);
@@ -335,6 +332,7 @@
     //Set all of the information that is contained in the auction lines JSON
     //
     //#######################################
+    @try {
     NSString *owner = [[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"owner"];
     NSString *timeLeft = [[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"timeLeft"];
     NSString *bidG = [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/10000];
@@ -469,6 +467,13 @@
         {
             //NSLog(@"New thumbnail saved as: %@",[itemDictionary valueForKey:@"icon"]);
         }
+    }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Cell was deleted while loading");
+    }
+    @finally {
+        
     }
 }
 

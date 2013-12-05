@@ -12,6 +12,7 @@
 #import "AHPItemAPIRequest.h"
 #import "AHPImageRequest.h"
 #import "AHPPetAPIRequest.h"
+#import <dispatch/dispatch.h>
 
 @class AHPAppDelegate;
 
@@ -24,7 +25,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (weak, nonatomic) IBOutlet UITableView *auctionTable;
-//@property NSArray *auctionsArray;
+@property (weak, nonatomic) IBOutlet UIProgressView *progressBar;
 
 - (void)filterAuctionTable:(NSPredicate*)predicate;
 - (void)filterAuctionTableByString:(NSString*)predicateString;

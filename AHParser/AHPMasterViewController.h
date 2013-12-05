@@ -22,5 +22,6 @@
 
 -(id)initWithTitle:(NSString*)title andDictionary:(NSDictionary*)dictionary;
 -(IBAction)applyFilters:(id)sender;
+- (IBAction)clearFilters:(id)sender;
 
 @end

@@ -18,6 +18,7 @@
 
 -(id) initWithURL: (NSURL*) url;
 -(void) storeAuctions: (NSManagedObjectContext*) context;
+-(void) storeAuctions:(NSManagedObjectContext *)context withProgress:(UIProgressView*) progressBar withTableView:(UITableView *) tableView;
 -(void) setLastDumpInContext: (NSManagedObjectContext*)context;
 -(double) getLastDumpInContext:(NSManagedObjectContext*)context;
 +(NSDate*) convertWOWTime:(double)time;

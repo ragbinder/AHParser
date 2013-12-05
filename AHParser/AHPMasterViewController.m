@@ -51,13 +51,67 @@
     self.navigationItem.rightBarButtonItem = doneButton;
 }
 
+//This method is linked to the done button in the master view. It is called when the user is done selecting a category filter
 -(IBAction)applyFilters:(id)sender
 {
-    //[self indexPathForSelectedRow];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(itemRelationship.itemClass == %d)",[[_dictionary valueForKey:@"class"] integerValue]];
-    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(item == %d)",54443];
+    NSIndexPath *index = [[self tableView] indexPathForSelectedRow];
+    NSPredicate *predicate;
+    
+    if(index != nil)
+    {
+        NSDictionary *selectedRow = [_rows objectAtIndex:index.row];
+        NSLog(@"%@",index);
+        NSLog(@"Selected Cell: %@",[[self tableView] cellForRowAtIndexPath:index]);
+        
+        if([selectedRow objectForKey:@"subclass"] != nil)
+        {
+            if([selectedRow objectForKey:@"inventoryType"] != nil)
+            {
+                predicate = [NSPredicate predicateWithFormat:@"(itemRelationship.itemClass == %d) AND (itemRelationship.itemSubClass == %d) AND (itemRelationship.inventoryType == %d)",[[selectedRow valueForKey:@"class"] integerValue],[[selectedRow valueForKey:@"subclass"] integerValue],[[selectedRow valueForKey:@"inventoryType"] integerValue]];
+            }
+            else
+            {
+                //If we are in the battlePet Menu
+                if([[_dictionary valueForKey:@"class"] integerValue] == 17)
+                {
+                    predicate = [NSPredicate predicateWithFormat:@"(petBreedID == %d)",[[selectedRow valueForKey:@"subclass"] integerValue]];
+                }
+                else
+                {
+                    predicate = [NSPredicate predicateWithFormat:@"(itemRelationship.itemClass == %d) AND (itemRelationship.itemSubClass == %d)",[[selectedRow valueForKey:@"class"] integerValue],[[selectedRow valueForKey:@"subclass"] integerValue]];
+                }
+            }
+        }
+        
+        else
+        {
+            predicate = [NSPredicate predicateWithFormat:@"(itemRelationship.itemClass == %d)",[[selectedRow valueForKey:@"class"] integerValue]];
+        }
+    }
+    else
+    {
+        if([_dictionary valueForKey:@"class"] != nil)
+        {
+            if([_dictionary valueForKey:@"subclass"] != nil)
+            {
+                predicate = [NSPredicate predicateWithFormat:@"(itemRelationship.itemClass == %d) AND (itemRelationship.itemSubClass == %d)",[[_dictionary valueForKey:@"class"] integerValue], [[_dictionary valueForKey:@"subclass"] integerValue]];
+            }
+            else
+            {
+                predicate = [NSPredicate predicateWithFormat:@"(itemRelationship.itemClass == %d)",[[_dictionary valueForKey:@"class"] integerValue]];
+            }
+        }
+        else
+        {
+            predicate = nil;
+        }
+    }
     NSLog(@"%@",predicate);
     [self.detailViewController filterAuctionTable:predicate];
+}
+
+- (IBAction)clearFilters:(id)sender {
+    [[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -119,7 +173,7 @@
         //[self.detailViewController filterAuctionTableByString:[object valueForKey:@"predicate"]];
     }
     
-    NSLog(@"Dictionary for selected Row: %@",selectedRow);
+    //NSLog(@"Dictionary for selected Row: %@",selectedRow);
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath

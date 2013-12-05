@@ -63,7 +63,7 @@
                                                         <constraint firstAttribute="height" constant="56" id="kzq-3A-z6a"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" misplaced="YES" text="Owner" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hFn-V3-DOg">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Owner" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hFn-V3-DOg">
                                                     <rect key="frame" x="464" y="24" width="96" height="21"/>
                                                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="15"/>
                                                     <color key="textColor" red="0.98289411230000001" green="0.98838514089999996" blue="0.97740308379999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -176,10 +176,10 @@
                                             <constraints>
                                                 <constraint firstItem="cQd-TC-7zJ" firstAttribute="leading" secondItem="9EI-wn-l0i" secondAttribute="trailing" constant="8" symbolic="YES" id="3Jt-iE-PKS"/>
                                                 <constraint firstItem="JoS-RA-NwR" firstAttribute="top" secondItem="9Ub-0z-CyL" secondAttribute="top" constant="10" id="3Qp-Cs-aOY"/>
+                                                <constraint firstItem="JoS-RA-NwR" firstAttribute="leading" secondItem="hFn-V3-DOg" secondAttribute="trailing" constant="3" id="3Yp-HB-8so"/>
                                                 <constraint firstItem="9EI-wn-l0i" firstAttribute="baseline" secondItem="G5y-mG-FYc" secondAttribute="baseline" id="4EV-UU-Nmn"/>
                                                 <constraint firstItem="G5y-mG-FYc" firstAttribute="trailing" secondItem="JoS-RA-NwR" secondAttribute="trailing" id="4hg-gt-pgb"/>
                                                 <constraint firstItem="cQd-TC-7zJ" firstAttribute="top" secondItem="VEg-tt-CW7" secondAttribute="bottom" constant="8" symbolic="YES" id="702-13-BAe"/>
-                                                <constraint firstItem="JoS-RA-NwR" firstAttribute="leading" secondItem="hFn-V3-DOg" secondAttribute="trailing" constant="3" id="7Ds-gJ-G1G"/>
                                                 <constraint firstAttribute="bottom" secondItem="8RF-N4-Lkg" secondAttribute="bottom" constant="13" id="7EQ-i7-2T8"/>
                                                 <constraint firstItem="9EI-wn-l0i" firstAttribute="top" secondItem="zAL-xx-wTB" secondAttribute="bottom" constant="12" id="8Ha-X3-Oq2"/>
                                                 <constraint firstItem="VEg-tt-CW7" firstAttribute="leading" secondItem="Hvh-Qn-szc" secondAttribute="trailing" constant="3" id="BZa-bc-Rsk"/>
@@ -194,6 +194,7 @@
                                                 <constraint firstItem="G5y-mG-FYc" firstAttribute="top" secondItem="JoS-RA-NwR" secondAttribute="bottom" constant="8" symbolic="YES" id="LxL-uD-jSt"/>
                                                 <constraint firstItem="Yvy-Wh-QIT" firstAttribute="trailing" secondItem="NJ6-2C-Mtw" secondAttribute="trailing" id="MpS-yX-j2g"/>
                                                 <constraint firstItem="Hvh-Qn-szc" firstAttribute="leading" secondItem="9EI-wn-l0i" secondAttribute="leading" id="Nkv-uI-Mhx"/>
+                                                <constraint firstItem="hFn-V3-DOg" firstAttribute="leading" secondItem="Nil-hL-sC8" secondAttribute="trailing" constant="8" symbolic="YES" id="O0D-AB-n0G"/>
                                                 <constraint firstItem="8RF-N4-Lkg" firstAttribute="bottom" secondItem="DkB-KF-rnp" secondAttribute="bottom" id="OZC-az-tKN"/>
                                                 <constraint firstItem="DkB-KF-rnp" firstAttribute="trailing" secondItem="zAL-xx-wTB" secondAttribute="trailing" id="Ors-p2-jhc"/>
                                                 <constraint firstItem="zV9-ak-rSy" firstAttribute="leading" secondItem="JoS-RA-NwR" secondAttribute="trailing" constant="3" id="TTH-cr-ZOK"/>
@@ -213,8 +214,10 @@
                                                 <constraint firstItem="DkB-KF-rnp" firstAttribute="leading" secondItem="zAL-xx-wTB" secondAttribute="leading" id="ny4-VY-plz"/>
                                                 <constraint firstItem="G5y-mG-FYc" firstAttribute="leading" secondItem="JoS-RA-NwR" secondAttribute="leading" id="oA1-48-KBo"/>
                                                 <constraint firstItem="VEg-tt-CW7" firstAttribute="top" secondItem="Hvh-Qn-szc" secondAttribute="top" id="pSq-QM-2Wb"/>
+                                                <constraint firstItem="hFn-V3-DOg" firstAttribute="baseline" secondItem="Nil-hL-sC8" secondAttribute="baseline" id="pUk-Iw-90B"/>
                                                 <constraint firstItem="Yvy-Wh-QIT" firstAttribute="leading" secondItem="NJ6-2C-Mtw" secondAttribute="leading" id="rPR-VB-XfC"/>
                                                 <constraint firstItem="DkB-KF-rnp" firstAttribute="top" secondItem="Hvh-Qn-szc" secondAttribute="bottom" constant="13" id="sBv-sm-FyT"/>
+                                                <constraint firstItem="hFn-V3-DOg" firstAttribute="top" secondItem="Nil-hL-sC8" secondAttribute="top" id="utl-QT-D5P"/>
                                                 <constraint firstItem="zAL-xx-wTB" firstAttribute="leading" secondItem="zV9-ak-rSy" secondAttribute="trailing" constant="22" id="x22-tU-FFQ"/>
                                                 <constraint firstItem="Yvy-Wh-QIT" firstAttribute="bottom" secondItem="DkB-KF-rnp" secondAttribute="bottom" id="yzh-6a-0Yz"/>
                                                 <constraint firstItem="8RF-N4-Lkg" firstAttribute="trailing" secondItem="zV9-ak-rSy" secondAttribute="trailing" id="zPk-sj-7DS"/>
@@ -268,16 +271,20 @@
                         </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
-                    <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="ejM-Si-RNg"/>
-                        <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="BO7-0n-CT3"/>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" id="uq8-di-C2P"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="uq8-di-C2P">
+                        <nil key="title"/>
+                        <progressView key="titleView" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="w3y-CZ-3SD">
+                            <rect key="frame" x="8" y="21" width="687" height="2"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </progressView>
+                    </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <connections>
                         <outlet property="auctionTable" destination="2bI-Le-GoH" id="cAl-9R-ELI"/>
+                        <outlet property="progressBar" destination="w3y-CZ-3SD" id="y3N-ee-Ww6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="15" sceneMemberID="firstResponder"/>
@@ -415,6 +422,11 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="40">
                         <barButtonItem key="backBarButtonItem" title="Back" id="eVw-gN-XUb"/>
+                        <barButtonItem key="leftBarButtonItem" title="Clear" id="WSp-Qs-Xyd">
+                            <connections>
+                                <action selector="clearFilters:" destination="19" id="HhP-7H-rk9"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="20" id="rMA-uT-jhZ"/>

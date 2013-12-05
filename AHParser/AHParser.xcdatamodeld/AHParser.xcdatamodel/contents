@@ -6,6 +6,7 @@
         <attribute name="buyout" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="item" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="owner" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="petBreedID" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="petLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="petQualityID" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="petSpeciesID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -20,18 +21,6 @@
     </entity>
     <entity name="AuctionDumpDate" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-    </entity>
-    <entity name="Category" syncable="YES">
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="predicate" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="child" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="parent" inverseEntity="Category" syncable="YES"/>
-        <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="child" inverseEntity="Category" syncable="YES"/>
-    </entity>
-    <entity name="Event">
-        <attribute name="timeStamp" optional="YES" attributeType="Date">
-            <userInfo/>
-        </attribute>
-        <userInfo/>
     </entity>
     <entity name="Icon" syncable="YES">
         <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
@@ -52,10 +41,8 @@
         <relationship name="iconRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Icon" inverseName="itemRelationship" inverseEntity="Icon" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Auction" positionX="61" positionY="243" width="128" height="266"/>
+        <element name="Auction" positionX="61" positionY="243" width="128" height="281"/>
         <element name="AuctionDumpDate" positionX="234" positionY="252" width="128" height="60"/>
-        <element name="Category" positionX="394" positionY="273" width="128" height="105"/>
-        <element name="Event" positionX="378" positionY="135" width="128" height="60"/>
         <element name="Icon" positionX="394" positionY="450" width="128" height="90"/>
         <element name="Item" positionX="234" positionY="360" width="128" height="208"/>
     </elements>
