@@ -9,11 +9,16 @@
 #import <UIKit/UIKit.h>
 
 @class AHPDetailViewController;
+@class AHPAppDelegate;
 
 #import <CoreData/CoreData.h>
 #import "AHPCategoryLoader.h"
+#import "AHPAppDelegate.h"
 
 @interface AHPMasterViewController : UITableViewController <UITableViewDataSource>
+{
+    AHPAppDelegate *delegate;
+}
 
 @property (strong, nonatomic) NSDictionary *dictionary;
 @property (strong, nonatomic) NSMutableArray *rows;

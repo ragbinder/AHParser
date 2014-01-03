@@ -9,10 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "AHPRealmStatusRequest.h"
 #import "AHPRealmSelectCell.h"
+#import "AHPAppDelegate.h"
+#import "AHPAPIRequest.h"
+#import "AHPDetailViewController.h"
 
 @interface AHPRealmSelectViewController : UITableViewController <UITableViewDataSource>
-
+{
+    AHPAppDelegate *delegate;
+}
 @property NSArray *realms;
 @property (strong, nonatomic) IBOutlet UITableView *realmTable;
+@property (strong, nonatomic) AHPDetailViewController *detailView;
 
 @end

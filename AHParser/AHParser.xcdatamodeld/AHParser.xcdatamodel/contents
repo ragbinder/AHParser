@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3400" systemVersion="13A603" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A603" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Auction" syncable="YES">
         <attribute name="auc" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="bid" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="buyout" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="faction" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="item" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="owner" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="petBreedID" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -14,6 +15,7 @@
         <attribute name="rand" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="seed" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="timeLeft" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="dumpRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AuctionDumpDate" inverseName="auctionRelationship" inverseEntity="AuctionDumpDate" syncable="YES"/>
         <relationship name="itemRelationship" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="auctionRelationship" inverseEntity="Item" syncable="YES"/>
         <fetchedProperty name="itemFetch" optional="YES" syncable="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Item" predicateString="itemID = $FETCH_SOURCE.item"/>
@@ -21,6 +23,9 @@
     </entity>
     <entity name="AuctionDumpDate" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="dumpURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="faction" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="auctionRelationship" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Auction" inverseName="dumpRelationship" inverseEntity="Auction" syncable="YES"/>
     </entity>
     <entity name="Icon" syncable="YES">
         <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
@@ -41,9 +46,9 @@
         <relationship name="iconRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Icon" inverseName="itemRelationship" inverseEntity="Icon" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Auction" positionX="61" positionY="243" width="128" height="281"/>
-        <element name="AuctionDumpDate" positionX="234" positionY="252" width="128" height="60"/>
-        <element name="Icon" positionX="394" positionY="450" width="128" height="90"/>
-        <element name="Item" positionX="234" positionY="360" width="128" height="208"/>
+        <element name="Auction" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="AuctionDumpDate" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Icon" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Item" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

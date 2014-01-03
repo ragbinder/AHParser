@@ -34,12 +34,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"Master View did Load with title: %@",self.title);
+    
+    delegate = (AHPAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     
     self.detailViewController = (AHPDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
-    NSLog(@"Master View did set detail controller");
+    //NSLog(@"Master View did set detail controller");
     
     _rows = [[NSMutableArray alloc] initWithArray:[_dictionary objectForKey:@"subclasses"]];
     
@@ -107,11 +108,17 @@
         }
     }
     NSLog(@"%@",predicate);
-    [self.detailViewController filterAuctionTable:predicate];
+    
+    //NSPredicate *dumpPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.dumpURL == %@",[delegate realmURL]];
+    //NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:predicate,dumpPredicate,nil]];
+    [delegate setCategoryPredicate:predicate];
+    [self.detailViewController filterWithCategoryPredicate:predicate];
 }
 
 - (IBAction)clearFilters:(id)sender {
     [[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
+    [delegate setSearchPredicate:nil];
+    [_detailViewController filterAuctionTable:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -189,6 +196,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     /*
     cell.backgroundColor = [UIColor blackColor];
     cell.textLabel.backgroundColor = [UIColor clearColor];
+    cell.textLabel.textColor = [UIColor blueColor];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];
      */
 }

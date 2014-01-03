@@ -23,7 +23,6 @@
     NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
     if(response)
     {
-        //NSLog(@"%@",response);
         return response;
     }
     else

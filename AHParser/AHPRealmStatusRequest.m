@@ -10,7 +10,6 @@
 
 @implementation AHPRealmStatusRequest
 
-//Will return an array of dictionaries that represent realm status.
 +(NSArray*) realmStatus
 {
     NSURL *url = [NSURL URLWithString:@"http://us.battle.net/api/wow/realm/status"];

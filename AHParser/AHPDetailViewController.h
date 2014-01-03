@@ -13,6 +13,8 @@
 #import "AHPImageRequest.h"
 #import "AHPPetAPIRequest.h"
 #import <dispatch/dispatch.h>
+#import "AHPRealmSelectViewController.h"
+#import "AHPSearchViewController.h"
 
 @class AHPAppDelegate;
 
@@ -20,16 +22,22 @@
 {
     AHPAppDelegate *delegate;
 }
-@property (strong, nonatomic) id detailItem;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (weak, nonatomic) IBOutlet UITableView *auctionTable;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressBar;
+/*
+@property (strong, nonatomic) NSPredicate *factionPredicate;
+@property (strong, nonatomic) NSPredicate *realmPredicate;
+@property (strong, nonatomic) NSPredicate *categoryPredicate;
+@property (strong, nonatomic) NSPredicate *searchPredicate;
+@property (strong, nonatomic) NSArray *sortDescriptors;
+*/
+@property (nonatomic) BOOL pricePerUnit;
 
 - (void)filterAuctionTable:(NSPredicate*)predicate;
-- (void)filterAuctionTableByString:(NSString*)predicateString;
-+ (NSString*)timeLeftFormat:(NSString*)timeLeft;
-- (IBAction)searchButton:(id)sender;
+- (void)filterWithCategoryPredicate:(NSPredicate*)predicate;
+- (void)filterWithSearchPredicate:(NSPredicate*)predicate;
+- (void)filterWithSearchPredicate:(NSPredicate*)predicate andSort:(NSSortDescriptor*)sort;
 
 @end

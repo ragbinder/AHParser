@@ -23,19 +23,55 @@
     return self;
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.clearsSelectionOnViewWillAppear = NO;
+    
+    delegate = (AHPAppDelegate *)[[UIApplication sharedApplication] delegate];
  
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     _realms = [AHPRealmStatusRequest realmStatus];
-    NSLog(@"%@",_realms);
     
     [_realmTable setDataSource:self];
+    
+}
+
+-(void) viewDidAppear:(BOOL)animated
+{
+    //Set up the faction select buttons
+    NSArray *factions = [NSArray arrayWithObjects:@"Alliance",@"Neutral",@"Horde", nil];
+    UISegmentedControl *factionSelect = [[UISegmentedControl alloc] initWithItems:factions];
+    UIBarButtonItem *factionSelectButton = [[UIBarButtonItem alloc] initWithCustomView:factionSelect];
+    [self.navigationItem setRightBarButtonItem:factionSelectButton animated:animated];
+    
+    //Link the segmented control to the setFactionForDelegate: method
+    [factionSelect addTarget:self
+                         action:@selector(setFactionForDelegate:)
+               forControlEvents:UIControlEventValueChanged];
+    
+    //Set the segmented control selection to be what is currently in the delegate.
+    if([[delegate faction] isEqualToString:@"Alliance"])
+    {
+        [factionSelect setSelectedSegmentIndex:0];
+    }
+    if ([delegate.faction isEqualToString:@"Neutral"])
+    {
+        [factionSelect setSelectedSegmentIndex:1];
+    }
+    if ([delegate.faction isEqualToString:@"Horde"])
+    {
+        [factionSelect setSelectedSegmentIndex:2];
+    }
+}
+
+-(void) setFactionForDelegate:(UISegmentedControl*)faction
+{
+    NSString *factionString = [faction titleForSegmentAtIndex:[faction selectedSegmentIndex]];
+    [delegate setFaction:factionString];
+    [delegate setFactionPredicate:[NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",factionString]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,8 +96,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    AHPRealmSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"RealmCell";
+    AHPRealmSelectCell *cell = [tableView
+                                dequeueReusableCellWithIdentifier:CellIdentifier
+                                forIndexPath:indexPath];
     
     // Configure the cell...
     [cell.realmName setText: [[_realms objectAtIndex:indexPath.row] objectForKey:@"name"]];
@@ -98,6 +136,9 @@
         [cell.type setText:@"PvE"];
     }
     
+    //Format Colors
+    [cell setBackgroundColor:[UIColor blackColor]];
+    [cell.realmName setTextColor:[UIColor whiteColor]];
     
     return cell;
 }
@@ -145,14 +186,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
-    NSLog(@"Selected: %@", [_realms objectAtIndex:indexPath.row]);
+    delegate.realm = [[_realms objectAtIndex:indexPath.row] objectForKey:@"slug"];
+    delegate.realmProper = [[_realms objectAtIndex:indexPath.row] objectForKey:@"name"];
+    delegate.realmURL = [[[[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://us.battle.net/api/wow/auction/data/%@",[[_realms objectAtIndex:indexPath.row] objectForKey:@"slug"]]]] auctionDataURL] description];
+    //NSLog(@"JANK:%@",delegate.realmURL);
+    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.dumpURL == %@",delegate.realmURL];
+    [delegate setRealmPredicate:realmPredicate];
+    //NSLog(@"Selected: %@", [[_realms objectAtIndex:indexPath.row] objectForKey:@"slug"]);
 }
 
 @end

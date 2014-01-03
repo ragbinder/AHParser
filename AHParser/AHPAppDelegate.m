@@ -16,11 +16,18 @@
 @synthesize auctionData = _auctionData;
 @synthesize faction = _faction;
 @synthesize realm = _realm;
+@synthesize realmProper = _realmProper;
+@synthesize factionPredicate = _factionPredicate;
+@synthesize realmPredicate = _realmPredicate;
+@synthesize categoryPredicate = _categoryPredicate;
+@synthesize searchPredicate = _searchPredicate;
+@synthesize sortDescriptors = _sortDescriptors;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
     _realm = @"sentinels";
+    _realmProper =@"Sentinels";
     
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
@@ -30,7 +37,6 @@
     AHPMasterViewController *controller = (AHPMasterViewController *)masterNavigationController.topViewController;
     
     NSDictionary *dict = [AHPCategoryLoader importCategories];
-    //NSLog(@"Dictionary for categories: %@",dict);
     [controller initWithTitle:@"All" andDictionary:dict];
     
     return YES;

@@ -20,7 +20,19 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property AHPAPIRequest *auctionData;
 @property (strong, nonatomic) NSString *faction;
+//The realm slug that us currently being used.
 @property (strong, nonatomic) NSString *realm;
+//The realm name that us currently being used.
+@property (strong, nonatomic) NSString *realmProper;
+//The URL the current realm dump is pulled from
+@property (strong, nonatomic) NSString *realmURL;
+
+//The current predicates and sort descriptors. These are contained in the app delegate so that more than one may be applied at a time more easily.
+@property (strong, nonatomic) NSPredicate *factionPredicate;
+@property (strong, nonatomic) NSPredicate *realmPredicate;
+@property (strong, nonatomic) NSPredicate *categoryPredicate;
+@property (strong, nonatomic) NSPredicate *searchPredicate;
+@property (strong, nonatomic) NSArray *sortDescriptors;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
