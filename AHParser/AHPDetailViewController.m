@@ -188,17 +188,19 @@
     
     
     NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects: factionPredicate, realmPredicate, predicate, nil]];
-    
+    /*
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
     NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
     [fetch setEntity:entityDescription];
     [fetch setPredicate:predicate];
+    //[fetch setSortDescriptors:[NSArray arrayWithObjects:sort,sortDescriptor1, nil]];
     [fetch setSortDescriptors:[NSArray arrayWithObjects:sort,sortDescriptor1, nil]];
-    
+    */
     NSError *error;
     [NSFetchedResultsController deleteCacheWithName:@"Root"];
     [[self fetchedResultsController].fetchRequest setPredicate:compoundPredicate];
+    [[self fetchedResultsController].fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sort, nil]];
     [[self fetchedResultsController] performFetch:&error];
     NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
     NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);

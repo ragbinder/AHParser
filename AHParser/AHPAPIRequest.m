@@ -27,18 +27,20 @@
         
         //Store the location of the AH data and the last modified date
         _auctionDataURL = [NSURL URLWithString:[[filesArray objectAtIndex:0] objectForKey:@"url"]];
-        NSLog(@"Retrieving Auction Cache from: %@",_auctionDataURL);
+        //NSLog(@"Retrieving Auction Cache from: %@",_auctionDataURL);
         lastModified = [[filesArray objectAtIndex:0] objectForKey:@"lastModified"];
         
         //Fetch the data from the URL provided by the API
-        NSMutableURLRequest *auctionDataRequest = [NSURLRequest requestWithURL:_auctionDataURL];
+        NSMutableURLRequest *auctionDataRequest = [NSURLRequest requestWithURL:_auctionDataURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+        
         NSHTTPURLResponse *APIResponse = [[NSHTTPURLResponse alloc] init];
         NSData *dataResponse = [NSURLConnection sendSynchronousRequest:auctionDataRequest returningResponse:&APIResponse error:&error];
         
+        int status = [APIResponse statusCode];
         //If the APIRequest received an answer
-        if([APIResponse statusCode] == 200)
+        if(status == 200)
         {
-            NSLog(@"%ld",(long)[APIResponse statusCode]);
+            NSLog(@"%d",status);
             if(dataResponse)
             {
                 NSDictionary *auctionData = [NSJSONSerialization JSONObjectWithData:dataResponse options:NSJSONReadingMutableContainers error:nil];
@@ -51,7 +53,7 @@
                 _hordeAuctions = [hordeData objectForKey:@"auctions"];
                 _neutralAuctions = [neutralData objectForKey:@"auctions"];
                 
-                NSLog(@"Data Stored Successfully");
+                //NSLog(@"Data Stored Successfully");
                 
                 return self;
             }
@@ -63,8 +65,8 @@
         }
         else
         {
-            NSLog(@"Error in API Request to Auction House: %d",[APIResponse statusCode]);
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"API Error" message:@"The Auction API returned error code 404. Please try again later." delegate:Nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            NSLog(@"Error in API Request to Auction House: %d",status);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"API Error" message:[NSString stringWithFormat:@"The Auction API returned error code %d. Please try again later.",status] delegate:Nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
             [alert show];
             return self;
         }

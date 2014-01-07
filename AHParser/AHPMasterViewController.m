@@ -61,8 +61,8 @@
     if(index != nil)
     {
         NSDictionary *selectedRow = [_rows objectAtIndex:index.row];
-        NSLog(@"%@",index);
-        NSLog(@"Selected Cell: %@",[[self tableView] cellForRowAtIndexPath:index]);
+        //NSLog(@"%@",index);
+        //NSLog(@"Selected Cell: %@",[[self tableView] cellForRowAtIndexPath:index]);
         
         if([selectedRow objectForKey:@"subclass"] != nil)
         {
@@ -118,7 +118,7 @@
 - (IBAction)clearFilters:(id)sender {
     [[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
     [delegate setSearchPredicate:nil];
-    [_detailViewController filterAuctionTable:nil];
+    [_detailViewController filterAuctionTable:nil andSort:nil];
 }
 
 - (void)didReceiveMemoryWarning

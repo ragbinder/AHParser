@@ -27,7 +27,8 @@
 {
     // Override point for customization after application launch.
     _realm = @"sentinels";
-    _realmProper =@"Sentinels";
+    _realmProper = @"Please Select A Realm";
+    _faction = @"and Faction";
     
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];

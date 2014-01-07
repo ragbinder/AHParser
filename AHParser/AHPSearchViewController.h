@@ -22,9 +22,6 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) AHPDetailViewController *detailView;
 
-- (IBAction)sortByBar:(id)sender;
-- (IBAction)ascDescBar:(id)sender;
-- (IBAction)stackUnitBar:(id)sender;
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar;
 
 @end

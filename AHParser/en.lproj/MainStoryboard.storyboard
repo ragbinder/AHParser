@@ -343,41 +343,18 @@
                                 <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Display Prices:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ewN-5n-2kN">
-                                <rect key="frame" x="47" y="304" width="114" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4bI-Td-2gO">
-                                <rect key="frame" x="47" y="346" width="270" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="Per Stack"/>
-                                    <segment title="Per Unit"/>
-                                </segments>
-                                <connections>
-                                    <action selector="stackUnitBar:" destination="dSe-7T-izm" eventType="valueChanged" id="t7e-b1-n3d"/>
-                                </connections>
-                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="5Rd-Uw-TM3" firstAttribute="top" secondItem="0Et-5v-gqr" secondAttribute="bottom" constant="41" id="A5N-kp-sZg"/>
                             <constraint firstItem="t5y-6p-L44" firstAttribute="centerX" secondItem="5Rd-Uw-TM3" secondAttribute="centerX" id="Eme-SP-fsh"/>
                             <constraint firstItem="5Rd-Uw-TM3" firstAttribute="leading" secondItem="aEA-MY-Rtr" secondAttribute="leading" id="Gus-Fw-k9a"/>
-                            <constraint firstItem="4bI-Td-2gO" firstAttribute="top" secondItem="ewN-5n-2kN" secondAttribute="bottom" constant="21" id="JUk-1H-yCt"/>
                             <constraint firstItem="t5y-6p-L44" firstAttribute="top" secondItem="egb-Oa-ing" secondAttribute="bottom" constant="22" id="Ox7-Sn-X9r"/>
                             <constraint firstItem="U3X-5I-kT5" firstAttribute="top" secondItem="t5y-6p-L44" secondAttribute="bottom" constant="32" id="SD7-zW-Nrr"/>
-                            <constraint firstItem="ewN-5n-2kN" firstAttribute="leading" secondItem="4bI-Td-2gO" secondAttribute="leading" id="TGW-dL-Vc7"/>
                             <constraint firstItem="egb-Oa-ing" firstAttribute="top" secondItem="5Rd-Uw-TM3" secondAttribute="bottom" constant="44" id="eOH-Fn-XCx"/>
                             <constraint firstItem="t5y-6p-L44" firstAttribute="leading" secondItem="egb-Oa-ing" secondAttribute="leading" id="gXv-th-eJg"/>
-                            <constraint firstItem="U3X-5I-kT5" firstAttribute="trailing" secondItem="4bI-Td-2gO" secondAttribute="trailing" id="kx4-Gn-WPq"/>
                             <constraint firstItem="egb-Oa-ing" firstAttribute="leading" secondItem="aEA-MY-Rtr" secondAttribute="leading" constant="47" id="s7u-Sn-AqH"/>
-                            <constraint firstItem="ewN-5n-2kN" firstAttribute="top" secondItem="U3X-5I-kT5" secondAttribute="bottom" constant="24" id="sQr-DY-g1H"/>
                             <constraint firstItem="U3X-5I-kT5" firstAttribute="leading" secondItem="t5y-6p-L44" secondAttribute="leading" id="txO-vy-1bw"/>
-                            <constraint firstItem="ewN-5n-2kN" firstAttribute="leading" secondItem="U3X-5I-kT5" secondAttribute="leading" id="xge-Dd-p1O"/>
                             <constraint firstAttribute="trailing" secondItem="5Rd-Uw-TM3" secondAttribute="trailing" id="zh8-n2-vnK"/>
                         </constraints>
                     </view>
@@ -385,7 +362,6 @@
                         <outlet property="ascDescBar" destination="U3X-5I-kT5" id="z6f-51-D6j"/>
                         <outlet property="searchBar" destination="5Rd-Uw-TM3" id="jAg-pY-YHB"/>
                         <outlet property="sortByBar" destination="t5y-6p-L44" id="R5T-2L-V6U"/>
-                        <outlet property="stackUnitBar" destination="4bI-Td-2gO" id="VHp-nL-Q0E"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VOl-CV-5Qb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -513,6 +489,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                             </tableViewCell>
                         </prototypes>
                         <sections/>

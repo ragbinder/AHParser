@@ -188,11 +188,10 @@
 {
     delegate.realm = [[_realms objectAtIndex:indexPath.row] objectForKey:@"slug"];
     delegate.realmProper = [[_realms objectAtIndex:indexPath.row] objectForKey:@"name"];
+    
     delegate.realmURL = [[[[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://us.battle.net/api/wow/auction/data/%@",[[_realms objectAtIndex:indexPath.row] objectForKey:@"slug"]]]] auctionDataURL] description];
-    //NSLog(@"JANK:%@",delegate.realmURL);
     NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.dumpURL == %@",delegate.realmURL];
     [delegate setRealmPredicate:realmPredicate];
-    //NSLog(@"Selected: %@", [[_realms objectAtIndex:indexPath.row] objectForKey:@"slug"]);
 }
 
 @end

@@ -30,13 +30,11 @@
 	// Do any additional setup after loading the view.
     delegate = (AHPAppDelegate *)[[UIApplication sharedApplication] delegate];
     [self.searchBar setDelegate:self];
+    [self.searchBar setShowsSearchResultsButton:YES];
 }
 
--(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+- (NSSortDescriptor*)getSortDescriptor
 {
-    NSLog(@"Search Clicked");
-    
-    //Setup the sort descriptor to be applied to the detail view.
     BOOL ascDesc;
     if ([self.ascDescBar selectedSegmentIndex] == 0) {
         ascDesc = YES;
@@ -55,7 +53,36 @@
             break;
             
         case 1:
-            sort = [[NSSortDescriptor alloc] initWithKey:@"timeLeft" ascending:ascDesc];
+            //Had to write a custom comparator to sort the Time Remaining field correctly
+            sort = [NSSortDescriptor sortDescriptorWithKey:@"timeLeft" ascending:ascDesc comparator:^(id obj1, id obj2){
+                int o1,o2;
+                if([obj1 isEqualToString:@"Short"])
+                    o1 = 0;
+                if([obj2 isEqualToString:@"Short"])
+                    o2 = 0;
+                
+                if([obj1 isEqualToString:@"Medium"])
+                    o1 = 1;
+                if([obj2 isEqualToString:@"Medium"])
+                    o2 = 1;
+                
+                if([obj1 isEqualToString:@"Long"])
+                    o1 = 2;
+                if([obj2 isEqualToString:@"Long"])
+                    o2 = 2;
+                
+                if([obj1 isEqualToString:@"Very Long"])
+                    o1 = 3;
+                if([obj2 isEqualToString:@"Very Long"])
+                    o2 = 3;
+                
+                if(o1 > o2)
+                    return (NSComparisonResult)NSOrderedDescending;
+                if(o1 < o2)
+                    return (NSComparisonResult)NSOrderedAscending;
+                return (NSComparisonResult)NSOrderedSame;
+            }
+                    ];
             break;
             
         case 2:
@@ -75,26 +102,25 @@
             break;
     }
     
-    //Set the search predicate.
-    NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:@"itemRelationship.name CONTAINS %@",searchBar.text];
+    return sort;
+}
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    NSLog(@"Search Clicked");
     
-    
-    //Set price per unit/stack boolean variable in detail view controller.
-    if([self.stackUnitBar selectedSegmentIndex] == 0)
-    {
-        [detailView setPricePerUnit: NO];
-    }
-    else
-    {
-        [detailView setPricePerUnit: YES];
-    }
+    //Set the search predicate and sort descriptor.
+    NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:@"itemRelationship.name CONTAINS[cd] %@",searchBar.text];
+    NSSortDescriptor *sort = [self getSortDescriptor];
     
     NSLog(@"Search Predicate:\n%@\n%@",searchPredicate,sort);
     
-    //Combine the search and sort predicates and apply them to the detail view.
+    //Apply search predicate and sort descriptor to the detail view.
     [delegate setSearchPredicate:searchPredicate];
+    [delegate setSortDescriptors:[NSArray arrayWithObject:sort]];
     [detailView filterWithSearchPredicate:searchPredicate andSort:sort];
     
+    //Navigate back
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -104,16 +130,4 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)sortByBar:(id)sender {
-    NSLog(@"sortByBar event");
-}
-
-- (IBAction)ascDescBar:(id)sender {
-    NSLog(@"ascDescBar event");
-}
-
-- (IBAction)stackUnitBar:(id)sender {
-    NSLog(@"stackUnitBar event");
-    //[delegate set]
-}
 @end

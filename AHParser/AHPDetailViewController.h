@@ -36,6 +36,7 @@
 @property (nonatomic) BOOL pricePerUnit;
 
 - (void)filterAuctionTable:(NSPredicate*)predicate;
+- (void)filterAuctionTable:(NSPredicate *)predicate andSort: (NSSortDescriptor*) sort;
 - (void)filterWithCategoryPredicate:(NSPredicate*)predicate;
 - (void)filterWithSearchPredicate:(NSPredicate*)predicate;
 - (void)filterWithSearchPredicate:(NSPredicate*)predicate andSort:(NSSortDescriptor*)sort;
