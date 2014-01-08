@@ -15,8 +15,6 @@
 		84071B7C184257AB005C644B /* Copper.png in Resources */ = {isa = PBXBuildFile; fileRef = 84071B79184257AB005C644B /* Copper.png */; };
 		84071B7D184257AB005C644B /* Gold.png in Resources */ = {isa = PBXBuildFile; fileRef = 84071B7A184257AB005C644B /* Gold.png */; };
 		84071B7E184257AB005C644B /* Silver.png in Resources */ = {isa = PBXBuildFile; fileRef = 84071B7B184257AB005C644B /* Silver.png */; };
-		8420E1141851451900F0C81F /* 482px-AllianceCrest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8420E1121851451900F0C81F /* 482px-AllianceCrest.jpg */; };
-		8420E1151851451900F0C81F /* HordeCrest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8420E1131851451900F0C81F /* HordeCrest.jpg */; };
 		845CA7B7180C9B2100E9E2F1 /* AHPRealmSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 845CA7B6180C9B2100E9E2F1 /* AHPRealmSelectCell.m */; };
 		845CA7BA180C9CB000E9E2F1 /* AHPRealmStatusRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 845CA7B9180C9CB000E9E2F1 /* AHPRealmStatusRequest.m */; };
 		845CA7BD180CA06400E9E2F1 /* AHPRealmSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845CA7BC180CA06400E9E2F1 /* AHPRealmSelectViewController.m */; };
@@ -70,8 +68,6 @@
 		84071B79184257AB005C644B /* Copper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Copper.png; path = ../../../../Downloads/Copper.png; sourceTree = "<group>"; };
 		84071B7A184257AB005C644B /* Gold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Gold.png; path = ../../../../Downloads/Gold.png; sourceTree = "<group>"; };
 		84071B7B184257AB005C644B /* Silver.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Silver.png; path = ../../../../Downloads/Silver.png; sourceTree = "<group>"; };
-		8420E1121851451900F0C81F /* 482px-AllianceCrest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "482px-AllianceCrest.jpg"; sourceTree = "<group>"; };
-		8420E1131851451900F0C81F /* HordeCrest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = HordeCrest.jpg; sourceTree = "<group>"; };
 		845CA7B5180C9B2100E9E2F1 /* AHPRealmSelectCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPRealmSelectCell.h; sourceTree = "<group>"; };
 		845CA7B6180C9B2100E9E2F1 /* AHPRealmSelectCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPRealmSelectCell.m; sourceTree = "<group>"; };
 		845CA7B8180C9CB000E9E2F1 /* AHPRealmStatusRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPRealmStatusRequest.h; sourceTree = "<group>"; };
@@ -238,8 +234,6 @@
 		84938738179F50DB001F80BF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8420E1121851451900F0C81F /* 482px-AllianceCrest.jpg */,
-				8420E1131851451900F0C81F /* HordeCrest.jpg */,
 				07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */,
 				84071B79184257AB005C644B /* Copper.png */,
 				84071B7A184257AB005C644B /* Gold.png */,
@@ -412,10 +406,8 @@
 				8493873C179F50DB001F80BF /* InfoPlist.strings in Resources */,
 				84071B7E184257AB005C644B /* Silver.png in Resources */,
 				84938744179F50DB001F80BF /* Default.png in Resources */,
-				8420E1151851451900F0C81F /* HordeCrest.jpg in Resources */,
 				84938746179F50DB001F80BF /* Default@2x.png in Resources */,
 				84938748179F50DB001F80BF /* Default-568h@2x.png in Resources */,
-				8420E1141851451900F0C81F /* 482px-AllianceCrest.jpg in Resources */,
 				8493874B179F50DB001F80BF /* MainStoryboard.storyboard in Resources */,
 				07DE46CB17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */,
 				84071B7C184257AB005C644B /* Copper.png in Resources */,
