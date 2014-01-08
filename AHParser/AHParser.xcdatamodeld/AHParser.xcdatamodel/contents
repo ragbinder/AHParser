@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A603" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Auction" syncable="YES">
         <attribute name="auc" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="bid" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -45,10 +45,12 @@
         <relationship name="auctionRelationship" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Auction" inverseName="itemRelationship" inverseEntity="Auction" syncable="YES"/>
         <relationship name="iconRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Icon" inverseName="itemRelationship" inverseEntity="Icon" syncable="YES"/>
     </entity>
+    <entity name="RealmURL" syncable="YES"/>
     <elements>
         <element name="Auction" positionX="0" positionY="0" width="0" height="0"/>
         <element name="AuctionDumpDate" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Icon" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Item" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RealmURL" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>
