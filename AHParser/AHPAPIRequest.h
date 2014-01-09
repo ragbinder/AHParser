@@ -19,16 +19,16 @@
 @property (strong, nonatomic) NSNumber *lastModified;
 @property (strong, nonatomic) NSString *realm, *slug, *faction;
 @property (strong, nonatomic) NSArray *allianceAuctions, *hordeAuctions, *neutralAuctions;
-@property (strong, nonatomic) NSMutableArray *realmsInGroup;
+//@property (strong, nonatomic) NSMutableArray *realmsInGroup;
 
 //This method needs to be called with the API URL, not the data dump URL. This is responsible for fetching the auction data and setting all of the properties of the AHPAPIRequest object.
--(id) initWithURL: (NSURL*) url;
+- (id) initWithURL: (NSURL*) url;
 //This method is the one that stores the auctions in the managed object context. It is designed to be run via GCD from the detail view controller class.
--(void) storeAuctions:(NSManagedObjectContext *)context withProgress:(UIProgressView*) progressBar forFaction:(NSString*)faction;
+- (void) storeAuctions:(NSManagedObjectContext *)context withProgress:(UIProgressView*) progressBar forFaction:(NSString*)faction;
 //-(void) setLastDumpInContext: (NSManagedObjectContext*)context;
-+(NSMutableArray*)findDumpsInContext:(NSManagedObjectContext*)context WithURL:(NSString*)dumpURL forFaction:(NSString*)faction;
++ (NSMutableArray*)findDumpsInContext:(NSManagedObjectContext*)context WithURL:(NSString*)dumpURL forFaction:(NSString*)faction;
 //This converts the unix time that the API uses to a human-readable time.
-+(NSString*) convertWOWTime:(double)time;
++ (NSString*) convertWOWTime:(double)time;
 //This formats the time_left field in the auction JSON for display in the detail view controller.
 + (NSString*)timeLeftFormat:(NSString*)timeLeft;
 

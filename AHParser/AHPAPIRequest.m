@@ -20,19 +20,18 @@
     NSError *error = nil;
     NSURLResponse *urlResponse;
     NSData *response = [NSURLConnection sendSynchronousRequest:auctionAPIRequest returningResponse:&urlResponse error:&error];
+    
     if(response)
     {
+        //Since the API call returns the location of the data file, and not the file itself, we need to extract the URL from the API response.
         NSArray *auctionLines = [NSArray arrayWithObject:[NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil]];
         NSArray *filesArray = [auctionLines[0] objectForKey:@"files"];
-        
-        //Store the location of the AH data and the last modified date
         _auctionDataURL = [NSURL URLWithString:[[filesArray objectAtIndex:0] objectForKey:@"url"]];
-        //NSLog(@"Retrieving Auction Cache from: %@",_auctionDataURL);
         lastModified = [[filesArray objectAtIndex:0] objectForKey:@"lastModified"];
+        //NSLog(@"Retrieving Auction Cache from: %@",_auctionDataURL);
         
         //Fetch the data from the URL provided by the API
         NSMutableURLRequest *auctionDataRequest = [NSURLRequest requestWithURL:_auctionDataURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-        
         NSHTTPURLResponse *APIResponse = [[NSHTTPURLResponse alloc] init];
         NSData *dataResponse = [NSURLConnection sendSynchronousRequest:auctionDataRequest returningResponse:&APIResponse error:&error];
         
@@ -53,8 +52,6 @@
                 _hordeAuctions = [hordeData objectForKey:@"auctions"];
                 _neutralAuctions = [neutralData objectForKey:@"auctions"];
                 
-                //NSLog(@"Data Stored Successfully");
-                
                 return self;
             }
             else
@@ -70,6 +67,7 @@
             [alert show];
             return self;
         }
+        
     }
     else
     {
@@ -78,7 +76,29 @@
     }
 }
 
--(void) storeAuctions:(NSManagedObjectContext *)context1 withProgress:(UIProgressView *)progressBar forFaction:(NSString *)faction
+
+- (void)storeRealmURL:(NSString*)url forRealm:(NSString*) realm andSlug:(NSString*)slug inContext:(NSManagedObjectContext*) context
+{
+    NSFetchRequest *realmFetch = [[NSFetchRequest alloc] init];
+    NSEntityDescription *realmEntity = [NSEntityDescription entityForName:@"RealmURL" inManagedObjectContext:context];
+    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"slug CONTAINS %@",slug];
+    NSError *error = nil;
+    
+    [realmFetch setEntity:realmEntity];
+    [realmFetch setPredicate:realmPredicate];
+    NSArray *results = [context executeFetchRequest:realmFetch error:&error];
+    
+    if(results != nil)
+    {
+        NSLog(@"%d",[results count]);
+    }
+    else
+    {
+        NSLog(@"Error searching for previously cached realm URL: %@",error);
+    }
+}
+
+- (void)storeAuctions:(NSManagedObjectContext *)context1 withProgress:(UIProgressView *)progressBar forFaction:(NSString *)faction
 {
     //Unhide the progress bar. Hide the Displaying label.
     dispatch_async(dispatch_get_main_queue(), ^(void){

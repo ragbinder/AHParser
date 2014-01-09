@@ -45,7 +45,11 @@
         <relationship name="auctionRelationship" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Auction" inverseName="itemRelationship" inverseEntity="Auction" syncable="YES"/>
         <relationship name="iconRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Icon" inverseName="itemRelationship" inverseEntity="Icon" syncable="YES"/>
     </entity>
-    <entity name="RealmURL" syncable="YES"/>
+    <entity name="RealmURL" syncable="YES">
+        <attribute name="realm" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="slug" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Auction" positionX="0" positionY="0" width="0" height="0"/>
         <element name="AuctionDumpDate" positionX="0" positionY="0" width="0" height="0"/>
