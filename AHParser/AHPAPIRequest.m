@@ -10,25 +10,38 @@
 
 @implementation AHPAPIRequest
 @synthesize lastModified;
+@synthesize realm = _realm;
+@synthesize slug = _slug;
+@synthesize auctionDataURL = _auctionDataURL;
 
 
--(id) initWithURL:(NSURL *)url
+-(id) initWithRealmURL:(NSManagedObject *)realmURL
+             inContext:(NSManagedObjectContext *)context
 {
-    //NSLog(@"Initializing APIRequest with URL: %@",url);
+    _realm = [realmURL valueForKey:@"realm"];
+    _slug = [realmURL valueForKey:@"slug"];
+    NSLog(@"Initializing APIRequest with slug: %@",_slug);
+    
     //Fetch the Location of the auction house data
-    NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:url];
     NSError *error = nil;
+    NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://battle.net/api/wow/auction/data/%@",_slug]]];
     NSURLResponse *urlResponse;
     NSData *response = [NSURLConnection sendSynchronousRequest:auctionAPIRequest returningResponse:&urlResponse error:&error];
     
     if(response)
     {
-        //Since the API call returns the location of the data file, and not the file itself, we need to extract the URL from the API response.
-        NSArray *auctionLines = [NSArray arrayWithObject:[NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil]];
+        //Since the API call returns the location of the data file, and not the file itself, we need to extract the URL from the API response. We set the URL for the realmURL object now, in case it has changed since last time. The URLs are usually only changed when realms are connected to eachother.
+        NSArray *auctionLines = [NSArray arrayWithObject:[NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:&error]];
         NSArray *filesArray = [auctionLines[0] objectForKey:@"files"];
         _auctionDataURL = [NSURL URLWithString:[[filesArray objectAtIndex:0] objectForKey:@"url"]];
+        [realmURL setValue:[_auctionDataURL description] forKey:@"url"];
         lastModified = [[filesArray objectAtIndex:0] objectForKey:@"lastModified"];
-        //NSLog(@"Retrieving Auction Cache from: %@",_auctionDataURL);
+        
+        /*
+        //See if the RealmURL object for this URL/slug pair exists. If not, create it.
+        //NSLog(@"%@\n%@",_auctionDataURL,[[_auctionDataURL path] substringFromIndex:22]);
+        //[self storeRealmURL:[_auctionDataURL path] forSlug:[[_auctionDataURL path] substringFromIndex:22] inContext:context];
+        */
         
         //Fetch the data from the URL provided by the API
         NSMutableURLRequest *auctionDataRequest = [NSURLRequest requestWithURL:_auctionDataURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
@@ -76,12 +89,16 @@
     }
 }
 
-
-- (void)storeRealmURL:(NSString*)url forRealm:(NSString*) realm andSlug:(NSString*)slug inContext:(NSManagedObjectContext*) context
+//This is a helper method meant to be called during initialization to check if there is a RealmURL object for the given URL. If there is, check if the realm name and slug are present and add them if necessary. This will allow the user to match RealmURLs to name/slugs without calling the battle.net API.
+/*
+- (void)storeRealmURL:(NSString*) url
+              forSlug:(NSString*) slug
+              andName:(NSString*) name
+            inContext:(NSManagedObjectContext*) context
 {
     NSFetchRequest *realmFetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *realmEntity = [NSEntityDescription entityForName:@"RealmURL" inManagedObjectContext:context];
-    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"slug CONTAINS %@",slug];
+    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"slug == %@",slug];
     NSError *error = nil;
     
     [realmFetch setEntity:realmEntity];
@@ -90,15 +107,42 @@
     
     if(results != nil)
     {
-        NSLog(@"%d",[results count]);
+        int numResults = [results count];
+        NSLog(@"%d",numResults);
+        
+        //If there are no RealmURL objects for this URL.
+        if(numResults == 0)
+        {
+            //Create a new RealmURL object with the name, slug, and URL.
+            NSLog(@"Creating new RealmURL object for: %@",url);
+            NSManagedObject *realmURLObject = [[NSManagedObject alloc] initWithEntity:realmEntity insertIntoManagedObjectContext:context];
+            [realmURLObject setValue:url forKey:@"url"];
+            [realmURLObject setValue:slug forKey:@"slug"];
+            
+            if(![context save:&error]){
+                NSLog(@"Error: %@",error);}
+        }
+        else if(numResults == 1)
+        {
+            
+        }
+        //If somehow there is more than one RealmURL object for this URL
+        else
+        {
+            //Delete all of the RealmURL objects and insert a new one. This should never happen.
+            NSLog(@"MULTIPLE REALMURLS FOR %@",slug);
+        }
+        
     }
     else
     {
         NSLog(@"Error searching for previously cached realm URL: %@",error);
     }
 }
-
-- (void)storeAuctions:(NSManagedObjectContext *)context1 withProgress:(UIProgressView *)progressBar forFaction:(NSString *)faction
+*/
+- (void)storeAuctions:(NSManagedObjectContext*) context1
+         withProgress:(UIProgressView*) progressBar
+           forFaction:(NSString*) faction
 {
     //Unhide the progress bar. Hide the Displaying label.
     dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -108,7 +152,7 @@
     NSError *error;
     
     NSArray *auctionsArray;
-    _faction = faction;
+    //_faction = faction;
     if([faction isEqualToString:@"Horde"])
     {
         NSLog(@"Storing Horde Auctions");
@@ -136,6 +180,12 @@
         });
         return;
     }
+    
+    //Create the dump object to associate the auctions with.
+    /*
+    NSEntityDescription *dumpDescription = [NSEntityDescription entityForName:@"AuctionDumpDate" inManagedObjectContext:context1];
+    NSManagedObject *dumpObject = [[NSManagedObject alloc] initWithEntity:dumpDescription insertIntoManagedObjectContext:context1];
+    */
     //This stores the progress of the auction parsing.
     float currentAuction = 0;
     
@@ -145,7 +195,7 @@
     [context setPersistentStoreCoordinator:[context1 persistentStoreCoordinator]];
     NSEntityDescription *auctionEntity = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:context];
     NSEntityDescription *itemEntity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
-    NSManagedObject *auctionDumpObject = [self setLastDumpInContext:context];
+    NSManagedObject *auctionDumpObject = [self setLastDumpInContext:context forFaction:faction];
     [auctionDumpObject setValue:faction forKey:@"faction"];
     
     
@@ -220,18 +270,17 @@
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [progressBar setHidden:YES];
     });
-    
-    //NSLog(@"%d auctions in horde auctions",[_hordeAuctions count]);
 }
 
 //Call this method to set the Last Dumped date to the current dump generation date (from the JSON), formatted as a double. Also includes the URL a dump was generated from, for keeping multiple different sets of auction data at one time, and the faction the dump was generated for, so the user can load only part of an auction dump.
--(NSManagedObject*) setLastDumpInContext: (NSManagedObjectContext*)context
+-(NSManagedObject*) setLastDumpInContext:(NSManagedObjectContext*) context
+                              forFaction:(NSString*) faction
 {
     NSError *error = nil;
     
     //Remove all previous auction dumps with the same url
-    NSMutableArray *dumpsForURL = [AHPAPIRequest findDumpsInContext:context WithURL:[_auctionDataURL description] forFaction:_faction];
-    [dumpsForURL removeObjectAtIndex:0];
+    NSMutableArray *dumpsForURL = [AHPAPIRequest findDumpsInContext:context withSlug:_slug forFaction:faction];
+    [dumpsForURL removeObjectAtIndex:[dumpsForURL count]-1];
     for(NSManagedObject *dump in dumpsForURL)
     {
         NSLog(@"Deleting dump: %@",dump);
@@ -244,30 +293,43 @@
     
     //Insert the new dump date
     NSEntityDescription *auctionDumpDate = [NSEntityDescription entityForName:@"AuctionDumpDate" inManagedObjectContext:context];
-    NSManagedObject *time = [[NSManagedObject alloc] initWithEntity:auctionDumpDate insertIntoManagedObjectContext:context];
-    [time setValue:[NSNumber numberWithDouble:[lastModified doubleValue]] forKey:@"date"];
-    [time setValue:[_auctionDataURL description] forKey:@"dumpURL"];
-    [time setValue:_faction forKey:@"faction"];
-    NSLog(@"Last Dump Date set as: %@\n URL set as: %@",[AHPAPIRequest convertWOWTime: [lastModified doubleValue]],[_auctionDataURL description]);
+    NSManagedObject *dumpObject = [[NSManagedObject alloc] initWithEntity:auctionDumpDate insertIntoManagedObjectContext:context];
+    [dumpObject setValue:[NSNumber numberWithDouble:[lastModified doubleValue]] forKey:@"date"];
+    [dumpObject setValue:faction forKey:@"faction"];
+    
+    //Create a new realm
+    NSManagedObject *dumpURLObject = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"RealmURL" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+    [dumpURLObject setValue:_slug forKey:@"slug"];
+    [dumpURLObject setValue:_realm forKey:@"realm"];
+    [dumpURLObject setValue:[_auctionDataURL path] forKey:@"url"];
+    [dumpObject setValue:dumpURLObject forKey:@"realmRelationship"];
+    [dumpURLObject setValue:dumpObject forKey:@"dumpRelationship"];
+    
+    NSLog(@"Last Dump Date set as: %@\n URL set as: %@",dumpObject,dumpURLObject);
     if(![context save:&error])
     {
         NSLog(@"Error Saving Auction Dump Date: %@",error);
     }
     
-    return time;
+    return dumpObject;
 }
 
-//Returns an array of all dumps for the given URL, ordered by date (newest first).
-+(NSMutableArray *)findDumpsInContext:(NSManagedObjectContext*) context WithURL:(NSString*)dumpURL forFaction:(NSString *)faction
+//Returns an array of all dumps for the given slug, ordered by date (newest first).
++(NSMutableArray *)findDumpsinContext:(NSManagedObjectContext*) context
+                             withSlug:(NSString*) slug
+                           forFaction:(NSString*) faction
 {
+    //Find any other AuctionDumpDate objects with both:
+    //1. a relationship to a RealmURL object with this slug.
+    //2. the same faction attribute
+    NSError *error;
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *auctionDump = [NSEntityDescription entityForName:@"AuctionDumpDate" inManagedObjectContext:context];
     [request setEntity:auctionDump];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(dumpURL == %@) AND (faction == %@)",dumpURL,faction];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(ANY realmRelationship.slug == %@) AND (faction == %@)",slug,faction];
     [request setPredicate:predicate];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
     [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    NSError *error;
     
     NSMutableArray *dumps = [NSMutableArray arrayWithArray:[context executeFetchRequest:request error:&error]];
     if([dumps count] == 0)
@@ -278,7 +340,7 @@
         for(NSManagedObject *aucDump in dumps)
         {
             NSLog(@"%@ - %@",
-                  [aucDump valueForKey:@"dumpURL"],
+                  [aucDump valueForKey:@"realmRelationship"],
                   [AHPAPIRequest convertWOWTime:[[aucDump valueForKey:@"date"] doubleValue]]);
         }
         return dumps;
@@ -286,7 +348,7 @@
 }
 
 //This function converts the time number given by the wow server to a string, so that it's human-readable. The wow API returns times in unix time (seconds since 1/1/1970), in milliseconds. This method will format the date correctly, inculding timezone and locale.
-+(NSString*) convertWOWTime:(double)time
++(NSString*) convertWOWTime:(double) time
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
@@ -296,7 +358,7 @@
 }
 
 //This is a function for formatting the timeLeft value returned from the JSON so that it is formatted correctly.
-+(NSString*)timeLeftFormat:(NSString*)timeLeft
++(NSString*)timeLeftFormat:(NSString*) timeLeft
 {
     if([timeLeft isEqualToString:@"SHORT"])
         return @"Short";

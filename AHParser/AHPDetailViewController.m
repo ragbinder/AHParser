@@ -9,6 +9,7 @@
 #import "AHPDetailViewController.h"
 #import "AHPAppDelegate.h"
 
+
 @interface AHPDetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 - (void)configureView;
@@ -16,7 +17,6 @@
 
 @implementation AHPDetailViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
-@synthesize pricePerUnit = _pricePerUnit;
 
 #pragma mark - Managing the detail item
 
@@ -28,16 +28,18 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    if([delegate.faction isEqualToString:@""] || [delegate.realm isEqualToString:@""])
+    if([[delegate.realmURL valueForKey:@"realm"] isEqualToString:@""] || [[delegate.dump valueForKey:@"faction"] isEqualToString:@""])
     {
-        [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:@"Please Select A Realm/Faction"];
+        [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:[NSString stringWithFormat:@"Please Select A Realm/Faction"]];
     }
     else
     {
-        [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:[NSString stringWithFormat:@"%@ - %@",[delegate realmProper],[delegate faction]]];
+        [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:
+         [NSString stringWithFormat:@"%@ - %@",
+          [delegate.realmURL valueForKey:@"realm"],
+          [delegate.realmSelectViewController faction]]];
     }
     
-    //[self filterAuctionTable:nil];
     //NSLog(@"PREDICATES: \nFACTION:\n%@ \nREALM:\n%@ \nCATEGORY:\n%@ \nSEARCH:\n%@",[delegate factionPredicate],[delegate realmPredicate],[delegate categoryPredicate],[delegate searchPredicate]);
 }
 
@@ -50,11 +52,10 @@
     _managedObjectContext = [delegate managedObjectContext];
     [_auctionTable setDataSource:self];
     [self.progressBar setHidden:YES];
-    self.pricePerUnit = NO;
     
     //Set the upper right buttons - refresh table and return to realm/faction select
-    NSString *currentRealm = [delegate realm];
-    UIBarButtonItem *realmSelect = [[UIBarButtonItem alloc] initWithTitle:currentRealm style:UIBarButtonItemStyleBordered target:self action:@selector(realmSelect:)];
+    //NSString *currentRealm = [delegate.realmURL valueForKey:@"realm"];
+    UIBarButtonItem *realmSelect = [[UIBarButtonItem alloc] initWithTitle:@"Default" style:UIBarButtonItemStyleBordered target:self action:@selector(realmSelect:)];
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButton:)];
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButton:)];
     NSArray *array = [[NSArray alloc] initWithObjects: realmSelect,searchButton,refreshButton, nil];
@@ -67,19 +68,20 @@
 {
     
     //Grab the link to the JSON file and its lastModified date.
-    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://battle.net/api/wow/auction/data/%@",[delegate realm]]]];
-    NSManagedObject *latestDump = [[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description] forFaction:[delegate faction]] objectAtIndex:0];
+    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithRealmURL:[delegate realmURL]
+                                                               inContext:_managedObjectContext];
+    NSManagedObject *latestDump = [[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] withSlug:[auctionData slug] forFaction:[delegate.dump valueForKey:@"faction"]] objectAtIndex:0];
     
     //If the auction data dump is more recent than the one in coredata, delete all of the coredata Auction objects and repopulate the database.
     NSLog(@"Auction Data last Generated: %@",
           [AHPAPIRequest convertWOWTime:[[auctionData lastModified] doubleValue]]);
     NSLog(@"Auction Data in persistent store last generated: %@",
           [AHPAPIRequest convertWOWTime:[[latestDump valueForKey:@"date"] doubleValue]]);
-    NSLog(@"Auction Data pulled from: %@",[latestDump valueForKey:@"dumpURL"]);
+    //NSLog(@"Auction Data pulled from: %@",[latestDump valueForKey:@"realmRelationship.url"]);
     
     if([[latestDump valueForKey:@"date"] doubleValue] != [[auctionData lastModified] doubleValue])
     {
-        NSLog(@"Auction Data needs to be refreshed.\n%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
+        NSLog(@"AUCTION DATA NEEDS TO BE REFRESHED.\n%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
         
         //Disable the button until the refresh is completed.
         UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:2];
@@ -89,7 +91,7 @@
         dispatch_queue_t backgroundQueue;
         backgroundQueue = dispatch_queue_create("com.ragbinder.AHParser.background", NULL);
         dispatch_async(backgroundQueue, ^(void){
-            [auctionData storeAuctions: [delegate managedObjectContext] withProgress:[self progressBar] forFaction:[delegate faction]];
+            [auctionData storeAuctions: [delegate managedObjectContext] withProgress:[self progressBar] forFaction:[delegate.realmSelectViewController faction]];
             
             //Re-enable the refresh button and filter the auction table after the data operation is complete.
             dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -101,7 +103,7 @@
     }
     else
     {
-        NSLog(@"%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
+        NSLog(@"DATABASE IS UP TO DATE.\n%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
         //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dumpRelationship == %@",[[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description]] objectAtIndex:0]];
         [self filterAuctionTable:nil];
     }
@@ -154,8 +156,8 @@
 //Sample Predicate: "(item == 72095)" for trillium bar
 - (void)filterAuctionTable: (NSPredicate *) predicate
 {
-    NSPredicate *factionPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",[delegate faction]];
-    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.dumpURL == %@",delegate.realmURL];
+    NSPredicate *factionPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",[delegate.dump valueForKey:@"faction"]];
+    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"ANY dumpRelationship.realmRelationship.url == %@",delegate.realmURL];
     
     
     NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects: factionPredicate, realmPredicate, predicate, nil]];
@@ -183,8 +185,8 @@
 
 - (void)filterAuctionTable: (NSPredicate *) predicate andSort: (NSSortDescriptor*) sort
 {
-    NSPredicate *factionPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",[delegate faction]];
-    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.dumpURL == %@",delegate.realmURL];
+    NSPredicate *factionPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",[delegate.dump valueForKey:@"faction"]];
+    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"ANY dumpRelationship.realmRelationship.url == %@",delegate.realmURL];
     
     
     NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects: factionPredicate, realmPredicate, predicate, nil]];
@@ -324,16 +326,17 @@
     static NSString *cellIdentifier = @"SettingsCell";
     AHPAuctionTableCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     /*
-    if (cell == nil)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
-    }
-    */
+     if (cell == nil)
+     {
+     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+     }
+     */
     [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
 }
 
+//Long, messy method for configuring each auction cell.
 - (void)configureCell:(AHPAuctionTableCell*)cell atIndexPath:(NSIndexPath*)indexPath
 {
     //Try statement is necessary for when the table is refreshing. If the user is scrolling as the refresh completes, this function will generate an exception.
@@ -347,29 +350,19 @@
         NSString *timeLeft = [[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"timeLeft"];
         
         NSString *bidC,*bidS,*bidG,*buyoutC,*buyoutS,*buyoutG;
-        int quant = [[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"quantity"] integerValue];
-        NSString *quantity = [NSString stringWithFormat:@"%d",quant];
-        if(_pricePerUnit)
-        {
-            bidG = [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/10000/quant];
-            bidS = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/100 %100 /quant];
-            bidC = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]%100 /quant];
-            buyoutG = [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]/10000 /quant];
-            buyoutS = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]/100 %100 /quant];
-            buyoutC = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]%100 /quant];
-        }
-        else
-        {
-            bidG = [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/10000];
-            bidS = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/100 %100];
-            bidC = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]%100];
-            buyoutG = [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]/10000];
-            buyoutS = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]/100 %100];
-            buyoutC = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]%100];
-        }
+        //int quant = [[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"quantity"] integerValue];
+        NSString *quantity = [[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"quantity"];
+        
+        bidG = [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/10000];
+        bidS = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/100 %100];
+        bidC = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]%100];
+        buyoutG = [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]/10000];
+        buyoutS = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]/100 %100];
+        buyoutC = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]%100];
+        
         
         //Hide the quantity number for single items
-        if(quant == 1)
+        if([quantity isEqualToString:@"1"])
         {    quantity = @"";}
         
         [cell.owner setText:owner];
@@ -534,7 +527,12 @@
      */
 }
 
+//********************************************
+//
 //Functions for the rightBarButtonItems Array.
+//
+//********************************************
+
 -(IBAction)refreshButton:(id)sender
 {
     [self refreshAuctionDatabase];
@@ -564,10 +562,19 @@
 
 -(IBAction)realmSelect:(id)sender
 {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
-    AHPRealmSelectViewController *realmSelect = [storyboard instantiateViewControllerWithIdentifier:@"RealmSelectSB"];
-    [realmSelect setDetailView:self];
-    [self.navigationController pushViewController:realmSelect animated:YES];
+    if(![delegate realmSelectViewController])
+    {
+        NSLog(@"creating realm select view controller");
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
+        AHPRealmSelectViewController *realmSelect = [storyboard instantiateViewControllerWithIdentifier:@"RealmSelectSB"];
+        [realmSelect setDetailView:self];
+        [delegate setRealmSelectViewController:realmSelect];
+        [self.navigationController pushViewController:realmSelect animated:YES];
+    }
+    else
+    {
+        [self.navigationController pushViewController:[delegate realmSelectViewController] animated:YES];
+    }
 }
 
 @end

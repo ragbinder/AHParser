@@ -8,11 +8,14 @@
 
 #import "AHPRealmSelectViewController.h"
 
+/*
 @interface AHPRealmSelectViewController ()
 
 @end
+*/
 
 @implementation AHPRealmSelectViewController
+@synthesize faction = _faction;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -37,41 +40,46 @@
     
     [_realmTable setDataSource:self];
     
-}
-
--(void) viewDidAppear:(BOOL)animated
-{
     //Set up the faction select buttons
     NSArray *factions = [NSArray arrayWithObjects:@"Alliance",@"Neutral",@"Horde", nil];
     UISegmentedControl *factionSelect = [[UISegmentedControl alloc] initWithItems:factions];
     UIBarButtonItem *factionSelectButton = [[UIBarButtonItem alloc] initWithCustomView:factionSelect];
-    [self.navigationItem setRightBarButtonItem:factionSelectButton animated:animated];
+    [self.navigationItem setRightBarButtonItem:factionSelectButton animated:NO];
     
     //Link the segmented control to the setFactionForDelegate: method
     [factionSelect addTarget:self
-                         action:@selector(setFactionForDelegate:)
-               forControlEvents:UIControlEventValueChanged];
+                      action:@selector(setFactionForDelegate:)
+            forControlEvents:UIControlEventValueChanged];
+    
+}
+
+-(void) viewDidAppear:(BOOL)animated
+{
+    
     
     //Set the segmented control selection to be what is currently in the delegate.
-    if([[delegate faction] isEqualToString:@"Alliance"])
+    /*
+    if([[delegate.dump valueForKey:@"faction"] isEqualToString:@"Alliance"])
     {
         [factionSelect setSelectedSegmentIndex:0];
     }
-    if ([delegate.faction isEqualToString:@"Neutral"])
+    if ([[delegate.dump valueForKey:@"faction"] isEqualToString:@"Neutral"])
     {
         [factionSelect setSelectedSegmentIndex:1];
     }
-    if ([delegate.faction isEqualToString:@"Horde"])
+    if ([[delegate.dump valueForKey:@"faction"] isEqualToString:@"Horde"])
     {
         [factionSelect setSelectedSegmentIndex:2];
     }
+    */
+    //Set the selected index in the table to what it was previously
 }
 
--(void) setFactionForDelegate:(UISegmentedControl*)faction
+-(void) setFactionForDelegate:(UISegmentedControl*)factionBar
 {
-    NSString *factionString = [faction titleForSegmentAtIndex:[faction selectedSegmentIndex]];
-    [delegate setFaction:factionString];
-    [delegate setFactionPredicate:[NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",factionString]];
+    _faction = [factionBar titleForSegmentAtIndex:[factionBar selectedSegmentIndex]];
+    //[delegate setFaction:factionString];
+    //[delegate setFactionPredicate:[NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",factionString]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -88,13 +96,15 @@
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView*) tableView
+ numberOfRowsInSection:(NSInteger) section
 {
     // Return the number of rows in the section.
     return [_realms count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"RealmCell";
     AHPRealmSelectCell *cell = [tableView
@@ -183,15 +193,51 @@
 */
 
 #pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//This method sets the RealmURL object in the delegate to correspond to the selected realm. It also changes the dump object in the delegate to be the latest (if any) dump for that realm.
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    delegate.realm = [[_realms objectAtIndex:indexPath.row] objectForKey:@"slug"];
-    delegate.realmProper = [[_realms objectAtIndex:indexPath.row] objectForKey:@"name"];
+    NSString *realm = [[_realms objectAtIndex:indexPath.row] objectForKey:@"name"];
+    NSString *slug = [[_realms objectAtIndex:indexPath.row] objectForKey:@"slug"];
     
-    delegate.realmURL = [[[[AHPAPIRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://us.battle.net/api/wow/auction/data/%@",[[_realms objectAtIndex:indexPath.row] objectForKey:@"slug"]]]] auctionDataURL] description];
-    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.dumpURL == %@",delegate.realmURL];
-    [delegate setRealmPredicate:realmPredicate];
+    //Check if there are any existing realmURL objects for the given slug.
+    NSError *error;
+    NSFetchRequest *fetchURLBySlug = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"RealmURL" inManagedObjectContext:[delegate managedObjectContext]];
+    NSPredicate *slugPredicate = [NSPredicate predicateWithFormat:@"slug == %@",slug];
+    
+    [fetchURLBySlug setEntity:entity];
+    [fetchURLBySlug setPredicate:slugPredicate];
+    
+    NSArray *results = [delegate.managedObjectContext executeFetchRequest:fetchURLBySlug error:&error];
+    
+    NSLog(@"%@",results);
+    
+    if([results count] == 1)
+    {
+        delegate.realmURL = [results objectAtIndex:0];
+    }
+    //If there isn't already a RealmURL object for that slug, create it and give it to the delegate.
+    else if([results count] == 0)
+    {
+        NSManagedObject *realmURL = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:[delegate managedObjectContext]];
+        
+        [realmURL setValue:slug forKey:@"slug"];
+        [realmURL setValue:realm forKey:@"realm"];
+        
+        delegate.realmURL = realmURL;
+        
+        if(![[delegate managedObjectContext] save:&error])
+        {
+            NSLog(@"Error saving managed object context: %@",error);
+        }
+    }
+    else
+    {
+        NSLog(@"Error, %d realmURL objects found.",[results count]);
+        //Still give it the first object
+        delegate.realmURL = [results objectAtIndex:0];
+    }
 }
 
 @end

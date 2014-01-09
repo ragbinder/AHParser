@@ -20,5 +20,6 @@
 @property NSArray *realms;
 @property (strong, nonatomic) IBOutlet UITableView *realmTable;
 @property (strong, nonatomic) AHPDetailViewController *detailView;
+@property (strong, nonatomic) NSString *faction;
 
 @end

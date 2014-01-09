@@ -33,7 +33,6 @@
 @property (strong, nonatomic) NSPredicate *searchPredicate;
 @property (strong, nonatomic) NSArray *sortDescriptors;
 */
-@property (nonatomic) BOOL pricePerUnit;
 
 - (void)filterAuctionTable:(NSPredicate*)predicate;
 - (void)filterAuctionTable:(NSPredicate *)predicate andSort: (NSSortDescriptor*) sort;

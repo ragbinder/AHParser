@@ -13,23 +13,26 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-@synthesize auctionData = _auctionData;
-@synthesize faction = _faction;
-@synthesize realm = _realm;
-@synthesize realmProper = _realmProper;
+//@synthesize auctionData = _auctionData;
+//@synthesize faction = _faction;
+//@synthesize realm = _realm;
+//@synthesize realmProper = _realmProper;
 @synthesize factionPredicate = _factionPredicate;
 @synthesize realmPredicate = _realmPredicate;
 @synthesize categoryPredicate = _categoryPredicate;
 @synthesize searchPredicate = _searchPredicate;
 @synthesize sortDescriptors = _sortDescriptors;
+@synthesize realmSelectViewController = _realmSelectViewController;
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    /*
     _realm = @"sentinels";
     _realmProper = @"Please Select A Realm";
     _faction = @"and Faction";
-    
+    */
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     splitViewController.delegate = (id)navigationController.topViewController;

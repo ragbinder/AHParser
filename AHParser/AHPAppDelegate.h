@@ -11,14 +11,25 @@
 #import "AHPMasterViewController.h"
 #import "AHPCategoryLoader.h"
 
+@class AHPRealmSelectViewController;
+
 @interface AHPAppDelegate : UIResponder <UIApplicationDelegate>
+
 
 @property (strong, nonatomic) UIWindow *window;
 
+//Singletons
+@property (strong, nonatomic) AHPRealmSelectViewController *realmSelectViewController;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property AHPAPIRequest *auctionData;
+
+//This object holds the realm, slug, and URL that is associated with the dump object that the auctions are tied to.
+@property (strong, nonatomic) NSManagedObject *realmURL;
+//This object holds the dump object the auctions will be associated with.
+@property (strong, nonatomic) NSManagedObject *dump;
+
+/*
 @property (strong, nonatomic) NSString *faction;
 //The realm slug that us currently being used.
 @property (strong, nonatomic) NSString *realm;
@@ -26,6 +37,7 @@
 @property (strong, nonatomic) NSString *realmProper;
 //The URL the current realm dump is pulled from
 @property (strong, nonatomic) NSString *realmURL;
+*/
 
 //The current predicates and sort descriptors. These are contained in the app delegate so that more than one may be applied at a time more easily.
 @property (strong, nonatomic) NSPredicate *factionPredicate;

@@ -10,7 +10,7 @@
 
 @implementation AHPItemAPIRequest
 
-+(NSDictionary*) itemAPIRequest: (NSInteger) itemID
++(NSDictionary*) itemAPIRequest:(NSInteger) itemID
 {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://us.battle.net/api/wow/item/%d",itemID]];
     //NSLog(@"Initializing ItemAPIRequest with url: %@", url);
@@ -33,7 +33,8 @@
     }
 }
 
-+ (NSManagedObject*)storeItem:(NSInteger) itemID inContext:(NSManagedObjectContext*) context
++ (NSManagedObject*)storeItem:(NSInteger) itemID
+                    inContext:(NSManagedObjectContext*) context
 {
     NSDictionary *itemDictionary = [self itemAPIRequest:itemID];
     NSEntityDescription *item = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
