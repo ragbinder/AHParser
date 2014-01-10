@@ -70,7 +70,15 @@
     //Grab the link to the JSON file and its lastModified date.
     AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithRealmURL:[delegate realmURL]
                                                                inContext:_managedObjectContext];
-    NSManagedObject *latestDump = [[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] withSlug:[auctionData slug] forFaction:[delegate.dump valueForKey:@"faction"]] objectAtIndex:0];
+    NSManagedObjectContext *context = [delegate managedObjectContext];
+    NSString *slugString = [auctionData slug];
+    NSString *factionString = [delegate.realmSelectViewController faction];
+    
+    NSMutableArray *array = [AHPAPIRequest findDumpsInContext:context
+                                                     withSlug:slugString
+                                                   forFaction:factionString];
+    
+    NSManagedObject *latestDump = [array objectAtIndex:0];
     
     //If the auction data dump is more recent than the one in coredata, delete all of the coredata Auction objects and repopulate the database.
     NSLog(@"Auction Data last Generated: %@",
@@ -149,6 +157,35 @@
     {
         NSLog(@"[%@-%@] %@ - %@",[object valueForKey:@"itemClass"],[object valueForKey:@"itemSubClass"],[object valueForKey:@"itemID"],[object valueForKey:@"name"]);
     }
+}
+
+- (void)applyCurrentFilters
+{
+    NSPredicate *factionPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",[delegate.dump valueForKey:@"faction"]];
+    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"ANY dumpRelationship.realmRelationship.url == %@",delegate.realmURL];
+    
+    
+    NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects: factionPredicate, realmPredicate, predicate, nil]];
+    
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
+    [fetch setEntity:entityDescription];
+    [fetch setPredicate:predicate];
+    [fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1, nil]];
+    
+    NSError *error;
+    [NSFetchedResultsController deleteCacheWithName:@"Root"];
+    [[self fetchedResultsController].fetchRequest setPredicate:compoundPredicate];
+    [[self fetchedResultsController] performFetch:&error];
+    //NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
+    //NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);
+    if(error)
+    {
+        NSLog(@"Error filtering auction table: %@",error);
+    }
+    [_managedObjectContext executeFetchRequest:[_fetchedResultsController fetchRequest] error:&error];
+    [_auctionTable reloadData];
 }
 
 //This method changes the contents of the UITableView in the detail view to only contain auctions matching the predicate you pass in.

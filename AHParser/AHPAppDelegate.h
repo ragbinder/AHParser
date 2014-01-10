@@ -24,10 +24,15 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+//The next five properties are used for determining which auctions from Core Data to display.
 //This object holds the realm, slug, and URL that is associated with the dump object that the auctions are tied to.
 @property (strong, nonatomic) NSManagedObject *realmURL;
 //This object holds the dump object the auctions will be associated with.
 @property (strong, nonatomic) NSManagedObject *dump;
+//The current predicates and sort descriptors. These are contained in the app delegate so that more than one predicate may be applied at a time more easily.
+@property (strong, nonatomic) NSPredicate *categoryPredicate;
+@property (strong, nonatomic) NSPredicate *searchPredicate;
+@property (strong, nonatomic) NSArray *sortDescriptors;
 
 /*
 @property (strong, nonatomic) NSString *faction;
@@ -39,12 +44,7 @@
 @property (strong, nonatomic) NSString *realmURL;
 */
 
-//The current predicates and sort descriptors. These are contained in the app delegate so that more than one may be applied at a time more easily.
-@property (strong, nonatomic) NSPredicate *factionPredicate;
-@property (strong, nonatomic) NSPredicate *realmPredicate;
-@property (strong, nonatomic) NSPredicate *categoryPredicate;
-@property (strong, nonatomic) NSPredicate *searchPredicate;
-@property (strong, nonatomic) NSArray *sortDescriptors;
+
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

@@ -39,5 +39,6 @@
 - (void)filterWithCategoryPredicate:(NSPredicate*)predicate;
 - (void)filterWithSearchPredicate:(NSPredicate*)predicate;
 - (void)filterWithSearchPredicate:(NSPredicate*)predicate andSort:(NSSortDescriptor*)sort;
+- (void)applyCurrentFilters;
 
 @end

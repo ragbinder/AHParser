@@ -17,11 +17,14 @@
 //@synthesize faction = _faction;
 //@synthesize realm = _realm;
 //@synthesize realmProper = _realmProper;
-@synthesize factionPredicate = _factionPredicate;
-@synthesize realmPredicate = _realmPredicate;
+
+
+@synthesize dump = _dump;
+@synthesize realmURL = _realmURL;
 @synthesize categoryPredicate = _categoryPredicate;
 @synthesize searchPredicate = _searchPredicate;
 @synthesize sortDescriptors = _sortDescriptors;
+ 
 @synthesize realmSelectViewController = _realmSelectViewController;
 
 

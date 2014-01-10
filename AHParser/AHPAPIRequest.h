@@ -27,7 +27,9 @@
 //-(void) setLastDumpInContext: (NSManagedObjectContext*)context;
 
 //Useful static functions that don't belong in any particular place
-+ (NSMutableArray*)findDumpsInContext:(NSManagedObjectContext*)context withSlug:(NSString*)slug forFaction:(NSString*)faction;
++ (NSMutableArray*)findDumpsInContext:(NSManagedObjectContext*)context
+                             withSlug:(NSString*)slug
+                           forFaction:(NSString*)faction;
 //This converts the unix time that the API uses to a human-readable time.
 + (NSString*) convertWOWTime:(double)time;
 //This formats the time_left field in the auction JSON for display in the detail view controller.

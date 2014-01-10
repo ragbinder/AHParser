@@ -89,9 +89,8 @@
     }
 }
 
-//This is a helper method meant to be called during initialization to check if there is a RealmURL object for the given URL. If there is, check if the realm name and slug are present and add them if necessary. This will allow the user to match RealmURLs to name/slugs without calling the battle.net API.
-/*
-- (void)storeRealmURL:(NSString*) url
+//This is a helper method meant to be called during initialization to check if there is a RealmURL object for the given slug. If there is, check if the realm name and slug are present and add them if necessary. This will allow the user to match RealmURLs to name/slugs without calling the battle.net API.
+- (NSManagedObject *)storeRealmURL:(NSString*) url
               forSlug:(NSString*) slug
               andName:(NSString*) name
             inContext:(NSManagedObjectContext*) context
@@ -118,28 +117,33 @@
             NSManagedObject *realmURLObject = [[NSManagedObject alloc] initWithEntity:realmEntity insertIntoManagedObjectContext:context];
             [realmURLObject setValue:url forKey:@"url"];
             [realmURLObject setValue:slug forKey:@"slug"];
+            [realmURLObject setValue:name forKey:@"realm"];
             
             if(![context save:&error]){
                 NSLog(@"Error: %@",error);}
+            
+            return realmURLObject;
         }
         else if(numResults == 1)
         {
-            
+            return [results objectAtIndex:0];
         }
         //If somehow there is more than one RealmURL object for this URL
         else
         {
             //Delete all of the RealmURL objects and insert a new one. This should never happen.
-            NSLog(@"MULTIPLE REALMURLS FOR %@",slug);
+            NSLog(@"\n\n\n\nMULTIPLE REALMURLS FOR %@\n\n\n\n",slug);
+            return [results objectAtIndex:0];
         }
         
     }
     else
     {
         NSLog(@"Error searching for previously cached realm URL: %@",error);
+        return nil;
     }
 }
-*/
+
 - (void)storeAuctions:(NSManagedObjectContext*) context1
          withProgress:(UIProgressView*) progressBar
            forFaction:(NSString*) faction
@@ -297,15 +301,18 @@
     [dumpObject setValue:[NSNumber numberWithDouble:[lastModified doubleValue]] forKey:@"date"];
     [dumpObject setValue:faction forKey:@"faction"];
     
-    //Create a new realm
-    NSManagedObject *dumpURLObject = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"RealmURL" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
-    [dumpURLObject setValue:_slug forKey:@"slug"];
-    [dumpURLObject setValue:_realm forKey:@"realm"];
-    [dumpURLObject setValue:[_auctionDataURL path] forKey:@"url"];
-    [dumpObject setValue:dumpURLObject forKey:@"realmRelationship"];
-    [dumpURLObject setValue:dumpObject forKey:@"dumpRelationship"];
+    //Create a new realmURL object
+    NSManagedObject *realmURLObject = [self storeRealmURL:[_auctionDataURL description] forSlug:_slug andName:_realm inContext:context];
+    [realmURLObject setValue:dumpObject forKey:@"dumpRelationship"];
     
-    NSLog(@"Last Dump Date set as: %@\n URL set as: %@",dumpObject,dumpURLObject);
+    //Set the array of realmURL objects for the dumpURL. Since the dump to realmURL relationship is a to-many relationship, we need to add this realmURL
+    NSSet *realmURLSet = [dumpObject valueForKey:@"realmRelationship"];
+    if(![realmURLSet member:realmURLObject])
+    {
+        [dumpObject setValue:[realmURLSet setByAddingObject:realmURLObject] forKey:@"realmRelationship"];
+    }
+    
+    NSLog(@"Last Dump Date set as: %@\n URL set as: %@",dumpObject,realmURLObject);
     if(![context save:&error])
     {
         NSLog(@"Error Saving Auction Dump Date: %@",error);
@@ -315,9 +322,9 @@
 }
 
 //Returns an array of all dumps for the given slug, ordered by date (newest first).
-+(NSMutableArray *)findDumpsinContext:(NSManagedObjectContext*) context
-                             withSlug:(NSString*) slug
-                           forFaction:(NSString*) faction
++(NSMutableArray *)findDumpsInContext:(NSManagedObjectContext *)context
+                             withSlug:(NSString *)slug
+                           forFaction:(NSString *)faction
 {
     //Find any other AuctionDumpDate objects with both:
     //1. a relationship to a RealmURL object with this slug.
@@ -332,8 +339,8 @@
     [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
     NSMutableArray *dumps = [NSMutableArray arrayWithArray:[context executeFetchRequest:request error:&error]];
-    if([dumps count] == 0)
-        return nil;
+    if([dumps count] == 0){
+        return nil;}
     else
     {
         NSLog(@"Found %d dumps", [dumps count]);
