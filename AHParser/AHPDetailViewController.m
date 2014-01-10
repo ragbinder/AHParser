@@ -79,6 +79,9 @@
                                                    forFaction:factionString];
     
     NSManagedObject *latestDump = [array objectAtIndex:0];
+    NSLog(@"Latest Dump: %@",array);
+    //Give the delegate a reference to the latest dump for this realmURL.
+    [delegate setDump:latestDump];
     
     //If the auction data dump is more recent than the one in coredata, delete all of the coredata Auction objects and repopulate the database.
     NSLog(@"Auction Data last Generated: %@",
@@ -105,7 +108,8 @@
             dispatch_async(dispatch_get_main_queue(), ^(void){
                 [refreshButton setEnabled:YES];
                 //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dumpRelationship == %@",[[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description]] objectAtIndex:0]];
-                [self filterAuctionTable:nil];
+                [delegate setDump:latestDump];
+                [self applyCurrentFilters];
             });
         });
     }
@@ -113,7 +117,7 @@
     {
         NSLog(@"DATABASE IS UP TO DATE.\n%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
         //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dumpRelationship == %@",[[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description]] objectAtIndex:0]];
-        [self filterAuctionTable:nil];
+        [self applyCurrentFilters];
     }
 }
 
@@ -144,6 +148,7 @@
  */
 
 //Prints out the stored Items in coredata
+/*
 -(void) printStoredItems
 {
     NSFetchRequest *fetchItems = [[NSFetchRequest alloc] init];
@@ -158,28 +163,57 @@
         NSLog(@"[%@-%@] %@ - %@",[object valueForKey:@"itemClass"],[object valueForKey:@"itemSubClass"],[object valueForKey:@"itemID"],[object valueForKey:@"name"]);
     }
 }
+ */
 
 - (void)applyCurrentFilters
 {
+    NSLog(@"Delegate Dump object: %@",[delegate dump]);
+    NSLog(@"Delegate Realm object: %@",[delegate realmURL]);
     NSPredicate *factionPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",[delegate.dump valueForKey:@"faction"]];
-    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"ANY dumpRelationship.realmRelationship.url == %@",delegate.realmURL];
+    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"ANY dumpRelationship.realmRelationship.url == %@",[delegate.realmURL valueForKey:@"url"]];
+    NSPredicate *searchPredicate = [delegate searchPredicate];
+    NSPredicate *filterPredicate = [delegate categoryPredicate];
+    NSArray *sortDescriptorArray = [delegate sortDescriptors];
     
+    //Need to combine the predicates into an array, making sure that none of them are nil. If any are nil, then any predicates after them will be ignored.
+    NSMutableArray *predicatesArray = [[NSMutableArray alloc] initWithCapacity:4];
+    if(factionPredicate)
+    {   [predicatesArray addObject:factionPredicate];}
+    if(realmPredicate)
+    {   [predicatesArray addObject:realmPredicate];}
+    if(searchPredicate)
+    {   [predicatesArray addObject:searchPredicate];}
+    if(filterPredicate)
+    {   [predicatesArray addObject:filterPredicate];}
     
-    NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects: factionPredicate, realmPredicate, predicate, nil]];
+    for(NSObject *object in predicatesArray)
+    {
+        NSLog(@"FILTERING WITH: %@",object);
+    }
+    
+    NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicatesArray];
     
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
     NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
     [fetch setEntity:entityDescription];
-    [fetch setPredicate:predicate];
-    [fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1, nil]];
+    [fetch setPredicate:compoundPredicate];
+    if([sortDescriptorArray count] != 0)
+    {
+        
+        [fetch setSortDescriptors:[sortDescriptorArray arrayByAddingObject:sortDescriptor1]];
+    }
+    else
+    {
+        [fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1, nil]];
+    }
     
     NSError *error;
     [NSFetchedResultsController deleteCacheWithName:@"Root"];
     [[self fetchedResultsController].fetchRequest setPredicate:compoundPredicate];
     [[self fetchedResultsController] performFetch:&error];
-    //NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
-    //NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);
+    NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
+    NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);
     if(error)
     {
         NSLog(@"Error filtering auction table: %@",error);
@@ -188,6 +222,8 @@
     [_auctionTable reloadData];
 }
 
+//Old filtering methods, not using anymore.
+/*
 //This method changes the contents of the UITableView in the detail view to only contain auctions matching the predicate you pass in.
 //It will include by default the currently selected realm and faction.
 //Sample Predicate: "(item == 72095)" for trillium bar
@@ -227,15 +263,15 @@
     
     
     NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects: factionPredicate, realmPredicate, predicate, nil]];
-    /*
-    NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
-    [fetch setEntity:entityDescription];
-    [fetch setPredicate:predicate];
+ 
+    //NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+    //NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
+    //NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
+    //[fetch setEntity:entityDescription];
+    //[fetch setPredicate:predicate];
     //[fetch setSortDescriptors:[NSArray arrayWithObjects:sort,sortDescriptor1, nil]];
-    [fetch setSortDescriptors:[NSArray arrayWithObjects:sort,sortDescriptor1, nil]];
-    */
+    //[fetch setSortDescriptors:[NSArray arrayWithObjects:sort,sortDescriptor1, nil]];
+ 
     NSError *error;
     [NSFetchedResultsController deleteCacheWithName:@"Root"];
     [[self fetchedResultsController].fetchRequest setPredicate:compoundPredicate];
@@ -250,6 +286,7 @@
     [_managedObjectContext executeFetchRequest:[_fetchedResultsController fetchRequest] error:&error];
     [_auctionTable reloadData];
 }
+
 
 -(void)filterWithCategoryPredicate:(NSPredicate *)predicate
 {
@@ -305,6 +342,7 @@
     NSLog(@"Current Predicate: %@",currentPredicate);
     [self filterAuctionTable:currentPredicate andSort:sort];
 }
+*/
 
 - (void)didReceiveMemoryWarning
 {
@@ -388,7 +426,7 @@
         
         NSString *bidC,*bidS,*bidG,*buyoutC,*buyoutS,*buyoutG;
         //int quant = [[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"quantity"] integerValue];
-        NSString *quantity = [[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"quantity"];
+        NSString *quantity = [NSString stringWithFormat:@"%@",[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"quantity"]];
         
         bidG = [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/10000];
         bidS = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/100 %100];

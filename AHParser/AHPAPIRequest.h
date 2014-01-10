@@ -20,10 +20,10 @@
 @property (strong, nonatomic) NSArray *allianceAuctions, *hordeAuctions, *neutralAuctions;
 
 //This method needs to be called with the API URL, not the data dump URL. This is responsible for fetching the auction data and setting all of the properties of the AHPAPIRequest object.
-- (id) initWithRealmURL: (NSManagedObject*) realmURL inContext:(NSManagedObjectContext*) context;
+- (id)initWithRealmURL: (NSManagedObject*) realmURL inContext:(NSManagedObjectContext*) context;
 
 //This method is the one that stores the auctions in the managed object context. It is designed to be run via GCD from the detail view controller class. This part was taken out of the init method because it takes a long time to run.
-- (void) storeAuctions:(NSManagedObjectContext *)context withProgress:(UIProgressView*) progressBar forFaction:(NSString*)faction;
+- (void)storeAuctions:(NSManagedObjectContext *)context withProgress:(UIProgressView*) progressBar forFaction:(NSString*)faction;
 //-(void) setLastDumpInContext: (NSManagedObjectContext*)context;
 
 //Useful static functions that don't belong in any particular place

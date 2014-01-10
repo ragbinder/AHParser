@@ -118,7 +118,7 @@
     //Apply search predicate and sort descriptor to the detail view.
     [delegate setSearchPredicate:searchPredicate];
     [delegate setSortDescriptors:[NSArray arrayWithObject:sort]];
-    [detailView filterWithSearchPredicate:searchPredicate andSort:sort];
+    [detailView applyCurrentFilters];
     
     //Navigate back
     [self.navigationController popViewControllerAnimated:YES];

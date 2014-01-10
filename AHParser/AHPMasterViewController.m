@@ -112,13 +112,15 @@
     //NSPredicate *dumpPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.dumpURL == %@",[delegate realmURL]];
     //NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:predicate,dumpPredicate,nil]];
     [delegate setCategoryPredicate:predicate];
-    [self.detailViewController filterWithCategoryPredicate:predicate];
+    [self.detailViewController applyCurrentFilters];
 }
 
 - (IBAction)clearFilters:(id)sender {
     [[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
     [delegate setSearchPredicate:nil];
-    [_detailViewController filterAuctionTable:nil andSort:nil];
+    [delegate setSortDescriptors:nil];
+    [delegate setCategoryPredicate:nil];
+    [_detailViewController applyCurrentFilters];
 }
 
 - (void)didReceiveMemoryWarning

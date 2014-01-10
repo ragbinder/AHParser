@@ -34,9 +34,14 @@
         NSArray *auctionLines = [NSArray arrayWithObject:[NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:&error]];
         NSArray *filesArray = [auctionLines[0] objectForKey:@"files"];
         _auctionDataURL = [NSURL URLWithString:[[filesArray objectAtIndex:0] objectForKey:@"url"]];
-        [realmURL setValue:[_auctionDataURL description] forKey:@"url"];
         lastModified = [[filesArray objectAtIndex:0] objectForKey:@"lastModified"];
+        [realmURL setValue:[_auctionDataURL description] forKey:@"url"];
         
+        NSError *error;
+        
+        if (![context save:&error]) {
+            NSLog(@"FAILED TO SAVE CONTEXT WHEN INTIAILIZING REALMURL: %@",error);
+        }
         /*
         //See if the RealmURL object for this URL/slug pair exists. If not, create it.
         //NSLog(@"%@\n%@",_auctionDataURL,[[_auctionDataURL path] substringFromIndex:22]);
@@ -185,11 +190,6 @@
         return;
     }
     
-    //Create the dump object to associate the auctions with.
-    /*
-    NSEntityDescription *dumpDescription = [NSEntityDescription entityForName:@"AuctionDumpDate" inManagedObjectContext:context1];
-    NSManagedObject *dumpObject = [[NSManagedObject alloc] initWithEntity:dumpDescription insertIntoManagedObjectContext:context1];
-    */
     //This stores the progress of the auction parsing.
     float currentAuction = 0;
     
@@ -245,7 +245,7 @@
             //If there is no matching record, try to fetch the item info from the API, and then set the itemRelationship to the newly created item object.
             else
             {
-                NSLog(@"Could not find item in database for ID: %d",[[auction valueForKey:@"item"] intValue]);
+                //NSLog(@"Could not find item in database for ID: %d",[[auction valueForKey:@"item"] intValue]);
                 //[AHPItemAPIRequest storeItem:inContext:] returns a reference to the item managed object it created for the item ID it is given.
                 [aucData setValue:[AHPItemAPIRequest storeItem:[[auction valueForKey:@"item"] integerValue] inContext:context] forKey:@"itemRelationship"];
             }
@@ -256,6 +256,10 @@
             
             //Set the dump date that the auction is generated from.
             [aucData setValue:auctionDumpObject forKey:@"dumpRelationship"];
+            
+            //NSLog(@"Auction object:\n%@",aucData);
+            //NSLog(@"Dump Relationship:%@",auctionDumpObject);
+            //NSLog(@"Realm Relationship:%@",[auctionDumpObject valueForKey:@"realmRelationship"]);
         }
         currentAuction++;
         float progress = currentAuction/numAuctions;
@@ -276,15 +280,16 @@
     });
 }
 
-//Call this method to set the Last Dumped date to the current dump generation date (from the JSON), formatted as a double. Also includes the URL a dump was generated from, for keeping multiple different sets of auction data at one time, and the faction the dump was generated for, so the user can load only part of an auction dump.
+//Call this method to set the Last Dumped date to the current dump generation date (from the JSON), formatted as a double. Also includes the faction the dump was generated for, so the user can load only part of an auction dump.
 -(NSManagedObject*) setLastDumpInContext:(NSManagedObjectContext*) context
                               forFaction:(NSString*) faction
 {
     NSError *error = nil;
     
-    //Remove all previous auction dumps with the same url
+    //Remove all previous auction dumps with the same slug and faction
     NSMutableArray *dumpsForURL = [AHPAPIRequest findDumpsInContext:context withSlug:_slug forFaction:faction];
     [dumpsForURL removeObjectAtIndex:[dumpsForURL count]-1];
+    
     for(NSManagedObject *dump in dumpsForURL)
     {
         NSLog(@"Deleting dump: %@",dump);
