@@ -124,6 +124,21 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (IBAction)sortByBar:(id)sender
+{
+    NSSortDescriptor *defaultSort = [NSSortDescriptor sortDescriptorWithKey:@"auc" ascending:YES];
+    [delegate setSortDescriptors:[NSArray arrayWithObjects:[self getSortDescriptor], defaultSort, nil]];
+    NSLog(@"Delegate sort descriptor set as: %@",[delegate sortDescriptors]);
+}
+
+- (IBAction)ascDescBar:(id)sender
+{
+    NSSortDescriptor *defaultSort = [NSSortDescriptor sortDescriptorWithKey:@"auc" ascending:YES];
+    [delegate setSortDescriptors:[NSArray arrayWithObjects:[self getSortDescriptor], defaultSort, nil]];
+    NSLog(@"Delegate sort descriptor set as: %@",[delegate sortDescriptors]);
+}
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

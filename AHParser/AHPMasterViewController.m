@@ -50,6 +50,8 @@
                                    target:self
                                    action:@selector(applyFilters:)];
     self.navigationItem.rightBarButtonItem = doneButton;
+    
+    [self.tableView setSeparatorColor:[UIColor lightGrayColor]];
 }
 
 //This method is linked to the done button in the master view. It is called when the user is done selecting a category filter
@@ -179,6 +181,7 @@
     }
     else
     {
+        //Changing filtering to be done on exlpicit command only (when user presses 'Done')
         //[self.detailViewController filterAuctionTableByString:[object valueForKey:@"predicate"]];
     }
     
@@ -195,12 +198,11 @@
   willDisplayCell: (UITableViewCell*)cell
 forRowAtIndexPath: (NSIndexPath*)indexPath
 {
-    /*
-    cell.backgroundColor = [UIColor blackColor];
+    cell.backgroundColor = [UIColor colorWithRed:35.0/255.0 green:35.0/255.0 blue:35.0/255.0 alpha:1.0];
     cell.textLabel.backgroundColor = [UIColor clearColor];
-    cell.textLabel.textColor = [UIColor blueColor];
+    cell.textLabel.textColor = [UIColor colorWithRed:252.0/255.0 green:221.0/255.0 blue:13.0/255.0 alpha:1];
+    //cell.textLabel.textColor = [UIColor colorWithRed:0/255.0 green:128/255.0 blue:255/255.0 alpha:1];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-     */
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle{

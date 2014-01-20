@@ -108,7 +108,16 @@
             dispatch_async(dispatch_get_main_queue(), ^(void){
                 [refreshButton setEnabled:YES];
                 //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dumpRelationship == %@",[[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description]] objectAtIndex:0]];
-                [delegate setDump:latestDump];
+                NSLog(@"latest dump after filter (fetched) %@",[[AHPAPIRequest findDumpsInContext:context
+                                         withSlug:slugString
+                                        forFaction:factionString] objectAtIndex:0]);
+                NSLog(@"Latest Dump after fitlering: %@",latestDump);
+                [delegate setDump:[[AHPAPIRequest findDumpsInContext:context
+                                                            withSlug:slugString
+                                                          forFaction:factionString] objectAtIndex:0]];
+                NSError *error;
+                if(![delegate.managedObjectContext save:&error])
+                {   NSLog(@"Error saving context after refresh: %@",error);}
                 [self applyCurrentFilters];
             });
         });
@@ -173,7 +182,8 @@
     NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"ANY dumpRelationship.realmRelationship.url == %@",[delegate.realmURL valueForKey:@"url"]];
     NSPredicate *searchPredicate = [delegate searchPredicate];
     NSPredicate *filterPredicate = [delegate categoryPredicate];
-    NSArray *sortDescriptorArray = [delegate sortDescriptors];
+    NSArray *sortDescriptorArray = [[NSArray alloc] initWithArray:[delegate sortDescriptors]];
+    NSLog(@"SORT DESCRIPTOR ARRAY: %@",sortDescriptorArray);
     
     //Need to combine the predicates into an array, making sure that none of them are nil. If any are nil, then any predicates after them will be ignored.
     NSMutableArray *predicatesArray = [[NSMutableArray alloc] initWithCapacity:4];
@@ -192,12 +202,15 @@
     }
     
     NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicatesArray];
-    
+    /*
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
+    //NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
     [fetch setEntity:entityDescription];
     [fetch setPredicate:compoundPredicate];
+    [fetch setSortDescriptors:[delegate sortDescriptors]];
+     */
+    /*
     if([sortDescriptorArray count] != 0)
     {
         
@@ -207,9 +220,10 @@
     {
         [fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1, nil]];
     }
-    
+    */
     NSError *error;
     [NSFetchedResultsController deleteCacheWithName:@"Root"];
+    [[self fetchedResultsController].fetchRequest setSortDescriptors:[delegate sortDescriptors]];
     [[self fetchedResultsController].fetchRequest setPredicate:compoundPredicate];
     [[self fetchedResultsController] performFetch:&error];
     NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
@@ -545,6 +559,7 @@
         [fetchIcon setPredicate:[NSPredicate predicateWithFormat:@"icon == %@",[itemDictionary valueForKey:@"icon"]]];
         NSError *error = nil;
         NSArray *fetchedIcons = [[delegate managedObjectContext] executeFetchRequest:fetchIcon error:&error];
+        //NSLog(@"Error (may be nil): %@", error);
         if([fetchedIcons count] > 0)
         {
             NSData *thumbnailData = [fetchedIcons[0] valueForKey:@"thumbnail"];

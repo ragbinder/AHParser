@@ -16,6 +16,7 @@
 
 @implementation AHPRealmSelectViewController
 @synthesize faction = _faction;
+@synthesize realms = _realms;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -36,7 +37,8 @@
     
     delegate = (AHPAppDelegate *)[[UIApplication sharedApplication] delegate];
  
-    _realms = [AHPRealmStatusRequest realmStatus];
+    //Moved to viewDidAppear to refresh whenever the view is reloaded.
+    _realms = [[NSArray alloc] init];
     
     [_realmTable setDataSource:self];
     
@@ -44,35 +46,53 @@
     NSArray *factions = [NSArray arrayWithObjects:@"Alliance",@"Neutral",@"Horde", nil];
     UISegmentedControl *factionSelect = [[UISegmentedControl alloc] initWithItems:factions];
     UIBarButtonItem *factionSelectButton = [[UIBarButtonItem alloc] initWithCustomView:factionSelect];
-    [self.navigationItem setRightBarButtonItem:factionSelectButton animated:NO];
+    
+    //Set up the Refresh Realms button
+    UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButton)];
+    
+    //Add the bar buttons to the view
+    NSArray *barButtonArray = [[NSArray alloc] initWithObjects:factionSelectButton,refreshButton, nil];
+    [self.navigationItem setRightBarButtonItems:barButtonArray animated:NO];
     
     //Link the segmented control to the setFactionForDelegate: method
     [factionSelect addTarget:self
                       action:@selector(setFactionForDelegate:)
             forControlEvents:UIControlEventValueChanged];
-    
+    //Lazy way to load the realms in
+    [self refreshButton];
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
-    
-    
-    //Set the segmented control selection to be what is currently in the delegate.
     /*
-    if([[delegate.dump valueForKey:@"faction"] isEqualToString:@"Alliance"])
-    {
-        [factionSelect setSelectedSegmentIndex:0];
-    }
-    if ([[delegate.dump valueForKey:@"faction"] isEqualToString:@"Neutral"])
-    {
-        [factionSelect setSelectedSegmentIndex:1];
-    }
-    if ([[delegate.dump valueForKey:@"faction"] isEqualToString:@"Horde"])
-    {
-        [factionSelect setSelectedSegmentIndex:2];
-    }
+    _realms = [AHPRealmStatusRequest realmStatus];
+    [_realmTable reloadData];
+    NSLog(@"Realms :%@",_realms);
     */
-    //Set the selected index in the table to what it was previously
+}
+
+-(void) refreshButton
+{
+    _realms = [AHPRealmStatusRequest realmStatus];
+    [_realmTable reloadData];
+    NSLog(@"Realms :%@",_realms);
+    
+    //Disable the button until the refresh is completed.
+    UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:1];
+    [refreshButton setEnabled:NO];
+    
+    dispatch_queue_t backgroundQueue;
+    backgroundQueue = dispatch_queue_create("com.ragbinder.AHParser.background.realm", NULL);
+    dispatch_async(backgroundQueue, ^(void){
+        _realms = [AHPRealmStatusRequest realmStatus];
+        [_realmTable reloadData];
+        NSLog(@"Realms :%@",_realms);
+        
+        //Re-enable the refresh button and filter the auction table after the data operation is complete.
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [refreshButton setEnabled:YES];
+        });
+    });
 }
 
 -(void) setFactionForDelegate:(UISegmentedControl*)factionBar

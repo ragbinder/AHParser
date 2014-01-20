@@ -319,7 +319,7 @@
                                     <segment title="Price"/>
                                 </segments>
                                 <connections>
-                                    <action selector="sortByBar:" destination="dSe-7T-izm" eventType="valueChanged" id="bVj-BN-xVA"/>
+                                    <action selector="sortByBar:" destination="dSe-7T-izm" eventType="valueChanged" id="Aiq-yc-odQ"/>
                                 </connections>
                             </segmentedControl>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="U3X-5I-kT5">
@@ -333,7 +333,7 @@
                                     <segment title="Descending"/>
                                 </segments>
                                 <connections>
-                                    <action selector="ascDescBar:" destination="dSe-7T-izm" eventType="valueChanged" id="5ml-bq-vFf"/>
+                                    <action selector="ascDescBar:" destination="dSe-7T-izm" eventType="valueChanged" id="Put-88-wce"/>
                                 </connections>
                             </segmentedControl>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort By:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="egb-Oa-ing">
@@ -448,6 +448,7 @@
                     </tableView>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
+                        <outlet property="realmTable" destination="YlQ-aA-4DN" id="AiT-mw-Rta"/>
                         <outlet property="tableView" destination="YlQ-aA-4DN" id="e5f-zJ-m1i"/>
                     </connections>
                 </tableViewController>
@@ -480,7 +481,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
-                        <color key="separatorColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="separatorColor" red="0.098039217293262482" green="0.098039217293262482" blue="0.098039217293262482" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="sectionIndexColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="sectionIndexTrackingBackgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="ZSw-0O-9Pw" customClass="AHPCategoryCell">
                                 <rect key="frame" x="0.0" y="119" width="320" height="44"/>
@@ -489,7 +492,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </tableViewCell>
                         </prototypes>
                         <sections/>

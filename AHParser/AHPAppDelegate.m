@@ -39,12 +39,19 @@
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     splitViewController.delegate = (id)navigationController.topViewController;
-
+    
+    /*
+    AHPMasterViewController *newView = [[[AHPMasterViewController alloc] initWithStyle:UITableViewStyleGrouped] initWithTitle:[selectedRow valueForKey:@"name"] andDictionary:[AHPCategoryLoader findDictionaryWithValue:[selectedRow valueForKey:@"name"] forKey:@"name" inArray:[_dictionary objectForKey:@"subclasses"]]];
+    newView.detailViewController = self.detailViewController;
+    [self.navigationController pushViewController:newView animated:YES];
+     */
+    
     UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
     AHPMasterViewController *controller = (AHPMasterViewController *)masterNavigationController.topViewController;
     
     NSDictionary *dict = [AHPCategoryLoader importCategories];
-    [controller initWithTitle:@"All" andDictionary:dict];
+    
+    NSLog(@"%@",[controller initWithTitle:@"All" andDictionary:dict]);
     
     return YES;
 }

@@ -23,5 +23,7 @@
 @property (strong, nonatomic) AHPDetailViewController *detailView;
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar;
+- (IBAction)sortByBar:(id)sender;
+- (IBAction)ascDescBar:(id)sender;
 
 @end
