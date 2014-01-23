@@ -28,7 +28,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    if([[delegate.realmURL valueForKey:@"realm"] isEqualToString:@""] || [[delegate.dump valueForKey:@"faction"] isEqualToString:@""])
+    if([[delegate.realmURL valueForKey:@"realm"] length] == 0 || [[delegate.realmSelectViewController faction] length] == 0)
     {
         [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:[NSString stringWithFormat:@"Please Select A Realm/Faction"]];
     }
@@ -54,7 +54,6 @@
     [self.progressBar setHidden:YES];
     
     //Set the upper right buttons - refresh table and return to realm/faction select
-    //NSString *currentRealm = [delegate.realmURL valueForKey:@"realm"];
     UIBarButtonItem *realmSelect = [[UIBarButtonItem alloc] initWithTitle:@"Default" style:UIBarButtonItemStyleBordered target:self action:@selector(realmSelect:)];
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButton:)];
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButton:)];
@@ -236,128 +235,6 @@
     [_auctionTable reloadData];
 }
 
-//Old filtering methods, not using anymore.
-/*
-//This method changes the contents of the UITableView in the detail view to only contain auctions matching the predicate you pass in.
-//It will include by default the currently selected realm and faction.
-//Sample Predicate: "(item == 72095)" for trillium bar
-- (void)filterAuctionTable: (NSPredicate *) predicate
-{
-    NSPredicate *factionPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",[delegate.dump valueForKey:@"faction"]];
-    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"ANY dumpRelationship.realmRelationship.url == %@",delegate.realmURL];
-    
-    
-    NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects: factionPredicate, realmPredicate, predicate, nil]];
-    
-    NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
-    [fetch setEntity:entityDescription];
-    [fetch setPredicate:predicate];
-    [fetch setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor1, nil]];
-    
-    NSError *error;
-    [NSFetchedResultsController deleteCacheWithName:@"Root"];
-    [[self fetchedResultsController].fetchRequest setPredicate:compoundPredicate];
-    [[self fetchedResultsController] performFetch:&error];
-    //NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
-    //NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);
-    if(error)
-    {
-        NSLog(@"Error filtering auction table: %@",error);
-    }
-    [_managedObjectContext executeFetchRequest:[_fetchedResultsController fetchRequest] error:&error];
-    [_auctionTable reloadData];
-}
-
-- (void)filterAuctionTable: (NSPredicate *) predicate andSort: (NSSortDescriptor*) sort
-{
-    NSPredicate *factionPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",[delegate.dump valueForKey:@"faction"]];
-    NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"ANY dumpRelationship.realmRelationship.url == %@",delegate.realmURL];
-    
-    
-    NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects: factionPredicate, realmPredicate, predicate, nil]];
- 
-    //NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-    //NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:[delegate managedObjectContext]];
-    //NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"auc" ascending:YES];
-    //[fetch setEntity:entityDescription];
-    //[fetch setPredicate:predicate];
-    //[fetch setSortDescriptors:[NSArray arrayWithObjects:sort,sortDescriptor1, nil]];
-    //[fetch setSortDescriptors:[NSArray arrayWithObjects:sort,sortDescriptor1, nil]];
- 
-    NSError *error;
-    [NSFetchedResultsController deleteCacheWithName:@"Root"];
-    [[self fetchedResultsController].fetchRequest setPredicate:compoundPredicate];
-    [[self fetchedResultsController].fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sort, nil]];
-    [[self fetchedResultsController] performFetch:&error];
-    NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
-    NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);
-    if(error)
-    {
-        NSLog(@"Error filtering auction table: %@",error);
-    }
-    [_managedObjectContext executeFetchRequest:[_fetchedResultsController fetchRequest] error:&error];
-    [_auctionTable reloadData];
-}
-
-
--(void)filterWithCategoryPredicate:(NSPredicate *)predicate
-{
-    NSPredicate *currentPredicate;
-    
-    NSLog(@"Current Predicate Pieces:\n%@\n%@\n%@\n%@",[delegate factionPredicate],[delegate realmPredicate],[delegate categoryPredicate],[delegate searchPredicate]);
-    //Make sure the given predicate is not nil, or else the compound predicate array will terminate early.
-    if(predicate != nil)
-    {
-        currentPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:[delegate factionPredicate],[delegate realmPredicate],predicate,[delegate searchPredicate], nil]];
-    }
-    else
-    {
-        currentPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:[delegate factionPredicate],[delegate realmPredicate],[delegate searchPredicate], nil]];
-    }
-    
-    NSLog(@"Current Predicate: %@",currentPredicate);
-    [self filterAuctionTable:currentPredicate];
-}
-
--(void)filterWithSearchPredicate:(NSPredicate *)predicate
-{
-    NSPredicate *currentPredicate;
-    NSLog(@"Current Predicate Pieces:\n%@\n%@\n%@\n%@",[delegate factionPredicate],[delegate realmPredicate],[delegate categoryPredicate],[delegate searchPredicate]);
-    //Make sure the given predicate is not nil, or else the compound predicate array will terminate early.
-    if(predicate != nil)
-    {
-        currentPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:[delegate factionPredicate],[delegate realmPredicate],predicate,[delegate categoryPredicate], nil]];
-    }
-    else
-    {
-        currentPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:[delegate factionPredicate ],[delegate realmPredicate],[delegate categoryPredicate], nil]];
-    }
-    
-    NSLog(@"Current Predicate: %@",currentPredicate);
-    [self filterAuctionTable:currentPredicate];
-}
-
-- (void)filterWithSearchPredicate:(NSPredicate *)predicate andSort:(NSSortDescriptor *)sort
-{
-    NSPredicate *currentPredicate;
-    NSLog(@"Current Predicate Pieces:\n%@\n%@\n%@\n%@",[delegate factionPredicate],[delegate realmPredicate],[delegate categoryPredicate],[delegate searchPredicate]);
-    //Make sure the given predicate is not nil, or else the compound predicate array will terminate early.
-    if(predicate != nil)
-    {
-        currentPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:[delegate factionPredicate],[delegate realmPredicate],[delegate searchPredicate],[delegate categoryPredicate], nil]];
-    }
-    else
-    {
-        currentPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:[delegate factionPredicate],[delegate realmPredicate],[delegate categoryPredicate], nil]];
-    }
-    
-    NSLog(@"Current Predicate: %@",currentPredicate);
-    [self filterAuctionTable:currentPredicate andSort:sort];
-}
-*/
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -429,25 +306,29 @@
 - (void)configureCell:(AHPAuctionTableCell*)cell atIndexPath:(NSIndexPath*)indexPath
 {
     //Try statement is necessary for when the table is refreshing. If the user is scrolling as the refresh completes, this function will generate an exception.
-    @try {
+    @try
+    {
         //#######################################
         //
         //Set all of the information that is contained in the auction lines JSON
+        //(not including some battlePet information)
         //
         //#######################################
-        NSString *owner = [[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"owner"];
-        NSString *timeLeft = [[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"timeLeft"];
+        NSManagedObject *auction = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+        NSString *owner = [auction valueForKey:@"owner"];
+        NSString *timeLeft = [auction valueForKey:@"timeLeft"];
         
         NSString *bidC,*bidS,*bidG,*buyoutC,*buyoutS,*buyoutG;
-        //int quant = [[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"quantity"] integerValue];
-        NSString *quantity = [NSString stringWithFormat:@"%@",[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"quantity"]];
+        //int quant = [[auction valueForKey:@"quantity"] integerValue];
+        NSString *quantity = [NSString stringWithFormat:@"%@",[auction valueForKey:@"quantity"]];
         
-        bidG = [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/10000];
-        bidS = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]/100 %100];
-        bidC = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"bid"] integerValue]%100];
-        buyoutG = [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]/10000];
-        buyoutS = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]/100 %100];
-        buyoutC = [NSString stringWithFormat:@"%02d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue]%100];
+        bidG = [NSString stringWithFormat:@"%d",[[auction valueForKey:@"bid"] integerValue]/10000];
+        bidS = [NSString stringWithFormat:@"%02d",[[auction valueForKey:@"bid"] integerValue]/100 %100];
+        bidC = [NSString stringWithFormat:@"%02d",[[auction valueForKey:@"bid"] integerValue]%100];
+        buyoutG = [NSString stringWithFormat:@"%d",[[auction valueForKey:@"buyout"] integerValue]/10000];
+        buyoutS = [NSString stringWithFormat:@"%02d",[[auction valueForKey:@"buyout"] integerValue]/100 %100];
+        buyoutC = [NSString stringWithFormat:@"%02d",[[auction valueForKey:@"buyout"] integerValue]%100];
         
         
         //Hide the quantity number for single items
@@ -465,7 +346,7 @@
         [cell.quantity setText:quantity];
         
         //Hide the buyout value if it is 0 (there is no buyout price)
-        if([[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"buyout"] integerValue] == 0)
+        if([[auction valueForKey:@"buyout"] integerValue] == 0)
         {
             [cell.buyoutC setHidden:YES];
             [cell.buyoutS setHidden:YES];
@@ -483,6 +364,7 @@
             [cell.buyoutGImage setHidden:NO];
             [cell.buyoutSImage setHidden:NO];
         }
+        
         //This array lets us change the name color based on item quality (given as a number from the JSON)
         NSArray *qualityColors = [NSArray arrayWithObjects:
                                   //Poor
@@ -506,15 +388,32 @@
         
         //Blizzard handles pets differently from normal items in the auction API, so this code deals with correctly displaying them. Otherwise, they'd all display as Pet Cages (Item ID 82800).
         NSDictionary *itemDictionary;
-        if([[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"item"] integerValue] == 82800)
+        if([[auction valueForKey:@"item"] integerValue] == 82800)
         {
-            itemDictionary = [AHPPetAPIRequest petAPIRequest:[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"petSpeciesID"] integerValue]];
+            NSFetchRequest *internalPetReq = [[NSFetchRequest alloc] init];
+            NSEntityDescription *pet = [NSEntityDescription entityForName:@"Pet" inManagedObjectContext:[delegate managedObjectContext]];
+            NSPredicate *petPredicate = [NSPredicate predicateWithFormat:@"(speciesID == %@)", [auction valueForKey:@"petSpeciesID"]];
+            [internalPetReq setEntity:pet];
+            [internalPetReq setPredicate:petPredicate];
+            NSArray *result = [[delegate managedObjectContext] executeFetchRequest:internalPetReq error:nil];
             
-            [cell.itemName setTextColor:[qualityColors objectAtIndex: [[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"petQualityID"] integerValue]]];
-            [cell.itemName setHighlightedTextColor:[qualityColors objectAtIndex: [[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"petQualityID"] integerValue]]];
-            [cell.level setText: [NSString stringWithFormat:@"%@",[itemDictionary valueForKey:@"itemLevel"]]];
+            if([result count] != 0)
+            {
+                //If there is an existing item with the itemID we want, use that as the itemDictionary.
+                itemDictionary = result[0];
+                //NSLog(@"Found pet in internal DB for: %@",[auction valueForKey:@"petSpeciesID"]);
+            }
+            else
+            {
+                itemDictionary = [AHPPetAPIRequest petAPIRequest:[[auction valueForKey:@"petSpeciesID"] integerValue]];
+            }
+            
+            [cell.itemName setTextColor:[qualityColors objectAtIndex: [[auction valueForKey:@"petQualityID"] integerValue]]];
+            [cell.itemName setHighlightedTextColor:[qualityColors objectAtIndex: [[auction valueForKey:@"petQualityID"] integerValue]]];
+            [cell.level setText:
+             [NSString stringWithFormat:@"%@",[auction valueForKey:@"petLevel"]]];
             [cell.itemName setText: [itemDictionary valueForKey:@"name"]];
-            [cell.level setText: [NSString stringWithFormat:@"%d",[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"petLevel"] integerValue]]];
+            [cell.level setText: [NSString stringWithFormat:@"%d",[[auction valueForKey:@"petLevel"] integerValue]]];
         }
         else
         {
@@ -526,7 +425,7 @@
             //Check if the item needed by the next cell is in the internal item database. If it is, then load it from there. Else get it from the WoW web API and store it in the internal database.
             NSFetchRequest *internalItemReq = [[NSFetchRequest alloc] init];
             NSEntityDescription *item = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:[delegate managedObjectContext]];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(itemID == %@)", [[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"item"]];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(itemID == %@)", [auction valueForKey:@"item"]];
             [internalItemReq setEntity:item];
             [internalItemReq setPredicate:predicate];
             NSArray *result = [[delegate managedObjectContext] executeFetchRequest:internalItemReq error:nil];
@@ -538,14 +437,38 @@
             }
             else
             {
-                //If an existing item with the desired itemID can't be found, fetch the data from the web and make a new coredata object for it.
-                [AHPItemAPIRequest storeItem:[[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"item"] integerValue] inContext:[delegate managedObjectContext]];
+                //If an existing item with the desired itemID can't be found, fetch the data from the web and make a new core data object for it.
+                [AHPItemAPIRequest storeItem:[[auction valueForKey:@"item"] integerValue] inContext:[delegate managedObjectContext]];
+                
+                result = [[delegate managedObjectContext] executeFetchRequest:internalItemReq error:nil];
+                if([result count] != 0)
+                {
+                    itemDictionary = result[0];
+                }
+                else
+                {
+                    NSLog(@"Could not find item data for %@",[auction valueForKey:@"item"]);
+                }
             }
             
             [cell.itemName setTextColor:[qualityColors objectAtIndex: [[itemDictionary valueForKey:@"quality"] intValue]]];
             [cell.itemName setHighlightedTextColor:[qualityColors objectAtIndex: [[itemDictionary valueForKey:@"quality"] intValue]]];
-            [cell.level setText: [NSString stringWithFormat:@"%@",[itemDictionary valueForKey:@"itemLevel"]]];
-            [cell.itemName setText: [itemDictionary valueForKey:@"name"]];
+            if([itemDictionary valueForKey:@"itemLevel"])
+            {
+                [cell.level setText: [NSString stringWithFormat:@"%@",[itemDictionary valueForKey:@"itemLevel"]]];
+            }
+            else
+            {
+                [cell.level setText:@"Err"];
+            }
+            if([itemDictionary valueForKey:@"name"])
+            {
+                [cell.itemName setText: [itemDictionary valueForKey:@"name"]];
+            }
+            else
+            {
+                [cell.itemName setText:@""];
+            }
         }
         
         
@@ -586,7 +509,7 @@
         }
     }
     @catch (NSException *exception) {
-        NSLog(@"Cell was deleted while loading");
+        NSLog(@"Cell was deleted while loading: %@",exception);
     }
     @finally {}
 }
@@ -628,26 +551,24 @@
     [self refreshAuctionDatabase];
 }
 
-- (IBAction)searchButton:(id)sender {
+- (IBAction)searchButton:(id)sender
+{
     /*
-    NSEntityDescription *dumps = [NSEntityDescription entityForName:@"AuctionDumpDate" inManagedObjectContext:[delegate managedObjectContext]];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:dumps];
-    NSArray *array = [[delegate managedObjectContext] executeFetchRequest:fetchRequest error:Nil];
+    NSEntityDescription *petEntity = [NSEntityDescription entityForName:@"Pet" inManagedObjectContext:[delegate managedObjectContext]];
+    NSFetchRequest *fetchAllPets = [[NSFetchRequest alloc] init];
     
-    for(NSManagedObject *object in array)
+    [fetchAllPets setEntity:petEntity];
+    [fetchAllPets setReturnsObjectsAsFaults:NO];
+    //NSLog(@"All Pets: %@",[[delegate managedObjectContext] executeFetchRequest:fetchAllPets error:nil]);
+    for(NSManagedObject *object in [[delegate managedObjectContext] executeFetchRequest:fetchAllPets error:nil])
     {
-        NSLog(@"%@ - %@",
-              [object valueForKey:@"dumpURL"],
-              [AHPAPIRequest convertWOWTime:[[object valueForKey:@"date"] doubleValue]]);
+        NSLog(@"Pet: %@",object);
     }
     */
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
-    AHPSearchViewController *searchView = [storyboard instantiateViewControllerWithIdentifier:@"searchViewSB"];
+    AHPSearchViewController *searchView = [delegate searchViewController];
     [searchView setDetailView:self];
     [self.navigationController pushViewController:searchView animated:YES];
-    
 }
 
 -(IBAction)realmSelect:(id)sender

@@ -12,5 +12,7 @@
 
 //This function takes a petID nubmer (petSpeciesID according to the wow API) and returns a dictionary with the pet's information. This is used primarily for fetching the pet's name and thumbnail for display in the detail view.
 +(NSDictionary *) petAPIRequest: (NSInteger) petID;
++(NSManagedObject *)storePet:(NSInteger)petID
+                   inContext:(NSManagedObjectContext *)context;
 
 @end

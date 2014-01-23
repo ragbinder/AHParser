@@ -73,9 +73,7 @@
 
 -(void) refreshButton
 {
-    _realms = [AHPRealmStatusRequest realmStatus];
     [_realmTable reloadData];
-    NSLog(@"Realms :%@",_realms);
     
     //Disable the button until the refresh is completed.
     UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:1];
@@ -86,7 +84,7 @@
     dispatch_async(backgroundQueue, ^(void){
         _realms = [AHPRealmStatusRequest realmStatus];
         [_realmTable reloadData];
-        NSLog(@"Realms :%@",_realms);
+        //NSLog(@"Realms :%@",_realms);
         
         //Re-enable the refresh button and filter the auction table after the data operation is complete.
         dispatch_async(dispatch_get_main_queue(), ^(void){

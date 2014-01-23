@@ -26,19 +26,7 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (weak, nonatomic) IBOutlet UITableView *auctionTable;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressBar;
-/*
-@property (strong, nonatomic) NSPredicate *factionPredicate;
-@property (strong, nonatomic) NSPredicate *realmPredicate;
-@property (strong, nonatomic) NSPredicate *categoryPredicate;
-@property (strong, nonatomic) NSPredicate *searchPredicate;
-@property (strong, nonatomic) NSArray *sortDescriptors;
-*/
 
-//- (void)filterAuctionTable:(NSPredicate*)predicate;
-//- (void)filterAuctionTable:(NSPredicate *)predicate andSort: (NSSortDescriptor*) sort;
-//- (void)filterWithCategoryPredicate:(NSPredicate*)predicate;
-//- (void)filterWithSearchPredicate:(NSPredicate*)predicate;
-//- (void)filterWithSearchPredicate:(NSPredicate*)predicate andSort:(NSSortDescriptor*)sort;
 - (void)applyCurrentFilters;
 
 @end

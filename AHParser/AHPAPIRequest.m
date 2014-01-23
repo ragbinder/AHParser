@@ -18,6 +18,9 @@
 -(id) initWithRealmURL:(NSManagedObject *)realmURL
              inContext:(NSManagedObjectContext *)context
 {
+    //Used to track consumption of battle.net API.
+    NSLog(@"MAKING AUCTION API REQUEST");
+    
     _realm = [realmURL valueForKey:@"realm"];
     _slug = [realmURL valueForKey:@"slug"];
     NSLog(@"Initializing APIRequest with slug: %@",_slug);
@@ -213,6 +216,7 @@
         //Make sure the auction object initialized.
         if(aucData)
         {
+            //sNSLog(@"%@",auction);
             //Set the properties of each auction that can be fetched from the JSON
             [aucData setValue:[auction valueForKey:@"auc"] forKey:@"auc"];
             [aucData setValue:[auction valueForKey:@"bid"] forKey:@"bid"];
@@ -227,7 +231,6 @@
             [aucData setValue:[auction valueForKey:@"petQualityId"] forKey:@"petQualityID"];
             [aucData setValue:[auction valueForKey:@"petBreedId"] forKey:@"petBreedID"];
             [aucData setValue:[auction valueForKey:@"petLevel"] forKey:@"petLevel"];
-            //[aucData setValue:faction forKey:@"faction"];
             
             //Set the item relationship for each auction
             NSFetchRequest *fetchItem = [[NSFetchRequest alloc] init];
@@ -254,12 +257,36 @@
                 NSLog(@"Error linking Item ID: %@",error);
             }
             
+            //BattlePet API steps
+            //Check if the item is actually a battlePet cage (itemID = 82800)
+            if([[auction valueForKey:@"item"] integerValue] == 82800)
+            {
+                //NSLog(@"Auction: %@",auction);
+                //NSLog(@"Attempting to fetch pet data for %d",[[auction valueForKey:@"petSpeciesId"] integerValue]);
+                //First, try to fetch the pet info from the persistent store.
+                NSFetchRequest *fetchPet = [[NSFetchRequest alloc] init];
+                NSEntityDescription *petEntity = [NSEntityDescription entityForName:@"Pet" inManagedObjectContext:context];
+                NSPredicate *petPredicate = [NSPredicate predicateWithFormat:@"speciesID == %d",[[auction valueForKey:@"petSpeciesId"] intValue]];
+                
+                [fetchPet setEntity:petEntity];
+                [fetchPet setPredicate:petPredicate];
+                [fetchPet setIncludesPropertyValues:NO];
+                
+                NSArray *fetchedPet = [context executeFetchRequest:fetchPet error:&error];
+                if([fetchedPet count] > 0)
+                {
+                    [aucData setValue:fetchedPet[0] forKey:@"petRelationship"];
+                }
+                //If there is no matching pet (by speciesID) in the persistent store
+                else
+                {
+                    
+                    [aucData setValue:[AHPPetAPIRequest storePet:[[auction valueForKey:@"petSpeciesId"] integerValue] inContext:context] forKey:@"petRelationship"];
+                }
+            }
+            
             //Set the dump date that the auction is generated from.
             [aucData setValue:auctionDumpObject forKey:@"dumpRelationship"];
-            
-            //NSLog(@"Auction object:\n%@",aucData);
-            //NSLog(@"Dump Relationship:%@",auctionDumpObject);
-            //NSLog(@"Realm Relationship:%@",[auctionDumpObject valueForKey:@"realmRelationship"]);
         }
         currentAuction++;
         float progress = currentAuction/numAuctions;

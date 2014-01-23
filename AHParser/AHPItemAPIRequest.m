@@ -12,6 +12,9 @@
 
 +(NSDictionary*) itemAPIRequest:(NSInteger) itemID
 {
+    //Used to track consumption of battle.net API.
+    NSLog(@"MAKING ITEM API REQUEST");
+    
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://us.battle.net/api/wow/item/%d",itemID]];
     //NSLog(@"Initializing ItemAPIRequest with url: %@", url);
     

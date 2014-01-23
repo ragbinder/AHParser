@@ -12,6 +12,7 @@
 #import "AHPCategoryLoader.h"
 
 @class AHPRealmSelectViewController;
+@class AHPSearchViewController;
 
 @interface AHPAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -20,6 +21,7 @@
 
 //Singletons
 @property (strong, nonatomic) AHPRealmSelectViewController *realmSelectViewController;
+@property (strong, nonatomic) AHPSearchViewController *searchViewController;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;

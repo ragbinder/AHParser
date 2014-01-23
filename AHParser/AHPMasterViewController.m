@@ -45,7 +45,7 @@
     _rows = [[NSMutableArray alloc] initWithArray:[_dictionary objectForKey:@"subclasses"]];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]
-                                   initWithTitle:@"Done"
+                                   initWithTitle:@"Apply"
                                    style:UIBarButtonItemStyleBordered
                                    target:self
                                    action:@selector(applyFilters:)];
@@ -77,7 +77,7 @@
                 //If we are in the battlePet Menu
                 if([[_dictionary valueForKey:@"class"] integerValue] == 17)
                 {
-                    predicate = [NSPredicate predicateWithFormat:@"(petBreedID == %d)",[[selectedRow valueForKey:@"subclass"] integerValue]];
+                    predicate = [NSPredicate predicateWithFormat:@"(petRelationship.petTypeID == %d)",[[selectedRow valueForKey:@"subclass"] integerValue]];
                 }
                 else
                 {
@@ -122,6 +122,9 @@
     [delegate setSearchPredicate:nil];
     [delegate setSortDescriptors:nil];
     [delegate setCategoryPredicate:nil];
+    [delegate.searchViewController.sortByBar setSelectedSegmentIndex:-1];
+    [delegate.searchViewController.ascDescBar setSelectedSegmentIndex:-1];
+    [delegate.searchViewController.searchBar setText:@""];
     [_detailViewController applyCurrentFilters];
 }
 

@@ -12,6 +12,9 @@
 
 +(NSArray*) realmStatus
 {
+    //Used to track consumption of battle.net API.
+    NSLog(@"MAKING REALM STATUS API REQUEST");
+    
     NSURL *url = [NSURL URLWithString:@"http://us.battle.net/api/wow/realm/status"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0];
     NSError *error = nil;

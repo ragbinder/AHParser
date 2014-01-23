@@ -37,7 +37,6 @@
 		8493875F179F50DD001F80BF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938735179F50DB001F80BF /* CoreData.framework */; };
 		84938767179F50DD001F80BF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84938765179F50DD001F80BF /* InfoPlist.strings */; };
 		8493876A179F50DD001F80BF /* AHParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938769179F50DD001F80BF /* AHParserTests.m */; };
-		8494701E1885F45D0039EEB7 /* Button BG.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8494701D1885F45D0039EEB7 /* Button BG.jpg */; };
 		8496F1B117CC0E8A007C47D7 /* AHPItemAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */; };
 		8496F1B417CEB9D4007C47D7 /* AHPImageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */; };
 		8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */; };
@@ -100,7 +99,6 @@
 		84938766179F50DD001F80BF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84938768179F50DD001F80BF /* AHParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHParserTests.h; sourceTree = "<group>"; };
 		84938769179F50DD001F80BF /* AHParserTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHParserTests.m; sourceTree = "<group>"; };
-		8494701D1885F45D0039EEB7 /* Button BG.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Button BG.jpg"; sourceTree = "<group>"; };
 		8496F1AF17CC0E8A007C47D7 /* AHPItemAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPItemAPIRequest.h; sourceTree = "<group>"; };
 		8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPItemAPIRequest.m; sourceTree = "<group>"; };
 		8496F1B217CEB9D4007C47D7 /* AHPImageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPImageRequest.h; sourceTree = "<group>"; };
@@ -276,7 +274,6 @@
 				8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */,
 				8496F1AF17CC0E8A007C47D7 /* AHPItemAPIRequest.h */,
 				8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */,
-				8494701D1885F45D0039EEB7 /* Button BG.jpg */,
 				84071B76183E6242005C644B /* AHPPetAPIRequest.h */,
 				84071B77183E6242005C644B /* AHPPetAPIRequest.m */,
 				8496F1B217CEB9D4007C47D7 /* AHPImageRequest.h */,
@@ -405,7 +402,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8494701E1885F45D0039EEB7 /* Button BG.jpg in Resources */,
 				84071B7D184257AB005C644B /* Gold.png in Resources */,
 				8493873C179F50DB001F80BF /* InfoPlist.strings in Resources */,
 				84071B7E184257AB005C644B /* Silver.png in Resources */,

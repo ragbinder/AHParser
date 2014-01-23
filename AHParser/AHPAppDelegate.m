@@ -26,6 +26,7 @@
 @synthesize sortDescriptors = _sortDescriptors;
  
 @synthesize realmSelectViewController = _realmSelectViewController;
+@synthesize searchViewController = _searchViewController;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -95,6 +96,21 @@
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         } 
+    }
+}
+
+-(AHPSearchViewController*)searchViewController
+{
+    if(!_searchViewController)
+    {
+        NSLog(@"creating search view controller");
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
+        _searchViewController = [storyboard instantiateViewControllerWithIdentifier:@"searchViewSB"];
+        return _searchViewController;
+    }
+    else
+    {
+        return _searchViewController;
     }
 }
 

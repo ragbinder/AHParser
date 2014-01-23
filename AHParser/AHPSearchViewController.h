@@ -18,7 +18,6 @@
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *sortByBar;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *ascDescBar;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *stackUnitBar;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) AHPDetailViewController *detailView;
 

@@ -17,6 +17,7 @@
         <attribute name="timeLeft" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="dumpRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AuctionDumpDate" inverseName="auctionRelationship" inverseEntity="AuctionDumpDate" syncable="YES"/>
         <relationship name="itemRelationship" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="auctionRelationship" inverseEntity="Item" syncable="YES"/>
+        <relationship name="petRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pet" inverseName="auctionRelationship" inverseEntity="Pet" syncable="YES"/>
         <fetchedProperty name="itemFetch" optional="YES" syncable="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Item" predicateString="itemID = $FETCH_SOURCE.item"/>
         </fetchedProperty>
@@ -30,7 +31,8 @@
     <entity name="Icon" syncable="YES">
         <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnail" optional="YES" attributeType="Binary" syncable="YES"/>
-        <relationship name="itemRelationship" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="iconRelationship" inverseEntity="Item" syncable="YES"/>
+        <relationship name="itemRelationship" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="iconRelationship" inverseEntity="Item" syncable="YES"/>
+        <relationship name="petRelationship" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pet" inverseName="iconRelationship" inverseEntity="Pet" syncable="YES"/>
     </entity>
     <entity name="Item" syncable="YES">
         <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
@@ -45,6 +47,15 @@
         <relationship name="auctionRelationship" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Auction" inverseName="itemRelationship" inverseEntity="Auction" syncable="YES"/>
         <relationship name="iconRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Icon" inverseName="itemRelationship" inverseEntity="Icon" syncable="YES"/>
     </entity>
+    <entity name="Pet" syncable="YES">
+        <attribute name="breedID" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="petTypeID" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="speciesID" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="auctionRelationship" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Auction" inverseName="petRelationship" inverseEntity="Auction" syncable="YES"/>
+        <relationship name="iconRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Icon" inverseName="petRelationship" inverseEntity="Icon" syncable="YES"/>
+    </entity>
     <entity name="RealmURL" syncable="YES">
         <attribute name="realm" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="slug" optional="YES" attributeType="String" syncable="YES"/>
@@ -57,5 +68,6 @@
         <element name="Icon" positionX="423" positionY="270" width="128" height="90"/>
         <element name="Item" positionX="412" positionY="9" width="128" height="210"/>
         <element name="RealmURL" positionX="36" positionY="-45" width="128" height="103"/>
+        <element name="Pet" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>
