@@ -65,16 +65,25 @@
 //Will refresh the auction database if and only if it is out of date.
 -(void) refreshAuctionDatabase
 {
-    
+    if([delegate realmURL] && [delegate dump])
+    {
+        NSLog(@"\n\nSet!\n%@\n%@\n\n",[delegate realmURL],[delegate dump]);
+    }
+    else
+    {
+        NSLog(@"\n\nNot Set!\n%@\n%@\n\n",[delegate realmURL],[delegate dump]);
+    }
     //Grab the link to the JSON file and its lastModified date.
     AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithRealmURL:[delegate realmURL]
                                                                inContext:_managedObjectContext];
     NSManagedObjectContext *context = [delegate managedObjectContext];
+    NSString *urlString = [[auctionData auctionDataURL] description];
     NSString *slugString = [auctionData slug];
     NSString *factionString = [delegate.realmSelectViewController faction];
     
+    //Problem Here
     NSMutableArray *array = [AHPAPIRequest findDumpsInContext:context
-                                                     withSlug:slugString
+                                                     withURL:urlString
                                                    forFaction:factionString];
     
     NSManagedObject *latestDump = [array objectAtIndex:0];
@@ -83,11 +92,13 @@
     [delegate setDump:latestDump];
     
     //If the auction data dump is more recent than the one in coredata, delete all of the coredata Auction objects and repopulate the database.
+    /*
     NSLog(@"Auction Data last Generated: %@",
           [AHPAPIRequest convertWOWTime:[[auctionData lastModified] doubleValue]]);
     NSLog(@"Auction Data in persistent store last generated: %@",
           [AHPAPIRequest convertWOWTime:[[latestDump valueForKey:@"date"] doubleValue]]);
-    //NSLog(@"Auction Data pulled from: %@",[latestDump valueForKey:@"realmRelationship.url"]);
+    NSLog(@"Auction Data pulled from: %@",[latestDump valueForKey:@"realmRelationship.url"]);
+    */
     
     if([[latestDump valueForKey:@"date"] doubleValue] != [[auctionData lastModified] doubleValue])
     {
@@ -182,7 +193,7 @@
     NSPredicate *searchPredicate = [delegate searchPredicate];
     NSPredicate *filterPredicate = [delegate categoryPredicate];
     NSArray *sortDescriptorArray = [[NSArray alloc] initWithArray:[delegate sortDescriptors]];
-    NSLog(@"SORT DESCRIPTOR ARRAY: %@",sortDescriptorArray);
+    //NSLog(@"SORT DESCRIPTOR ARRAY: %@",sortDescriptorArray);
     
     //Need to combine the predicates into an array, making sure that none of them are nil. If any are nil, then any predicates after them will be ignored.
     NSMutableArray *predicatesArray = [[NSMutableArray alloc] initWithCapacity:4];
@@ -317,7 +328,7 @@
         NSManagedObject *auction = [self.fetchedResultsController objectAtIndexPath:indexPath];
         
         NSString *owner = [auction valueForKey:@"owner"];
-        NSString *timeLeft = [auction valueForKey:@"timeLeft"];
+        int timeLeft = [[auction valueForKey:@"timeLeft"] integerValue];
         
         NSString *bidC,*bidS,*bidG,*buyoutC,*buyoutS,*buyoutG;
         //int quant = [[auction valueForKey:@"quantity"] integerValue];
@@ -395,7 +406,13 @@
             NSPredicate *petPredicate = [NSPredicate predicateWithFormat:@"(speciesID == %@)", [auction valueForKey:@"petSpeciesID"]];
             [internalPetReq setEntity:pet];
             [internalPetReq setPredicate:petPredicate];
-            NSArray *result = [[delegate managedObjectContext] executeFetchRequest:internalPetReq error:nil];
+            NSError *petError;
+            NSArray *result = [[delegate managedObjectContext] executeFetchRequest:internalPetReq error:&petError];
+            
+            if(petError)
+            {
+                NSLog(@"Pet Error: %@",petError);
+            }
             
             if([result count] != 0)
             {
@@ -428,7 +445,13 @@
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(itemID == %@)", [auction valueForKey:@"item"]];
             [internalItemReq setEntity:item];
             [internalItemReq setPredicate:predicate];
-            NSArray *result = [[delegate managedObjectContext] executeFetchRequest:internalItemReq error:nil];
+            NSError *itemError;
+            NSArray *result = [[delegate managedObjectContext] executeFetchRequest:internalItemReq error:&itemError];
+            
+            if(itemError)
+            {
+                NSLog(@"Item Error: %@",itemError);
+            }
             
             if([result count] != 0)
             {
@@ -440,7 +463,13 @@
                 //If an existing item with the desired itemID can't be found, fetch the data from the web and make a new core data object for it.
                 [AHPItemAPIRequest storeItem:[[auction valueForKey:@"item"] integerValue] inContext:[delegate managedObjectContext]];
                 
-                result = [[delegate managedObjectContext] executeFetchRequest:internalItemReq error:nil];
+                result = [[delegate managedObjectContext] executeFetchRequest:internalItemReq error:&itemError];
+                
+                if(itemError)
+                {
+                    NSLog(@"Item Error: %@",itemError);
+                }
+                
                 if([result count] != 0)
                 {
                     itemDictionary = result[0];
@@ -480,9 +509,14 @@
         NSFetchRequest *fetchIcon = [[NSFetchRequest alloc] init];
         [fetchIcon setEntity:[NSEntityDescription entityForName:@"Icon" inManagedObjectContext:[delegate managedObjectContext]]];
         [fetchIcon setPredicate:[NSPredicate predicateWithFormat:@"icon == %@",[itemDictionary valueForKey:@"icon"]]];
-        NSError *error = nil;
-        NSArray *fetchedIcons = [[delegate managedObjectContext] executeFetchRequest:fetchIcon error:&error];
-        //NSLog(@"Error (may be nil): %@", error);
+        NSError *iconError = nil;
+        NSArray *fetchedIcons = [[delegate managedObjectContext] executeFetchRequest:fetchIcon error:&iconError];
+        
+        if(iconError)
+        {
+            NSLog(@"Error with Icons: %@",iconError);
+        }
+        
         if([fetchedIcons count] > 0)
         {
             NSData *thumbnailData = [fetchedIcons[0] valueForKey:@"thumbnail"];
@@ -491,21 +525,9 @@
         }
         else
         {
-            NSData *thumbnailData = [AHPImageRequest imageRequestWithPath:[itemDictionary valueForKey:@"icon"]];
+            NSData *thumbnailData = [[AHPImageRequest storeImageWithPath:[itemDictionary valueForKey:@"icon"] inContext:[delegate managedObjectContext]] valueForKey:@"thumbnail"];
             UIImage *thumbnailImage = [UIImage imageWithData:thumbnailData];
             [cell.icon setImage:thumbnailImage];
-            
-            NSManagedObject *newIcon = [NSEntityDescription insertNewObjectForEntityForName:@"Icon" inManagedObjectContext:[delegate managedObjectContext]];
-            [newIcon setValue:thumbnailData forKey:@"thumbnail"];
-            [newIcon setValue:[itemDictionary valueForKey:@"icon"] forKey:@"icon"];
-            if(![[delegate managedObjectContext] save:&error])
-            {
-                NSLog(@"Error Saving Thumbnail: %@",error);
-            }
-            else
-            {
-                //NSLog(@"New thumbnail saved as: %@",[itemDictionary valueForKey:@"icon"]);
-            }
         }
     }
     @catch (NSException *exception) {
@@ -575,7 +597,7 @@
 {
     if(![delegate realmSelectViewController])
     {
-        NSLog(@"creating realm select view controller");
+        //NSLog(@"creating realm select view controller");
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
         AHPRealmSelectViewController *realmSelect = [storyboard instantiateViewControllerWithIdentifier:@"RealmSelectSB"];
         [realmSelect setDetailView:self];

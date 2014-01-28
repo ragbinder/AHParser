@@ -53,36 +53,7 @@
             break;
             
         case 1:
-            //Had to write a custom comparator to sort the Time Remaining field correctly
-            sort = [NSSortDescriptor sortDescriptorWithKey:@"timeLeft" ascending:ascDesc comparator:^(id obj1, id obj2){
-                int o1,o2;
-                if([obj1 isEqualToString:@"Short"])
-                    o1 = 0;
-                if([obj2 isEqualToString:@"Short"])
-                    o2 = 0;
-                
-                if([obj1 isEqualToString:@"Medium"])
-                    o1 = 1;
-                if([obj2 isEqualToString:@"Medium"])
-                    o2 = 1;
-                
-                if([obj1 isEqualToString:@"Long"])
-                    o1 = 2;
-                if([obj2 isEqualToString:@"Long"])
-                    o2 = 2;
-                
-                if([obj1 isEqualToString:@"Very Long"])
-                    o1 = 3;
-                if([obj2 isEqualToString:@"Very Long"])
-                    o2 = 3;
-                
-                if(o1 > o2)
-                    return (NSComparisonResult)NSOrderedDescending;
-                if(o1 < o2)
-                    return (NSComparisonResult)NSOrderedAscending;
-                return (NSComparisonResult)NSOrderedSame;
-            }
-                    ];
+            sort = [[NSSortDescriptor alloc] initWithKey:@"timeLeft" ascending:ascDesc];
             break;
             
         case 2:

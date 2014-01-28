@@ -73,8 +73,6 @@
 
 -(void) refreshButton
 {
-    [_realmTable reloadData];
-    
     //Disable the button until the refresh is completed.
     UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:1];
     [refreshButton setEnabled:NO];
@@ -83,12 +81,13 @@
     backgroundQueue = dispatch_queue_create("com.ragbinder.AHParser.background.realm", NULL);
     dispatch_async(backgroundQueue, ^(void){
         _realms = [AHPRealmStatusRequest realmStatus];
-        [_realmTable reloadData];
+        //[_realmTable reloadData];
         //NSLog(@"Realms :%@",_realms);
         
         //Re-enable the refresh button and filter the auction table after the data operation is complete.
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [refreshButton setEnabled:YES];
+            [_realmTable reloadData];
         });
     });
 }
@@ -128,6 +127,18 @@
     AHPRealmSelectCell *cell = [tableView
                                 dequeueReusableCellWithIdentifier:CellIdentifier
                                 forIndexPath:indexPath];
+    
+    //Set the cell selection background
+    if(![cell.selectedBackgroundView isKindOfClass:[AHPCustomCellBackground class]])
+    {
+        cell.selectedBackgroundView = [[AHPCustomCellBackground alloc] init];
+    }
+    
+    /*
+    UIView *bgView = [[UIView alloc] init];
+    [bgView setBackgroundColor:[UIColor blueColor]];
+    cell.selectedBackgroundView = bgView;
+    */
     
     // Configure the cell...
     [cell.realmName setText: [[_realms objectAtIndex:indexPath.row] objectForKey:@"name"]];
@@ -229,7 +240,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     
     NSArray *results = [delegate.managedObjectContext executeFetchRequest:fetchURLBySlug error:&error];
     
-    NSLog(@"%@",results);
+    //NSLog(@"%@",results);
     
     if([results count] == 1)
     {

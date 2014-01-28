@@ -23,7 +23,7 @@
     
     _realm = [realmURL valueForKey:@"realm"];
     _slug = [realmURL valueForKey:@"slug"];
-    NSLog(@"Initializing APIRequest with slug: %@",_slug);
+    //NSLog(@"Initializing APIRequest with slug: %@",_slug);
     
     //Fetch the Location of the auction house data
     NSError *error = nil;
@@ -115,7 +115,7 @@
     if(results != nil)
     {
         int numResults = [results count];
-        NSLog(@"%d",numResults);
+        //NSLog(@"%d",numResults);
         
         //If there are no RealmURL objects for this URL.
         if(numResults == 0)
@@ -202,8 +202,14 @@
     [context setPersistentStoreCoordinator:[context1 persistentStoreCoordinator]];
     NSEntityDescription *auctionEntity = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:context];
     NSEntityDescription *itemEntity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
+    //Calling setLastDumpInContext: should also delete all of the previous auctions in the database for this realm/faction.
     NSManagedObject *auctionDumpObject = [self setLastDumpInContext:context forFaction:faction];
     [auctionDumpObject setValue:faction forKey:@"faction"];
+    
+    if(![context save:&error])
+    {
+        NSLog(@"ERROR: %@",error);
+    }
     
     
     for(NSDictionary *auction in auctionsArray)
@@ -226,11 +232,21 @@
             [aucData setValue:[auction valueForKey:@"quantity"] forKey:@"quantity"];
             [aucData setValue:[auction valueForKey:@"rand"] forKey:@"rand"];
             [aucData setValue:[auction valueForKey:@"seed"] forKey:@"seed"];
-            [aucData setValue:[auction valueForKey:@"timeLeft"] forKey:@"timeLeft"];
             [aucData setValue:[auction valueForKey:@"petSpeciesId"] forKey:@"petSpeciesID"];
             [aucData setValue:[auction valueForKey:@"petQualityId"] forKey:@"petQualityID"];
             [aucData setValue:[auction valueForKey:@"petBreedId"] forKey:@"petBreedID"];
             [aucData setValue:[auction valueForKey:@"petLevel"] forKey:@"petLevel"];
+            
+            //Time Left has to be handled seperately to make it sortable in Core Data. (Custom comparator blocks are not supported for NSSortDescriptors in Core Data.)
+            NSString *timeLeft = [auction valueForKey:@"timeLeft"];
+            if([timeLeft isEqualToString:@"SHORT"])
+                [aucData setValue:[NSNumber numberWithInt:0] forKey:@"timeLeft"];
+            else if([timeLeft isEqualToString:@"MEDIUM"])
+                [aucData setValue:[NSNumber numberWithInt:1] forKey:@"timeLeft"];
+            else if([timeLeft isEqualToString:@"LONG"])
+                [aucData setValue:[NSNumber numberWithInt:2] forKey:@"timeLeft"];
+            else if([timeLeft isEqualToString:@"VERY_LONG"])
+                [aucData setValue:[NSNumber numberWithInt:3] forKey:@"timeLeft"];
             
             //Set the item relationship for each auction
             NSFetchRequest *fetchItem = [[NSFetchRequest alloc] init];
@@ -371,8 +387,45 @@
     [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
     NSMutableArray *dumps = [NSMutableArray arrayWithArray:[context executeFetchRequest:request error:&error]];
-    if([dumps count] == 0){
-        return nil;}
+    if([dumps count] == 0)
+    {
+        return nil;
+    }
+    else
+    {
+        NSLog(@"Found %d dumps", [dumps count]);
+        for(NSManagedObject *aucDump in dumps)
+        {
+            NSLog(@"%@ - %@",
+                  [aucDump valueForKey:@"realmRelationship"],
+                  [AHPAPIRequest convertWOWTime:[[aucDump valueForKey:@"date"] doubleValue]]);
+        }
+        return dumps;
+    }
+}
+
+//Returns an array of all dumps for the given slug, ordered by date (newest first).
++(NSMutableArray *)findDumpsInContext:(NSManagedObjectContext *)context
+                             withURL:(NSString *)url
+                           forFaction:(NSString *)faction
+{
+    //Find any other AuctionDumpDate objects with both:
+    //1. a relationship to a RealmURL object with this URL.
+    //2. the same faction attribute
+    NSError *error;
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *auctionDump = [NSEntityDescription entityForName:@"AuctionDumpDate" inManagedObjectContext:context];
+    [request setEntity:auctionDump];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(ANY realmRelationship.url == %@) AND (faction == %@)",url,faction];
+    [request setPredicate:predicate];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
+    [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    
+    NSMutableArray *dumps = [NSMutableArray arrayWithArray:[context executeFetchRequest:request error:&error]];
+    if([dumps count] == 0)
+    {
+        return nil;
+    }
     else
     {
         NSLog(@"Found %d dumps", [dumps count]);
@@ -397,15 +450,15 @@
 }
 
 //This is a function for formatting the timeLeft value returned from the JSON so that it is formatted correctly.
-+(NSString*)timeLeftFormat:(NSString*) timeLeft
++(NSString*)timeLeftFormat:(NSInteger) timeLeft
 {
-    if([timeLeft isEqualToString:@"SHORT"])
+    if(timeLeft == 0)
         return @"Short";
-    if([timeLeft isEqualToString:@"MEDIUM"])
+    if(timeLeft == 1)
         return @"Medium";
-    if([timeLeft isEqualToString:@"LONG"])
+    if(timeLeft == 2)
         return @"Long";
-    if([timeLeft isEqualToString:@"VERY_LONG"])
+    if(timeLeft == 3)
         return @"Very Long";
     return @"ERROR";
 }

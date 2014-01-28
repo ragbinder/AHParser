@@ -34,7 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.clearsSelectionOnViewWillAppear = NO;
     delegate = (AHPAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
@@ -150,6 +150,13 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
+    
+    //Set the cell selection background
+    if(![cell.selectedBackgroundView isKindOfClass:[AHPCustomCategoryCellBackground class]])
+    {
+        cell.selectedBackgroundView = [[AHPCustomCategoryCellBackground alloc] init];
+    }
+    
     return cell;
 }
 

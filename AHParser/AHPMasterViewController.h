@@ -14,6 +14,7 @@
 #import <CoreData/CoreData.h>
 #import "AHPCategoryLoader.h"
 #import "AHPAppDelegate.h"
+#import "AHPCustomCategoryCellBackground.h"
 
 @interface AHPMasterViewController : UITableViewController <UITableViewDataSource>
 {

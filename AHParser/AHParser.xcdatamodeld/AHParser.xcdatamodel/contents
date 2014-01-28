@@ -14,7 +14,7 @@
         <attribute name="quantity" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="rand" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="seed" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="timeLeft" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeLeft" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="dumpRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AuctionDumpDate" inverseName="auctionRelationship" inverseEntity="AuctionDumpDate" syncable="YES"/>
         <relationship name="itemRelationship" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="auctionRelationship" inverseEntity="Item" syncable="YES"/>
         <relationship name="petRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pet" inverseName="auctionRelationship" inverseEntity="Pet" syncable="YES"/>

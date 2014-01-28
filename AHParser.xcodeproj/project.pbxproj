@@ -37,6 +37,8 @@
 		8493875F179F50DD001F80BF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938735179F50DB001F80BF /* CoreData.framework */; };
 		84938767179F50DD001F80BF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84938765179F50DD001F80BF /* InfoPlist.strings */; };
 		8493876A179F50DD001F80BF /* AHParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938769179F50DD001F80BF /* AHParserTests.m */; };
+		849470221893314F0039EEB7 /* AHPCustomCellBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 849470211893314F0039EEB7 /* AHPCustomCellBackground.m */; };
+		84947025189694C00039EEB7 /* AHPCustomCategoryCellBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 84947024189694C00039EEB7 /* AHPCustomCategoryCellBackground.m */; };
 		8496F1B117CC0E8A007C47D7 /* AHPItemAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */; };
 		8496F1B417CEB9D4007C47D7 /* AHPImageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */; };
 		8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */; };
@@ -99,6 +101,10 @@
 		84938766179F50DD001F80BF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84938768179F50DD001F80BF /* AHParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHParserTests.h; sourceTree = "<group>"; };
 		84938769179F50DD001F80BF /* AHParserTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHParserTests.m; sourceTree = "<group>"; };
+		849470201893314F0039EEB7 /* AHPCustomCellBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPCustomCellBackground.h; sourceTree = "<group>"; };
+		849470211893314F0039EEB7 /* AHPCustomCellBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPCustomCellBackground.m; sourceTree = "<group>"; };
+		84947023189694C00039EEB7 /* AHPCustomCategoryCellBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPCustomCategoryCellBackground.h; sourceTree = "<group>"; };
+		84947024189694C00039EEB7 /* AHPCustomCategoryCellBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPCustomCategoryCellBackground.m; sourceTree = "<group>"; };
 		8496F1AF17CC0E8A007C47D7 /* AHPItemAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPItemAPIRequest.h; sourceTree = "<group>"; };
 		8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPItemAPIRequest.m; sourceTree = "<group>"; };
 		8496F1B217CEB9D4007C47D7 /* AHPImageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPImageRequest.h; sourceTree = "<group>"; };
@@ -267,6 +273,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		8494701F189331110039EEB7 /* Custom Cell Background */ = {
+			isa = PBXGroup;
+			children = (
+				849470201893314F0039EEB7 /* AHPCustomCellBackground.h */,
+				849470211893314F0039EEB7 /* AHPCustomCellBackground.m */,
+				84947023189694C00039EEB7 /* AHPCustomCategoryCellBackground.h */,
+				84947024189694C00039EEB7 /* AHPCustomCategoryCellBackground.m */,
+			);
+			name = "Custom Cell Background";
+			sourceTree = "<group>";
+		};
 		8499E32517B981E200E9FCC5 /* API Requests */ = {
 			isa = PBXGroup;
 			children = (
@@ -320,6 +337,7 @@
 		84CA583C17C58DBF000C4DCF /* Table Cells */ = {
 			isa = PBXGroup;
 			children = (
+				8494701F189331110039EEB7 /* Custom Cell Background */,
 				84CA583917C58DB1000C4DCF /* AHPAuctionTableCell.h */,
 				84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */,
 				845CA7B5180C9B2100E9E2F1 /* AHPRealmSelectCell.h */,
@@ -449,6 +467,7 @@
 			files = (
 				8493873E179F50DB001F80BF /* main.m in Sources */,
 				84938742179F50DB001F80BF /* AHPAppDelegate.m in Sources */,
+				849470221893314F0039EEB7 /* AHPCustomCellBackground.m in Sources */,
 				84071B78183E6242005C644B /* AHPPetAPIRequest.m in Sources */,
 				8493874E179F50DB001F80BF /* AHParser.xcdatamodeld in Sources */,
 				84938754179F50DC001F80BF /* AHPDetailViewController.m in Sources */,
@@ -464,6 +483,7 @@
 				84BCA7AA1863513300224337 /* AHPSearchViewController.m in Sources */,
 				845CA7BD180CA06400E9E2F1 /* AHPRealmSelectViewController.m in Sources */,
 				84071B72183CF442005C644B /* AHPCategoryCell.m in Sources */,
+				84947025189694C00039EEB7 /* AHPCustomCategoryCellBackground.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

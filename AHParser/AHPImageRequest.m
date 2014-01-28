@@ -32,4 +32,26 @@
     }
 }
 
++(NSManagedObject*)storeImageWithPath:(NSString *)path
+                            inContext:(NSManagedObjectContext *)context
+{
+    NSData *thumbnailData = [AHPImageRequest imageRequestWithPath:path];
+    
+    NSManagedObject *newIcon = [NSEntityDescription insertNewObjectForEntityForName:@"Icon" inManagedObjectContext:context];
+    [newIcon setValue:thumbnailData forKey:@"thumbnail"];
+    [newIcon setValue:path forKey:@"icon"];
+   
+    NSError *error;
+    if(![context save:&error])
+    {
+        NSLog(@"Error Saving Thumbnail: %@",error);
+    }
+    else
+    {
+        //NSLog(@"New thumbnail saved as: %@",path);
+    }
+    
+    return newIcon;
+}
+
 @end

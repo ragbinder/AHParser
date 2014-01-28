@@ -52,7 +52,7 @@
     
     NSDictionary *dict = [AHPCategoryLoader importCategories];
     
-    NSLog(@"%@",[controller initWithTitle:@"All" andDictionary:dict]);
+    NSLog(@"Master Controller View OK!: %@",[controller initWithTitle:@"All" andDictionary:dict]);
     
     return YES;
 }
