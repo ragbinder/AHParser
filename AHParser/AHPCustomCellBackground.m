@@ -29,10 +29,12 @@
     CGContextFillRect(context, self.bounds);
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGFloat locationsTop[] = {0.0, 0.25};
-    CGFloat locationsBot[] = {1.0, 0.75};
+    CGFloat locationsTop[] = {0.0, 0.3};
+    CGFloat locationsBot[] = {1.0, 0.7};
     
-    CGColorRef startColor = [UIColor colorWithRed:253.0/255.0 green:225.0/255.0 blue:8.0/255.0 alpha:1].CGColor;
+    //CGColorRef startColor = [UIColor colorWithRed:253.0/255.0 green:225.0/255.0 blue:8.0/255.0 alpha:1].CGColor;
+    CGColorRef startColor = [UIColor colorWithRed:0/255.0 green:128.0/255.0 blue:255.0/255.0 alpha:1].CGColor;
+
     CGColorRef endColor = [UIColor clearColor].CGColor;
     
     NSArray *colors = @[(__bridge id)startColor,(__bridge id)endColor];

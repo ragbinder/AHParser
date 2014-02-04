@@ -30,7 +30,10 @@
 	// Do any additional setup after loading the view.
     delegate = (AHPAppDelegate *)[[UIApplication sharedApplication] delegate];
     [self.searchBar setDelegate:self];
-    [self.searchBar setShowsSearchResultsButton:YES];
+    [self.searchBar setShowsSearchResultsButton:NO];
+    
+    [self.sortByBar setSelectedSegmentIndex:-1];
+    [self.ascDescBar setSelectedSegmentIndex:-1];
 }
 
 - (NSSortDescriptor*)getSortDescriptor
@@ -95,6 +98,15 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    NSLog(@"Cancel button clicked.");
+    
+    [delegate setSearchPredicate:nil];
+    [detailView applyCurrentFilters];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (IBAction)sortByBar:(id)sender
 {
     NSSortDescriptor *defaultSort = [NSSortDescriptor sortDescriptorWithKey:@"auc" ascending:YES];
@@ -107,6 +119,48 @@
     NSSortDescriptor *defaultSort = [NSSortDescriptor sortDescriptorWithKey:@"auc" ascending:YES];
     [delegate setSortDescriptors:[NSArray arrayWithObjects:[self getSortDescriptor], defaultSort, nil]];
     NSLog(@"Delegate sort descriptor set as: %@",[delegate sortDescriptors]);
+}
+
+- (IBAction)loadItems:(id)sender {
+    NSManagedObjectContext *context = [delegate managedObjectContext];
+    
+    //NSEntityDescription *itemEntity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
+    NSEntityDescription *petEntity = [NSEntityDescription entityForName:@"Pet" inManagedObjectContext:context];
+    
+    //NSFetchRequest *itemFetch = [[NSFetchRequest alloc] init];
+    //[itemFetch setEntity:itemEntity];
+    NSFetchRequest *petFetch = [[NSFetchRequest alloc] init];
+    [petFetch setEntity:petEntity];
+    
+    NSError *error;
+    //NSArray *itemFetchResults = [NSArray alloc];
+    NSArray *petFetchResults = [NSArray alloc];
+    for (int i = 1000; i<2000; i++) {
+        //NSPredicate *itemPredicate = [NSPredicate predicateWithFormat:@"itemID = %d", i];
+        NSPredicate *petPredicate = [NSPredicate predicateWithFormat:@"speciesID = %d",i];
+        
+        NSLog(@"petPredicate: %@",petPredicate);
+        [petFetch setPredicate:petPredicate];
+        
+        petFetchResults = [context executeFetchRequest:petFetch error:&error];
+        
+        if(error)
+        {
+            NSLog(@"Error adding pet ID %d to internal database.\n%@",i,error);
+        }
+        
+        if([petFetchResults count] == 0)
+        {
+            if([AHPPetAPIRequest storePet:i inContext:context])
+            {
+                NSLog(@"Stored pet %d",i);
+            }
+        }
+        else
+        {
+            NSLog(@"Pet already exists for %d",i);
+        }
+    }
 }
 
 

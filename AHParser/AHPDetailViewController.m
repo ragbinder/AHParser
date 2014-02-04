@@ -192,9 +192,8 @@
     NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"ANY dumpRelationship.realmRelationship.url == %@",[delegate.realmURL valueForKey:@"url"]];
     NSPredicate *searchPredicate = [delegate searchPredicate];
     NSPredicate *filterPredicate = [delegate categoryPredicate];
-    NSArray *sortDescriptorArray = [[NSArray alloc] initWithArray:[delegate sortDescriptors]];
+
     //NSLog(@"SORT DESCRIPTOR ARRAY: %@",sortDescriptorArray);
-    
     //Need to combine the predicates into an array, making sure that none of them are nil. If any are nil, then any predicates after them will be ignored.
     NSMutableArray *predicatesArray = [[NSMutableArray alloc] initWithCapacity:4];
     if(factionPredicate)
@@ -278,7 +277,7 @@
 
 - (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
 {
-    barButtonItem.title = NSLocalizedString(@"Browse", @"Browse");
+    barButtonItem.title = NSLocalizedString(@"Filter", @"Filter");
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;
 }

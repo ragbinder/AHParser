@@ -256,6 +256,7 @@
             [fetchItem setEntity:itemEntity];
             [fetchItem setPredicate:predicate];
             [fetchItem setIncludesPropertyValues:NO];
+            
             NSArray *fetchedItem = [context executeFetchRequest:fetchItem error:&error];
             if([fetchedItem count] > 0)
             {
@@ -264,7 +265,7 @@
             //If there is no matching record, try to fetch the item info from the API, and then set the itemRelationship to the newly created item object.
             else
             {
-                //NSLog(@"Could not find item in database for ID: %d",[[auction valueForKey:@"item"] intValue]);
+                NSLog(@"Could not find item in database for itemID: %d",[[auction valueForKey:@"item"] intValue]);
                 //[AHPItemAPIRequest storeItem:inContext:] returns a reference to the item managed object it created for the item ID it is given.
                 [aucData setValue:[AHPItemAPIRequest storeItem:[[auction valueForKey:@"item"] integerValue] inContext:context] forKey:@"itemRelationship"];
             }
@@ -296,7 +297,7 @@
                 //If there is no matching pet (by speciesID) in the persistent store
                 else
                 {
-                    
+                    NSLog(@"Could not find pet in database for speciesID: %d",[[auction valueForKey:@"item"] intValue]);
                     [aucData setValue:[AHPPetAPIRequest storePet:[[auction valueForKey:@"petSpeciesId"] integerValue] inContext:context] forKey:@"petRelationship"];
                 }
             }
@@ -306,7 +307,7 @@
         }
         currentAuction++;
         float progress = currentAuction/numAuctions;
-        //NSLog(@"%f - %f \n%@",currentAuction,progress,aucData);
+        NSLog(@"%f - %f \n",currentAuction,progress);
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [progressBar setProgress:progress animated:YES];

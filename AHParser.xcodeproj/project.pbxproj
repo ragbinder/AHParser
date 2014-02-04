@@ -396,6 +396,11 @@
 				CLASSPREFIX = AHP;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Steven Jordan Kozmary";
+				TargetAttributes = {
+					8493872B179F50DA001F80BF = {
+						DevelopmentTeam = DG6CHU7QDH;
+					};
+				};
 			};
 			buildConfigurationList = 84938727179F50DA001F80BF /* Build configuration list for PBXProject "AHParser" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -594,9 +599,14 @@
 		8493876E179F50DD001F80BF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AHParser/AHParser-Prefix.pch";
 				INFOPLIST_FILE = "AHParser/AHParser-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/admin/Desktop/AHP/AHParser2/AHParser/TestFlightSDK2.2.1,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -605,9 +615,14 @@
 		8493876F179F50DD001F80BF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AHParser/AHParser-Prefix.pch";
 				INFOPLIST_FILE = "AHParser/AHParser-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/admin/Desktop/AHP/AHParser2/AHParser/TestFlightSDK2.2.1,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

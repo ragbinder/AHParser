@@ -32,11 +32,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    /*
-    _realm = @"sentinels";
-    _realmProper = @"Please Select A Realm";
-    _faction = @"and Faction";
-    */
+   
+    //NSInteger inte = 200;
+    //NSLog(@"inte: %05d",inte);
+    
+    
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     splitViewController.delegate = (id)navigationController.topViewController;

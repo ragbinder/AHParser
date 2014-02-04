@@ -86,6 +86,12 @@
         
         //Re-enable the refresh button and filter the auction table after the data operation is complete.
         dispatch_async(dispatch_get_main_queue(), ^(void){
+            if([_realms count] == 0)
+            {
+                UIAlertView *noServersAlert = [[UIAlertView alloc] initWithTitle:@"Realm Status Error" message:@"No Realms were found. Please make sure your device is connected to the internet and try again." delegate:Nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [noServersAlert show];
+            }
+            
             [refreshButton setEnabled:YES];
             [_realmTable reloadData];
         });
