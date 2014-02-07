@@ -307,7 +307,7 @@
         }
         currentAuction++;
         float progress = currentAuction/numAuctions;
-        NSLog(@"%f - %f \n",currentAuction,progress);
+        //NSLog(@"%f - %f \n",currentAuction,progress);
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [progressBar setProgress:progress animated:YES];

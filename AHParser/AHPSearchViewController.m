@@ -124,17 +124,65 @@
 - (IBAction)loadItems:(id)sender {
     NSManagedObjectContext *context = [delegate managedObjectContext];
     
-    //NSEntityDescription *itemEntity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
+    NSEntityDescription *itemEntity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
     NSEntityDescription *petEntity = [NSEntityDescription entityForName:@"Pet" inManagedObjectContext:context];
     
-    //NSFetchRequest *itemFetch = [[NSFetchRequest alloc] init];
-    //[itemFetch setEntity:itemEntity];
+    NSFetchRequest *itemFetch = [[NSFetchRequest alloc] init];
+    [itemFetch setEntity:itemEntity];
     NSFetchRequest *petFetch = [[NSFetchRequest alloc] init];
     [petFetch setEntity:petEntity];
     
     NSError *error;
-    //NSArray *itemFetchResults = [NSArray alloc];
+    NSArray *itemFetchResults = [NSArray alloc];
     NSArray *petFetchResults = [NSArray alloc];
+    
+    itemFetchResults = [context executeFetchRequest:itemFetch error:&error];
+    petFetchResults = [context executeFetchRequest:petFetch error:&error];
+    if(error)
+    {
+        NSLog(@"ERROR: %@",error);
+    }
+    
+    NSEntityDescription *iconEntity = [NSEntityDescription entityForName:@"Icon" inManagedObjectContext:context];
+    NSFetchRequest *iconFetch = [[NSFetchRequest alloc] init];
+    [iconFetch setEntity:iconEntity];
+    
+    NSArray *iconFetchResults = [NSArray alloc];
+    for(NSManagedObject *item in itemFetchResults)
+    {
+        NSPredicate *iconPredicate = [NSPredicate predicateWithFormat:@"icon == %@",[item valueForKey:@"icon"]];
+        [iconFetch setPredicate:iconPredicate];
+        iconFetchResults = [context executeFetchRequest:iconFetch error:&error];
+        
+        if ([iconFetchResults count] == 0)
+        {
+            NSLog(@"Storing Icon for %@",[item valueForKey:@"icon"]);
+            [AHPImageRequest storeImageWithPath:[item valueForKey:@"icon"] inContext:context];
+        }
+        else
+        {
+            NSLog(@"Icon already stored for %@",[item valueForKey:@"icon"]);
+        }
+    }
+    
+    for(NSManagedObject *pet in petFetchResults)
+    {
+        NSPredicate *iconPredicate = [NSPredicate predicateWithFormat:@"icon == %@",[pet valueForKey:@"icon"]];
+        [iconFetch setPredicate:iconPredicate];
+        iconFetchResults = [context executeFetchRequest:iconFetch error:&error];
+        
+        if ([iconFetchResults count] == 0)
+        {
+            NSLog(@"Storing Icon for %@",[pet valueForKey:@"icon"]);
+            [AHPImageRequest storeImageWithPath:[pet valueForKey:@"icon"] inContext:context];
+        }
+        else
+        {
+            NSLog(@"Icon already stored for %@",[pet valueForKey:@"icon"]);
+        }
+    }
+    
+    /*
     for (int i = 1000; i<2000; i++) {
         //NSPredicate *itemPredicate = [NSPredicate predicateWithFormat:@"itemID = %d", i];
         NSPredicate *petPredicate = [NSPredicate predicateWithFormat:@"speciesID = %d",i];
@@ -161,6 +209,7 @@
             NSLog(@"Pet already exists for %d",i);
         }
     }
+     */
 }
 
 

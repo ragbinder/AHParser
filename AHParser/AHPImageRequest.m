@@ -17,6 +17,8 @@
 
 +(NSData*) imageRequestWithPath:(NSString *)path
 {
+    NSLog(@"MAKING IMAGE REQUEST");
+    
     NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"http://us.media.blizzard.com/wow/icons/56/%@.jpg",path]];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLCacheStorageAllowedInMemoryOnly timeoutInterval:5.00];
     NSError *error;
