@@ -222,7 +222,6 @@
         //Make sure the auction object initialized.
         if(aucData)
         {
-            //sNSLog(@"%@",auction);
             //Set the properties of each auction that can be fetched from the JSON
             [aucData setValue:[auction valueForKey:@"auc"] forKey:@"auc"];
             [aucData setValue:[auction valueForKey:@"bid"] forKey:@"bid"];
@@ -256,8 +255,10 @@
             [fetchItem setEntity:itemEntity];
             [fetchItem setPredicate:predicate];
             [fetchItem setIncludesPropertyValues:NO];
+            [fetchItem setFetchLimit:1];
             
             NSArray *fetchedItem = [context executeFetchRequest:fetchItem error:&error];
+            
             if([fetchedItem count] > 0)
             {
                 [aucData setValue:fetchedItem[0] forKey:@"itemRelationship"];

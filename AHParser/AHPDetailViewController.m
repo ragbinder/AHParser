@@ -60,6 +60,9 @@
     NSArray *array = [[NSArray alloc] initWithObjects: realmSelect,searchButton,refreshButton, nil];
     
     [self.navigationItem setRightBarButtonItems:array animated:YES];
+    
+    //Setup the upper left item.
+    //[self.lastModifiedLabel setHidden:YES];
 }
 
 //Will refresh the auction database if and only if it is out of date.
@@ -134,6 +137,8 @@
     }
     else
     {
+        UIAlertView *upToDateAlert = [[UIAlertView alloc] initWithTitle:@"Auctions up to Date" message:[NSString stringWithFormat:@"The auctions for this realms are already up to date!\nLast Generated: %@", [AHPAPIRequest convertWOWTime:[[latestDump valueForKey:@"date"] doubleValue]]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [upToDateAlert show];
         NSLog(@"DATABASE IS UP TO DATE.\n%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
         //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dumpRelationship == %@",[[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description]] objectAtIndex:0]];
         [self applyCurrentFilters];
