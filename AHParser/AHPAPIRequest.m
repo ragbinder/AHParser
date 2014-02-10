@@ -152,7 +152,7 @@
     }
 }
 
-- (void)storeAuctions:(NSManagedObjectContext*) context1
+- (void)storeAuctions:(NSManagedObjectContext*) contextParameter
          withProgress:(UIProgressView*) progressBar
            forFaction:(NSString*) faction
 {
@@ -193,15 +193,10 @@
         return;
     }
     
-    //This stores the progress of the auction parsing.
-    float currentAuction = 0;
-    
     //Coredata variables that are used while looping through the auction list.
     NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
     [context setUndoManager:nil];
-    [context setPersistentStoreCoordinator:[context1 persistentStoreCoordinator]];
-    NSEntityDescription *auctionEntity = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:context];
-    NSEntityDescription *itemEntity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
+    [context setPersistentStoreCoordinator:[contextParameter persistentStoreCoordinator]];
     //Calling setLastDumpInContext: should also delete all of the previous auctions in the database for this realm/faction.
     NSManagedObject *auctionDumpObject = [self setLastDumpInContext:context forFaction:faction];
     [auctionDumpObject setValue:faction forKey:@"faction"];
@@ -211,7 +206,112 @@
         NSLog(@"ERROR: %@",error);
     }
     
+    NSRange range0 = NSMakeRange(0, [auctionsArray count]/4);
+    NSRange range1 = NSMakeRange([auctionsArray count]/4, [auctionsArray count]/4);
+    NSRange range2 = NSMakeRange([auctionsArray count]/4+[auctionsArray count]/4, [auctionsArray count]/4);
+    NSRange range3 = NSMakeRange([auctionsArray count]/4+[auctionsArray count]/4+[auctionsArray count]/4, [auctionsArray count]/4 + ([auctionsArray count]%4));
+    NSLog(@"NSRanges:\n%d\n %d\n%d\n %d\n%d\n %d\n%d\n %d",range0.location,range0.length,range1.location,range1.length,range2.location,range2.length,range3.location,range3.length);
     
+    NSArray *auctionsArray0 = [[NSArray alloc] initWithArray:[auctionsArray subarrayWithRange:range0]];
+    NSArray *auctionsArray1 = [[NSArray alloc] initWithArray:[auctionsArray subarrayWithRange:range1]];
+    NSArray *auctionsArray2 = [[NSArray alloc] initWithArray:[auctionsArray subarrayWithRange:range2]];
+    NSArray *auctionsArray3 = [[NSArray alloc] initWithArray:[auctionsArray subarrayWithRange:range3]];
+    
+    //Insert the new auctions into the persistent store. A new AuctionDump object will be created and assigned to the objects.
+    dispatch_queue_t backgroundQueue0;
+    backgroundQueue0 = dispatch_queue_create("com.ragbinder.AHParser.background0", NULL);
+    NSLog(@"Starting queue 0");
+    dispatch_async(backgroundQueue0, ^(void){
+        NSLog(@"Queue 0 started");
+        
+        NSManagedObjectContext *context0 = [[NSManagedObjectContext alloc] init];
+        [context0 setUndoManager:nil];
+        [context0 setPersistentStoreCoordinator:[context persistentStoreCoordinator]];
+        [context0 setMergePolicy:NSOverwriteMergePolicy];
+
+        [self storeAuctionHelper:auctionsArray0 inContext:context0 forFaction:faction withProgressBar:progressBar];
+        
+        NSError *error0;
+        if(![context0 save:&error0])
+        {
+            NSLog(@"Error saving context 0: %@",error0);
+        }
+    });
+    
+    //Insert the new auctions into the persistent store. A new AuctionDump object will be created and assigned to the objects.
+    dispatch_queue_t backgroundQueue1;
+    backgroundQueue1 = dispatch_queue_create("com.ragbinder.AHParser.background1", NULL);
+    NSLog(@"Starting queue 1");
+    dispatch_async(backgroundQueue1, ^(void){
+        NSLog(@"Queue 1 started");
+        
+        NSManagedObjectContext *context1 = [[NSManagedObjectContext alloc] init];
+        [context1 setUndoManager:nil];
+        [context1 setPersistentStoreCoordinator:[context persistentStoreCoordinator]];
+        [context1 setMergePolicy:NSOverwriteMergePolicy];
+        
+        [self storeAuctionHelper:auctionsArray1 inContext:context1 forFaction:faction withProgressBar:progressBar];
+        
+        NSError *error1;
+        if(![context1 save:&error1])
+        {
+            NSLog(@"Error saving context 1: %@",error1);
+        }
+    });
+    
+    //Insert the new auctions into the persistent store. A new AuctionDump object will be created and assigned to the objects.
+    dispatch_queue_t backgroundQueue2;
+    backgroundQueue2 = dispatch_queue_create("com.ragbinder.AHParser.background2", NULL);
+    NSLog(@"Starting queue 2");
+    dispatch_async(backgroundQueue2, ^(void){
+        NSLog(@"Queue 2 started");
+        
+        NSManagedObjectContext *context2 = [[NSManagedObjectContext alloc] init];
+        [context2 setUndoManager:nil];
+        [context2 setPersistentStoreCoordinator:[context persistentStoreCoordinator]];
+        [context2 setMergePolicy:NSOverwriteMergePolicy];
+        
+        [self storeAuctionHelper:auctionsArray2 inContext:context2 forFaction:faction withProgressBar:progressBar];
+        
+        NSError *error2;
+        if(![context2 save:&error2])
+        {
+            NSLog(@"Error saving context 2: %@",error2);
+        }
+    });
+    
+    //Insert the new auctions into the persistent store. A new AuctionDump object will be created and assigned to the objects.
+    dispatch_queue_t backgroundQueue3;
+    backgroundQueue3 = dispatch_queue_create("com.ragbinder.AHParser.background3", NULL);
+    NSLog(@"Starting queue 3");
+    dispatch_async(backgroundQueue3, ^(void){
+        NSLog(@"Queue 3 started");
+        
+        NSManagedObjectContext *context3 = [[NSManagedObjectContext alloc] init];
+        [context3 setUndoManager:nil];
+        [context3 setPersistentStoreCoordinator:[context persistentStoreCoordinator]];
+        [context3 setMergePolicy:NSOverwriteMergePolicy];
+        
+        [self storeAuctionHelper:auctionsArray3 inContext:context forFaction:faction withProgressBar:progressBar];
+        
+        NSError *error3;
+        if(![context3 save:&error3])
+        {
+            NSLog(@"Error saving context 3: %@",error3);
+        }
+    });
+    
+    
+    /*
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [progressBar setHidden:YES];
+    });
+     
+     SAVE CONTEXT
+     
+     */
+    
+    /*
     for(NSDictionary *auction in auctionsArray)
     {
         NSManagedObject *aucData =
@@ -322,7 +422,129 @@
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [progressBar setHidden:YES];
     });
+     */
 }
+
+-(void)storeAuctionHelper:(NSArray *)auctionsArray
+                inContext:(NSManagedObjectContext *)contextParameter
+               forFaction:(NSString *)faction
+          withProgressBar:(UIProgressView *)progressBar
+{
+    NSEntityDescription *auctionEntity = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:contextParameter];
+    NSEntityDescription *itemEntity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:contextParameter];
+    NSEntityDescription *petEntity = [NSEntityDescription entityForName:@"Pet" inManagedObjectContext:contextParameter];
+    NSFetchRequest *fetchItem = [[NSFetchRequest alloc] init];
+    NSFetchRequest *fetchPet = [[NSFetchRequest alloc] init];
+    NSPredicate *predicate = [NSPredicate alloc];
+    NSPredicate *petPredicate = [NSPredicate alloc];
+    NSError *error;
+    
+    NSManagedObject *dumpObject = [[AHPAPIRequest findDumpsInContext:contextParameter withURL:[_auctionDataURL description] forFaction:faction] objectAtIndex:0];
+    
+    float currentAuction = 0;
+    float numAuctions = [auctionsArray count];
+    
+    for(NSDictionary *auction in auctionsArray)
+    {
+        NSManagedObject *aucData =
+        [[NSManagedObject alloc]
+         initWithEntity:auctionEntity
+         insertIntoManagedObjectContext:contextParameter];
+        
+        //Make sure the auction object initialized.
+        if(aucData)
+        {
+            //sNSLog(@"%@",auction);
+            //Set the properties of each auction that can be fetched from the JSON
+            [aucData setValue:[auction valueForKey:@"auc"] forKey:@"auc"];
+            [aucData setValue:[auction valueForKey:@"bid"] forKey:@"bid"];
+            [aucData setValue:[auction valueForKey:@"buyout"] forKey:@"buyout"];
+            [aucData setValue:[auction valueForKey:@"item"] forKey:@"item"];
+            [aucData setValue:[auction valueForKey:@"owner"] forKey:@"owner"];
+            [aucData setValue:[auction valueForKey:@"quantity"] forKey:@"quantity"];
+            [aucData setValue:[auction valueForKey:@"rand"] forKey:@"rand"];
+            [aucData setValue:[auction valueForKey:@"seed"] forKey:@"seed"];
+            [aucData setValue:[auction valueForKey:@"petSpeciesId"] forKey:@"petSpeciesID"];
+            [aucData setValue:[auction valueForKey:@"petQualityId"] forKey:@"petQualityID"];
+            [aucData setValue:[auction valueForKey:@"petBreedId"] forKey:@"petBreedID"];
+            [aucData setValue:[auction valueForKey:@"petLevel"] forKey:@"petLevel"];
+            
+            //Time Left has to be handled seperately to make it sortable in Core Data. (Custom comparator blocks are not supported for NSSortDescriptors in Core Data.)
+            NSString *timeLeft = [auction valueForKey:@"timeLeft"];
+            if([timeLeft isEqualToString:@"SHORT"])
+                [aucData setValue:[NSNumber numberWithInt:0] forKey:@"timeLeft"];
+            else if([timeLeft isEqualToString:@"MEDIUM"])
+                [aucData setValue:[NSNumber numberWithInt:1] forKey:@"timeLeft"];
+            else if([timeLeft isEqualToString:@"LONG"])
+                [aucData setValue:[NSNumber numberWithInt:2] forKey:@"timeLeft"];
+            else if([timeLeft isEqualToString:@"VERY_LONG"])
+                [aucData setValue:[NSNumber numberWithInt:3] forKey:@"timeLeft"];
+            
+            //Set the item relationship for each auction
+            
+            
+            //First, try to fetch the item info from the persistent store.
+            predicate = [NSPredicate predicateWithFormat:@"itemID == %d",[[auction valueForKey:@"item"] intValue]];
+            [fetchItem setEntity:itemEntity];
+            [fetchItem setPredicate:predicate];
+            [fetchItem setIncludesPropertyValues:NO];
+            
+            NSArray *fetchedItem = [contextParameter executeFetchRequest:fetchItem error:&error];
+            if([fetchedItem count] > 0)
+            {
+                [aucData setValue:fetchedItem[0] forKey:@"itemRelationship"];
+            }
+            //If there is no matching record, try to fetch the item info from the API, and then set the itemRelationship to the newly created item object.
+            else
+            {
+                NSLog(@"Could not find item in database for itemID: %d",[[auction valueForKey:@"item"] intValue]);
+                //[AHPItemAPIRequest storeItem:inContext:] returns a reference to the item managed object it created for the item ID it is given.
+                [aucData setValue:[AHPItemAPIRequest storeItem:[[auction valueForKey:@"item"] integerValue] inContext:contextParameter] forKey:@"itemRelationship"];
+            }
+            if(error)
+            {
+                NSLog(@"Error linking Item ID: %@",error);
+            }
+            
+            //BattlePet API steps
+            //Check if the item is actually a battlePet cage (itemID = 82800)
+            if([[auction valueForKey:@"item"] integerValue] == 82800)
+            {
+                //NSLog(@"Auction: %@",auction);
+                //NSLog(@"Attempting to fetch pet data for %d",[[auction valueForKey:@"petSpeciesId"] integerValue]);
+                //First, try to fetch the pet info from the persistent store.
+                petPredicate = [NSPredicate predicateWithFormat:@"speciesID == %d",[[auction valueForKey:@"petSpeciesId"] intValue]];
+                
+                [fetchPet setEntity:petEntity];
+                [fetchPet setPredicate:petPredicate];
+                [fetchPet setIncludesPropertyValues:NO];
+                
+                NSArray *fetchedPet = [contextParameter executeFetchRequest:fetchPet error:&error];
+                if([fetchedPet count] > 0)
+                {
+                    [aucData setValue:fetchedPet[0] forKey:@"petRelationship"];
+                }
+                //If there is no matching pet (by speciesID) in the persistent store
+                else
+                {
+                    NSLog(@"Could not find pet in database for speciesID: %d",[[auction valueForKey:@"item"] intValue]);
+                    [aucData setValue:[AHPPetAPIRequest storePet:[[auction valueForKey:@"petSpeciesId"] integerValue] inContext:contextParameter] forKey:@"petRelationship"];
+                }
+            }
+            
+            //Set the dump date that the auction is generated from.
+            [aucData setValue:dumpObject forKey:@"dumpRelationship"];
+        }
+        currentAuction++;
+        float progress = currentAuction/numAuctions;
+        //NSLog(@"%f - %f \n",currentAuction,progress);
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [progressBar setProgress:progress animated:YES];
+        });
+    }
+}
+
 
 //Call this method to set the Last Dumped date to the current dump generation date (from the JSON), formatted as a double. Also includes the faction the dump was generated for, so the user can load only part of an auction dump.
 -(NSManagedObject*) setLastDumpInContext:(NSManagedObjectContext*) context
