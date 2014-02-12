@@ -153,7 +153,7 @@
     }
     
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AHParser.sqlite"];
-    NSLog(@"Store URL: %@",storeURL);
+    //NSLog(@"Store URL: %@",storeURL);
     
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -162,6 +162,7 @@
     {
         NSURL *defaultStoreURL = [[NSBundle mainBundle] URLForResource:@"AHParser" withExtension:@"sqlite"];
         if (defaultStoreURL) {
+            NSLog(@"Imported Default Database");
             [fileManager copyItemAtURL:defaultStoreURL toURL:storeURL error:nil];
         }
     }

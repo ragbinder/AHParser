@@ -141,6 +141,19 @@
             [self applyCurrentFilters];
         }
     }
+    else
+    {
+        UIAlertView *noSelectionAlert = [[UIAlertView alloc] initWithTitle:@"No Realm/Faction Selected" message:@"Please choose a realm and faction." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [noSelectionAlert show];
+    }
+}
+
+//This method is only for the noSelectionAlert UIAlertView. The other alert view (upToDateAlert) has a nil delegate so this will not be called.
+//#JustUIAlertViewDelegateThings
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"%@\n%ld",alertView,(long)buttonIndex);
+    [self realmSelect:self];
 }
 
 //Will refresh the auction database, even if it is up to date
@@ -247,6 +260,12 @@
     [_managedObjectContext executeFetchRequest:[_fetchedResultsController fetchRequest] error:&error];
     [_auctionTable reloadData];
 }
+
+//********************************************
+//
+//          MANDATORY METHODS
+//
+//********************************************
 
 - (void)didReceiveMemoryWarning
 {

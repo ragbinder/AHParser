@@ -18,7 +18,7 @@
 
 @class AHPAppDelegate;
 
-@interface AHPDetailViewController : UIViewController <UISplitViewControllerDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
+@interface AHPDetailViewController : UIViewController <UISplitViewControllerDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UIAlertViewDelegate>
 {
     AHPAppDelegate *delegate;
 }
@@ -28,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *progressBar;
 @property (weak, nonatomic) UIBarButtonItem *realmSelect;
 
+//Call this method to apply the current filters stored in the AppDelegate to the current auction table view. The data will be reloaded and the user will be presented with new data.
 - (void)applyCurrentFilters;
 
 @end
