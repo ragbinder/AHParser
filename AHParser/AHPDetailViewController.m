@@ -17,6 +17,7 @@
 
 @implementation AHPDetailViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
+@synthesize realmSelect = _realmSelect;
 
 #pragma mark - Managing the detail item
 
@@ -61,87 +62,84 @@
     
     [self.navigationItem setRightBarButtonItems:array animated:YES];
     
-    //Setup the upper left item.
-    //[self.lastModifiedLabel setHidden:YES];
+    _realmSelect = realmSelect;
 }
 
 //Will refresh the auction database if and only if it is out of date.
 -(void) refreshAuctionDatabase
 {
-    if([delegate realmURL] && [delegate dump])
+    //NSLog(@"REALM SELECT: %@",_realmSelect.title);
+    //Make sure a realm and faction are selected.
+        //HAHAHA THERE IS CERTAINLY A BETTER WAY TO DO THIS.
+    if(![_realmSelect.title isEqualToString:@"Please Select A Realm/Faction"])
     {
-        NSLog(@"\n\nSet!\n%@\n%@\n\n",[delegate realmURL],[delegate dump]);
-    }
-    else
-    {
-        NSLog(@"\n\nNot Set!\n%@\n%@\n\n",[delegate realmURL],[delegate dump]);
-    }
-    //Grab the link to the JSON file and its lastModified date.
-    AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithRealmURL:[delegate realmURL]
-                                                               inContext:_managedObjectContext];
-    NSManagedObjectContext *context = [delegate managedObjectContext];
-    NSString *urlString = [[auctionData auctionDataURL] description];
-    NSString *slugString = [auctionData slug];
-    NSString *factionString = [delegate.realmSelectViewController faction];
-    
-    //Problem Here
-    NSMutableArray *array = [AHPAPIRequest findDumpsInContext:context
-                                                     withURL:urlString
-                                                   forFaction:factionString];
-    
-    NSManagedObject *latestDump = [array objectAtIndex:0];
-    NSLog(@"Latest Dump: %@",array);
-    //Give the delegate a reference to the latest dump for this realmURL.
-    [delegate setDump:latestDump];
-    
-    //If the auction data dump is more recent than the one in coredata, delete all of the coredata Auction objects and repopulate the database.
-    /*
-    NSLog(@"Auction Data last Generated: %@",
-          [AHPAPIRequest convertWOWTime:[[auctionData lastModified] doubleValue]]);
-    NSLog(@"Auction Data in persistent store last generated: %@",
-          [AHPAPIRequest convertWOWTime:[[latestDump valueForKey:@"date"] doubleValue]]);
-    NSLog(@"Auction Data pulled from: %@",[latestDump valueForKey:@"realmRelationship.url"]);
-    */
-    
-    if([[latestDump valueForKey:@"date"] doubleValue] != [[auctionData lastModified] doubleValue])
-    {
-        NSLog(@"AUCTION DATA NEEDS TO BE REFRESHED.\n%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
+        //Grab the link to the JSON file and its lastModified date.
+        AHPAPIRequest *auctionData = [[AHPAPIRequest alloc] initWithRealmURL:[delegate realmURL]
+                                                                   inContext:_managedObjectContext];
+        NSManagedObjectContext *context = [delegate managedObjectContext];
+        NSString *urlString = [[auctionData auctionDataURL] description];
+        NSString *slugString = [auctionData slug];
+        NSString *factionString = [delegate.realmSelectViewController faction];
         
-        //Disable the button until the refresh is completed.
-        UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:2];
-        [refreshButton setEnabled:NO];
+        //Problem Here
+        NSMutableArray *array = [AHPAPIRequest findDumpsInContext:context
+                                                          withURL:urlString
+                                                       forFaction:factionString];
         
-        //Insert the new auctions into the persistent store. A new AuctionDump object will be created and assigned to the objects.
-        dispatch_queue_t backgroundQueue;
-        backgroundQueue = dispatch_queue_create("com.ragbinder.AHParser.background", NULL);
-        dispatch_async(backgroundQueue, ^(void){
-            [auctionData storeAuctions: [delegate managedObjectContext] withProgress:[self progressBar] forFaction:[delegate.realmSelectViewController faction]];
+        NSManagedObject *latestDump = [array objectAtIndex:0];
+        NSLog(@"Latest Dump: %@",array);
+        //Give the delegate a reference to the latest dump for this realmURL.
+        [delegate setDump:latestDump];
+        
+        //If the auction data dump is more recent than the one in coredata, delete all of the coredata Auction objects and repopulate the database.
+        /*
+         NSLog(@"Auction Data last Generated: %@",
+         [AHPAPIRequest convertWOWTime:[[auctionData lastModified] doubleValue]]);
+         NSLog(@"Auction Data in persistent store last generated: %@",
+         [AHPAPIRequest convertWOWTime:[[latestDump valueForKey:@"date"] doubleValue]]);
+         NSLog(@"Auction Data pulled from: %@",[latestDump valueForKey:@"realmRelationship.url"]);
+         */
+        
+        if([[latestDump valueForKey:@"date"] doubleValue] != [[auctionData lastModified] doubleValue])
+        {
+            NSLog(@"AUCTION DATA NEEDS TO BE REFRESHED.\n%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
             
-            //Re-enable the refresh button and filter the auction table after the data operation is complete.
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                [refreshButton setEnabled:YES];
-                //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dumpRelationship == %@",[[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description]] objectAtIndex:0]];
-                NSLog(@"latest dump after filter (fetched) %@",[[AHPAPIRequest findDumpsInContext:context
-                                         withSlug:slugString
-                                        forFaction:factionString] objectAtIndex:0]);
-                NSLog(@"Latest Dump after fitlering: %@",latestDump);
-                [delegate setDump:[[AHPAPIRequest findDumpsInContext:context
-                                                            withSlug:slugString
-                                                          forFaction:factionString] objectAtIndex:0]];
-                NSError *error;
-                if(![delegate.managedObjectContext save:&error])
-                {   NSLog(@"Error saving context after refresh: %@",error);}
-                [self applyCurrentFilters];
+            //Disable the button until the refresh is completed.
+            UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:2];
+            [refreshButton setEnabled:NO];
+            
+            //Insert the new auctions into the persistent store. A new AuctionDump object will be created and assigned to the objects.
+            dispatch_queue_t backgroundQueue;
+            backgroundQueue = dispatch_queue_create("com.ragbinder.AHParser.background", NULL);
+            dispatch_async(backgroundQueue, ^(void){
+                [auctionData storeAuctions: [delegate managedObjectContext] withProgress:[self progressBar] forFaction:[delegate.realmSelectViewController faction]];
+                
+                //Re-enable the refresh button and filter the auction table after the data operation is complete.
+                dispatch_async(dispatch_get_main_queue(), ^(void){
+                    [refreshButton setEnabled:YES];
+                    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dumpRelationship == %@",[[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description]] objectAtIndex:0]];
+                    NSLog(@"latest dump after filter (fetched) %@",[[AHPAPIRequest findDumpsInContext:context
+                                                                                             withSlug:slugString
+                                                                                           forFaction:factionString] objectAtIndex:0]);
+                    NSLog(@"Latest Dump after fitlering: %@",latestDump);
+                    [delegate setDump:[[AHPAPIRequest findDumpsInContext:context
+                                                                withSlug:slugString
+                                                              forFaction:factionString] objectAtIndex:0]];
+                    NSError *error;
+                    if(![delegate.managedObjectContext save:&error])
+                    {   NSLog(@"Error saving context after refresh: %@",error);}
+                    [self applyCurrentFilters];
+                });
             });
-        });
-    }
-    else
-    {
-        UIAlertView *upToDateAlert = [[UIAlertView alloc] initWithTitle:@"Auctions up to Date" message:[NSString stringWithFormat:@"The auctions for this realms are already up to date!\nLast Generated: %@", [AHPAPIRequest convertWOWTime:[[latestDump valueForKey:@"date"] doubleValue]]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [upToDateAlert show];
-        NSLog(@"DATABASE IS UP TO DATE.\n%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
-        //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dumpRelationship == %@",[[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description]] objectAtIndex:0]];
-        [self applyCurrentFilters];
+        }
+        else
+        {
+            UIAlertView *upToDateAlert = [[UIAlertView alloc] initWithTitle:@"Auctions up to Date" message:[NSString stringWithFormat:@"The auctions for this realms are already up to date!\nLast Generated: %@", [AHPAPIRequest convertWOWTime:[[latestDump valueForKey:@"date"] doubleValue]]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [upToDateAlert show];
+            NSLog(@"DATABASE IS UP TO DATE.\n%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
+            //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dumpRelationship == %@",[[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description]] objectAtIndex:0]];
+            [self applyCurrentFilters];
+        }
     }
 }
 

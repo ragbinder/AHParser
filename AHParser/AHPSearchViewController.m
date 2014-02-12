@@ -124,6 +124,7 @@
 - (IBAction)loadItems:(id)sender {
     NSManagedObjectContext *context = [delegate managedObjectContext];
     
+    
     NSEntityDescription *itemEntity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
     NSEntityDescription *petEntity = [NSEntityDescription entityForName:@"Pet" inManagedObjectContext:context];
     
@@ -142,12 +143,14 @@
     {
         NSLog(@"ERROR: %@",error);
     }
-    
+    //Code for pre-populating the icon database (for all pets and items in the database)
+    /*
     NSEntityDescription *iconEntity = [NSEntityDescription entityForName:@"Icon" inManagedObjectContext:context];
     NSFetchRequest *iconFetch = [[NSFetchRequest alloc] init];
     [iconFetch setEntity:iconEntity];
     
     NSArray *iconFetchResults = [NSArray alloc];
+    NSLog(@"Icons to Fetch: %d",[itemFetchResults count] + [petFetchResults count]);
     for(NSManagedObject *item in itemFetchResults)
     {
         NSPredicate *iconPredicate = [NSPredicate predicateWithFormat:@"icon == %@",[item valueForKey:@"icon"]];
@@ -181,9 +184,11 @@
             NSLog(@"Icon already stored for %@",[pet valueForKey:@"icon"]);
         }
     }
+    */
     
+    //Code for fetching all pets from the battlePet API. Right now I have it done in batches of 1000.
     /*
-    for (int i = 1000; i<2000; i++) {
+    for (int i = 1; i<2000; i++) {
         //NSPredicate *itemPredicate = [NSPredicate predicateWithFormat:@"itemID = %d", i];
         NSPredicate *petPredicate = [NSPredicate predicateWithFormat:@"speciesID = %d",i];
         
@@ -209,6 +214,36 @@
             NSLog(@"Pet already exists for %d",i);
         }
     }
+    */
+    
+    //Code for fetching all items from the item API.
+    /*
+     for (int i = 1; i<130000; i++) {
+         NSPredicate *itemPredicate = [NSPredicate predicateWithFormat:@"itemID = %d", i];
+         //NSPredicate *petPredicate = [NSPredicate predicateWithFormat:@"speciesID = %d",i];
+         
+         NSLog(@"itemPredicate: %@",itemPredicate);
+         [itemFetch setPredicate:itemPredicate];
+         
+         itemFetchResults = [context executeFetchRequest:itemFetch error:&error];
+         
+         if(error)
+         {
+             NSLog(@"Error adding item ID %d to internal database.\n%@",i,error);
+         }
+         
+         if([itemFetchResults count] == 0)
+         {
+             if([AHPItemAPIRequest storeItem:i inContext:context])
+             {
+                 NSLog(@"Stored item %d",i);
+             }
+         }
+         else
+         {
+             NSLog(@"Pet already exists for %d",i);
+         }
+     }
      */
 }
 

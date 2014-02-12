@@ -211,6 +211,24 @@
         NSLog(@"ERROR: %@",error);
     }
     
+    //Cache all of the items in the item database so that no Core Data lookups will need to be done.
+    NSFetchRequest *fetchItem = [[NSFetchRequest alloc] init];
+    [fetchItem setEntity:itemEntity];
+    NSArray *fetchedItems = [context executeFetchRequest:fetchItem error:&error];
+    NSLog(@"Fetched Items Count: %d",[fetchedItems count]);
+    NSMutableArray *cachedItems = [[NSMutableArray alloc] initWithCapacity:130000];
+    
+    for (int i=0; i<107500; i++) {
+        [cachedItems addObject:[NSNull null]];
+    }
+    
+    for(NSManagedObject *itemObject in fetchedItems)
+    {
+        int itemID = [[itemObject valueForKey:@"itemID"] integerValue];
+        [cachedItems replaceObjectAtIndex:itemID withObject:itemObject];
+    }
+    
+    NSLog(@"Cached Items Count: %d",[cachedItems count]);
     
     for(NSDictionary *auction in auctionsArray)
     {
@@ -247,32 +265,19 @@
             else if([timeLeft isEqualToString:@"VERY_LONG"])
                 [aucData setValue:[NSNumber numberWithInt:3] forKey:@"timeLeft"];
             
+            //NSLog(@"Cached Index: %@",[auction valueForKey:@"item"]);
+            //NSLog(@"Cached Item: %@",cachedItems[[[auction valueForKey:@"item"]integerValue]]);
             //Set the item relationship for each auction
-            NSFetchRequest *fetchItem = [[NSFetchRequest alloc] init];
-            
-            //First, try to fetch the item info from the persistent store.
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"itemID == %d",[[auction valueForKey:@"item"] intValue]];
-            [fetchItem setEntity:itemEntity];
-            [fetchItem setPredicate:predicate];
-            [fetchItem setIncludesPropertyValues:NO];
-            [fetchItem setFetchLimit:1];
-            
-            NSArray *fetchedItem = [context executeFetchRequest:fetchItem error:&error];
-            
-            if([fetchedItem count] > 0)
+            if ([cachedItems[[[auction valueForKey:@"item"] integerValue]] isKindOfClass:[NSManagedObject class]])
             {
-                [aucData setValue:fetchedItem[0] forKey:@"itemRelationship"];
+                //NSLog(@"%@",[cachedItems[[[auction valueForKey:@"item"] integerValue]] class]);
+                [aucData setValue:cachedItems[[[auction valueForKey:@"item"] integerValue]] forKey:@"itemRelationship"];
             }
             //If there is no matching record, try to fetch the item info from the API, and then set the itemRelationship to the newly created item object.
             else
             {
-                NSLog(@"Could not find item in database for itemID: %d",[[auction valueForKey:@"item"] intValue]);
-                //[AHPItemAPIRequest storeItem:inContext:] returns a reference to the item managed object it created for the item ID it is given.
+                NSLog(@"MISSING ITEM %@",[auction valueForKey:@"item"]);
                 [aucData setValue:[AHPItemAPIRequest storeItem:[[auction valueForKey:@"item"] integerValue] inContext:context] forKey:@"itemRelationship"];
-            }
-            if(error)
-            {
-                NSLog(@"Error linking Item ID: %@",error);
             }
             
             //BattlePet API steps

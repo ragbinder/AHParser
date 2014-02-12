@@ -153,6 +153,18 @@
     }
     
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AHParser.sqlite"];
+    NSLog(@"Store URL: %@",storeURL);
+    
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    if(![fileManager fileExistsAtPath:[storeURL path]])
+    {
+        NSURL *defaultStoreURL = [[NSBundle mainBundle] URLForResource:@"AHParser" withExtension:@"sqlite"];
+        if (defaultStoreURL) {
+            [fileManager copyItemAtURL:defaultStoreURL toURL:storeURL error:nil];
+        }
+    }
     
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];

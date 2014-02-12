@@ -44,6 +44,26 @@
 		8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */; };
 		84A0105117E90213005A33E7 /* AHPCategoryLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A0105017E90213005A33E7 /* AHPCategoryLoader.m */; };
 		84A0105317E9039F005A33E7 /* AuctionCategories.JSON in Resources */ = {isa = PBXBuildFile; fileRef = 84A0105217E9039F005A33E7 /* AuctionCategories.JSON */; };
+		84AB5EFF18AB3A46006DAF35 /* auction_house_iOS_icon_Icon-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5EF518AB3A45006DAF35 /* auction_house_iOS_icon_Icon-100.png */; };
+		84AB5F0018AB3A46006DAF35 /* auction_house_iOS_icon_Icon-144.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5EF618AB3A45006DAF35 /* auction_house_iOS_icon_Icon-144.png */; };
+		84AB5F0118AB3A46006DAF35 /* auction_house_iOS_icon_Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5EF718AB3A45006DAF35 /* auction_house_iOS_icon_Icon-72.png */; };
+		84AB5F0218AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5EF818AB3A45006DAF35 /* auction_house_iOS_icon_Icon-Small-50.png */; };
+		84AB5F0318AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5EF918AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small.png */; };
+		84AB5F0418AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5EFA18AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small@2x.png */; };
+		84AB5F0518AB3A46006DAF35 /* auction_house_iOS_icon_Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5EFB18AB3A46006DAF35 /* auction_house_iOS_icon_Icon.png */; };
+		84AB5F0618AB3A46006DAF35 /* auction_house_iOS_icon_Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5EFC18AB3A46006DAF35 /* auction_house_iOS_icon_Icon@2x.png */; };
+		84AB5F0718AB3A46006DAF35 /* auction_house_iOS_icon_iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5EFD18AB3A46006DAF35 /* auction_house_iOS_icon_iTunesArtwork.png */; };
+		84AB5F0818AB3A46006DAF35 /* auction_house_iOS_icon_iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5EFE18AB3A46006DAF35 /* auction_house_iOS_icon_iTunesArtwork@2x.png */; };
+		84AB5F1C18AB497C006DAF35 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5F1318AB497C006DAF35 /* Default.png */; };
+		84AB5F1D18AB497C006DAF35 /* AHB_splash_1024x768.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5F1418AB497C006DAF35 /* AHB_splash_1024x768.png */; };
+		84AB5F1E18AB497C006DAF35 /* Default~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5F1518AB497C006DAF35 /* Default~ipad.png */; };
+		84AB5F1F18AB497C006DAF35 /* AHB_splash_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5F1618AB497C006DAF35 /* AHB_splash_2048x1536.png */; };
+		84AB5F2018AB497C006DAF35 /* icon_1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5F1718AB497C006DAF35 /* icon_1024.png */; };
+		84AB5F2118AB497C006DAF35 /* icon_152.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5F1818AB497C006DAF35 /* icon_152.png */; };
+		84AB5F2218AB497C006DAF35 /* icon_40.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5F1918AB497C006DAF35 /* icon_40.png */; };
+		84AB5F2318AB497C006DAF35 /* icon_76.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5F1A18AB497C006DAF35 /* icon_76.png */; };
+		84AB5F2418AB497C006DAF35 /* icon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5F1B18AB497C006DAF35 /* icon_80.png */; };
+		84AB5F2718AB7E44006DAF35 /* AHParser.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 84AB5F2618AB7E44006DAF35 /* AHParser.sqlite */; };
 		84BCA7AA1863513300224337 /* AHPSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BCA7A91863513300224337 /* AHPSearchViewController.m */; };
 		84CA583517C414DD000C4DCF /* AHPMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583417C414DD000C4DCF /* AHPMasterViewController.m */; };
 		84CA583B17C58DB1000C4DCF /* AHPAuctionTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */; };
@@ -114,6 +134,26 @@
 		84A0104F17E90213005A33E7 /* AHPCategoryLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPCategoryLoader.h; sourceTree = "<group>"; };
 		84A0105017E90213005A33E7 /* AHPCategoryLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPCategoryLoader.m; sourceTree = "<group>"; };
 		84A0105217E9039F005A33E7 /* AuctionCategories.JSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = AuctionCategories.JSON; path = ../../../AuctionCategories.JSON; sourceTree = "<group>"; };
+		84AB5EF518AB3A45006DAF35 /* auction_house_iOS_icon_Icon-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "auction_house_iOS_icon_Icon-100.png"; sourceTree = "<group>"; };
+		84AB5EF618AB3A45006DAF35 /* auction_house_iOS_icon_Icon-144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "auction_house_iOS_icon_Icon-144.png"; sourceTree = "<group>"; };
+		84AB5EF718AB3A45006DAF35 /* auction_house_iOS_icon_Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "auction_house_iOS_icon_Icon-72.png"; sourceTree = "<group>"; };
+		84AB5EF818AB3A45006DAF35 /* auction_house_iOS_icon_Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "auction_house_iOS_icon_Icon-Small-50.png"; sourceTree = "<group>"; };
+		84AB5EF918AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "auction_house_iOS_icon_Icon-Small.png"; sourceTree = "<group>"; };
+		84AB5EFA18AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "auction_house_iOS_icon_Icon-Small@2x.png"; sourceTree = "<group>"; };
+		84AB5EFB18AB3A46006DAF35 /* auction_house_iOS_icon_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auction_house_iOS_icon_Icon.png; sourceTree = "<group>"; };
+		84AB5EFC18AB3A46006DAF35 /* auction_house_iOS_icon_Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "auction_house_iOS_icon_Icon@2x.png"; sourceTree = "<group>"; };
+		84AB5EFD18AB3A46006DAF35 /* auction_house_iOS_icon_iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auction_house_iOS_icon_iTunesArtwork.png; sourceTree = "<group>"; };
+		84AB5EFE18AB3A46006DAF35 /* auction_house_iOS_icon_iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "auction_house_iOS_icon_iTunesArtwork@2x.png"; sourceTree = "<group>"; };
+		84AB5F1318AB497C006DAF35 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		84AB5F1418AB497C006DAF35 /* AHB_splash_1024x768.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AHB_splash_1024x768.png; sourceTree = "<group>"; };
+		84AB5F1518AB497C006DAF35 /* Default~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default~ipad.png"; sourceTree = "<group>"; };
+		84AB5F1618AB497C006DAF35 /* AHB_splash_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AHB_splash_2048x1536.png; sourceTree = "<group>"; };
+		84AB5F1718AB497C006DAF35 /* icon_1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_1024.png; sourceTree = "<group>"; };
+		84AB5F1818AB497C006DAF35 /* icon_152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_152.png; sourceTree = "<group>"; };
+		84AB5F1918AB497C006DAF35 /* icon_40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_40.png; sourceTree = "<group>"; };
+		84AB5F1A18AB497C006DAF35 /* icon_76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_76.png; sourceTree = "<group>"; };
+		84AB5F1B18AB497C006DAF35 /* icon_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_80.png; sourceTree = "<group>"; };
+		84AB5F2618AB7E44006DAF35 /* AHParser.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = AHParser.sqlite; sourceTree = "<group>"; };
 		84BCA7A81863513300224337 /* AHPSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPSearchViewController.h; sourceTree = "<group>"; };
 		84BCA7A91863513300224337 /* AHPSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPSearchViewController.m; sourceTree = "<group>"; };
 		84CA583417C414DD000C4DCF /* AHPMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPMasterViewController.m; sourceTree = "<group>"; };
@@ -196,6 +236,7 @@
 		84938723179F50DA001F80BF = {
 			isa = PBXGroup;
 			children = (
+				84AB5F1218AB497C006DAF35 /* fixed sizes */,
 				84938737179F50DB001F80BF /* AHParser */,
 				84938762179F50DD001F80BF /* AHParserTests */,
 				8493872E179F50DA001F80BF /* Frameworks */,
@@ -240,6 +281,9 @@
 		84938738179F50DB001F80BF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				84AB5F2518AB7E31006DAF35 /* Default Database */,
+				84AB5F0918AB3F2D006DAF35 /* App Launch Screens */,
+				84AB5EF418AB3A45006DAF35 /* App Icons */,
 				07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */,
 				84071B79184257AB005C644B /* Copper.png */,
 				84071B7A184257AB005C644B /* Gold.png */,
@@ -334,6 +378,55 @@
 			name = "Right Side";
 			sourceTree = "<group>";
 		};
+		84AB5EF418AB3A45006DAF35 /* App Icons */ = {
+			isa = PBXGroup;
+			children = (
+				84AB5EF518AB3A45006DAF35 /* auction_house_iOS_icon_Icon-100.png */,
+				84AB5EF618AB3A45006DAF35 /* auction_house_iOS_icon_Icon-144.png */,
+				84AB5EF718AB3A45006DAF35 /* auction_house_iOS_icon_Icon-72.png */,
+				84AB5EF818AB3A45006DAF35 /* auction_house_iOS_icon_Icon-Small-50.png */,
+				84AB5EF918AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small.png */,
+				84AB5EFA18AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small@2x.png */,
+				84AB5EFB18AB3A46006DAF35 /* auction_house_iOS_icon_Icon.png */,
+				84AB5EFC18AB3A46006DAF35 /* auction_house_iOS_icon_Icon@2x.png */,
+				84AB5EFD18AB3A46006DAF35 /* auction_house_iOS_icon_iTunesArtwork.png */,
+				84AB5EFE18AB3A46006DAF35 /* auction_house_iOS_icon_iTunesArtwork@2x.png */,
+			);
+			path = "App Icons";
+			sourceTree = "<group>";
+		};
+		84AB5F0918AB3F2D006DAF35 /* App Launch Screens */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "App Launch Screens";
+			path = "../App Launch Screens";
+			sourceTree = "<group>";
+		};
+		84AB5F1218AB497C006DAF35 /* fixed sizes */ = {
+			isa = PBXGroup;
+			children = (
+				84AB5F1318AB497C006DAF35 /* Default.png */,
+				84AB5F1418AB497C006DAF35 /* AHB_splash_1024x768.png */,
+				84AB5F1518AB497C006DAF35 /* Default~ipad.png */,
+				84AB5F1618AB497C006DAF35 /* AHB_splash_2048x1536.png */,
+				84AB5F1718AB497C006DAF35 /* icon_1024.png */,
+				84AB5F1818AB497C006DAF35 /* icon_152.png */,
+				84AB5F1918AB497C006DAF35 /* icon_40.png */,
+				84AB5F1A18AB497C006DAF35 /* icon_76.png */,
+				84AB5F1B18AB497C006DAF35 /* icon_80.png */,
+			);
+			path = "fixed sizes";
+			sourceTree = "<group>";
+		};
+		84AB5F2518AB7E31006DAF35 /* Default Database */ = {
+			isa = PBXGroup;
+			children = (
+				84AB5F2618AB7E44006DAF35 /* AHParser.sqlite */,
+			);
+			name = "Default Database";
+			sourceTree = "<group>";
+		};
 		84CA583C17C58DBF000C4DCF /* Table Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -425,16 +518,36 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84AB5F0318AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small.png in Resources */,
+				84AB5F2718AB7E44006DAF35 /* AHParser.sqlite in Resources */,
+				84AB5F1C18AB497C006DAF35 /* Default.png in Resources */,
+				84AB5F0818AB3A46006DAF35 /* auction_house_iOS_icon_iTunesArtwork@2x.png in Resources */,
+				84AB5F2118AB497C006DAF35 /* icon_152.png in Resources */,
+				84AB5F2218AB497C006DAF35 /* icon_40.png in Resources */,
+				84AB5F0018AB3A46006DAF35 /* auction_house_iOS_icon_Icon-144.png in Resources */,
 				84071B7D184257AB005C644B /* Gold.png in Resources */,
 				8493873C179F50DB001F80BF /* InfoPlist.strings in Resources */,
+				84AB5F0118AB3A46006DAF35 /* auction_house_iOS_icon_Icon-72.png in Resources */,
 				84071B7E184257AB005C644B /* Silver.png in Resources */,
+				84AB5F1D18AB497C006DAF35 /* AHB_splash_1024x768.png in Resources */,
 				84938744179F50DB001F80BF /* Default.png in Resources */,
 				84938746179F50DB001F80BF /* Default@2x.png in Resources */,
+				84AB5F1E18AB497C006DAF35 /* Default~ipad.png in Resources */,
+				84AB5F1F18AB497C006DAF35 /* AHB_splash_2048x1536.png in Resources */,
 				84938748179F50DB001F80BF /* Default-568h@2x.png in Resources */,
 				8493874B179F50DB001F80BF /* MainStoryboard.storyboard in Resources */,
 				07DE46CB17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */,
+				84AB5F0418AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small@2x.png in Resources */,
+				84AB5EFF18AB3A46006DAF35 /* auction_house_iOS_icon_Icon-100.png in Resources */,
+				84AB5F0618AB3A46006DAF35 /* auction_house_iOS_icon_Icon@2x.png in Resources */,
 				84071B7C184257AB005C644B /* Copper.png in Resources */,
+				84AB5F0518AB3A46006DAF35 /* auction_house_iOS_icon_Icon.png in Resources */,
+				84AB5F2318AB497C006DAF35 /* icon_76.png in Resources */,
 				84A0105317E9039F005A33E7 /* AuctionCategories.JSON in Resources */,
+				84AB5F2418AB497C006DAF35 /* icon_80.png in Resources */,
+				84AB5F0218AB3A46006DAF35 /* auction_house_iOS_icon_Icon-Small-50.png in Resources */,
+				84AB5F2018AB497C006DAF35 /* icon_1024.png in Resources */,
+				84AB5F0718AB3A46006DAF35 /* auction_house_iOS_icon_iTunesArtwork.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

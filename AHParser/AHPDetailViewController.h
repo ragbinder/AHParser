@@ -26,6 +26,7 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (weak, nonatomic) IBOutlet UITableView *auctionTable;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressBar;
+@property (weak, nonatomic) UIBarButtonItem *realmSelect;
 
 - (void)applyCurrentFilters;
 

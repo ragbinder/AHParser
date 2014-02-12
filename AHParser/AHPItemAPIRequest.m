@@ -38,6 +38,7 @@
     }
 }
 
+//WILL NOT STORE ITEMS THAT HAVE FALSE FOR THEIR ISAUCTIONABLE KEY.
 + (NSManagedObject*)storeItem:(NSInteger) itemID
                     inContext:(NSManagedObjectContext*) context
 {
@@ -48,6 +49,12 @@
         NSLog(@"Reason: %@",[itemDictionary valueForKey:@"reason"]);
         NSLog(@"No item to store for %d",itemID);
         return nil;
+    }
+    //Check if the isAuctionable Field is false.
+    else if(![[itemDictionary valueForKey:@"isAuctionable"] boolValue])
+    {
+        NSLog(@"Item %@ not Auctionable.",[itemDictionary valueForKey:@"id"]);
+        return  nil;
     }
     else
     {
