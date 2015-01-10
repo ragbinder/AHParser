@@ -16,6 +16,9 @@
 @end
 
 @implementation AHPDetailViewController
+{
+    dispatch_queue_t _backgroundQueue;
+}
 @synthesize fetchedResultsController = _fetchedResultsController;
 @synthesize realmSelect = _realmSelect;
 
@@ -59,10 +62,12 @@
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButton:)];
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButton:)];
     NSArray *array = [[NSArray alloc] initWithObjects: realmSelect,searchButton,refreshButton, nil];
-    
     [self.navigationItem setRightBarButtonItems:array animated:YES];
     
     _realmSelect = realmSelect;
+    
+    //Create a GCD queue for background loading of cells
+    _backgroundQueue = dispatch_queue_create("com.ragbinder.backgroundAuctionCell",nil);
 }
 
 //Will refresh the auction database if and only if it is out of date.
@@ -109,9 +114,9 @@
             [refreshButton setEnabled:NO];
             
             //Insert the new auctions into the persistent store. A new AuctionDump object will be created and assigned to the objects.
-            dispatch_queue_t backgroundQueue;
-            backgroundQueue = dispatch_queue_create("com.ragbinder.AHParser.background", NULL);
-            dispatch_async(backgroundQueue, ^(void){
+//            dispatch_queue_t backgroundQueue;
+//            backgroundQueue = dispatch_queue_create("com.ragbinder.AHParser.background", NULL);
+            dispatch_async(_backgroundQueue, ^(void){
                 [auctionData storeAuctions: [delegate managedObjectContext] withProgress:[self progressBar] forFaction:[delegate.realmSelectViewController faction]];
                 
                 //Re-enable the refresh button and filter the auction table after the data operation is complete.

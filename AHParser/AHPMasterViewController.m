@@ -18,7 +18,7 @@
 - (void)awakeFromNib
 {
     self.clearsSelectionOnViewWillAppear = NO;
-    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
+    self.preferredContentSize = CGSizeMake(320.0, 600.0);
     [super awakeFromNib];
 }
 
@@ -41,8 +41,8 @@
     
     self.detailViewController = (AHPDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     //NSLog(@"Master View did set detail controller");
-    
-    _rows = [[NSMutableArray alloc] initWithArray:[_dictionary objectForKey:@"subclasses"]];
+
+    _rows = [[NSMutableArray alloc] initWithArray:[_dictionary objectForKey:@"menus"]];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]
                                    initWithTitle:@"Apply"
@@ -143,7 +143,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[[self dictionary] objectForKey:@"subclasses"] count];
+    return [[[self dictionary] objectForKey:@"menus"] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -183,9 +183,12 @@
 {
     NSDictionary *selectedRow = [_rows objectAtIndex:indexPath.row];
     
-    if([selectedRow valueForKey:@"subclasses"] != nil)
+    if([selectedRow valueForKey:@"menus"] != nil)
     {
-        AHPMasterViewController *newView = [[[AHPMasterViewController alloc] initWithStyle:UITableViewStyleGrouped] initWithTitle:[selectedRow valueForKey:@"name"] andDictionary:[AHPCategoryLoader findDictionaryWithValue:[selectedRow valueForKey:@"name"] forKey:@"name" inArray:[_dictionary objectForKey:@"subclasses"]]];
+        AHPMasterViewController *newView;
+        
+        newView = [[[AHPMasterViewController alloc] initWithStyle:UITableViewStyleGrouped] initWithTitle:[selectedRow valueForKey:@"name"] andDictionary:[AHPCategoryLoader findDictionaryWithValue:[selectedRow valueForKey:@"name"] forKey:@"name" inArray:[_dictionary objectForKey:@"menus"]]];
+
         newView.detailViewController = self.detailViewController;
         [self.navigationController pushViewController:newView animated:YES];
     }

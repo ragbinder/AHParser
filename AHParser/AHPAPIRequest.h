@@ -41,4 +41,8 @@
 //This formats the time_left field in the auction JSON for display in the detail view controller.
 + (NSString*)timeLeftFormat:(NSInteger)timeLeft;
 
+//New static library functions, similar to how the other API classes function.
++ (NSURL*)auctionDumpURLForSlug:(NSString *)slug;
++ (NSArray*)auctionDictionaryForSlug:(NSString *)slug;
+
 @end

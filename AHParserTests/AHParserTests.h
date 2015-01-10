@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Steven Jordan Kozmary. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface AHParserTests : SenTestCase
+@interface AHParserTests : XCTestCase
 
 @end

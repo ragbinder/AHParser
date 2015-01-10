@@ -31,7 +31,6 @@
 		8493874B179F50DB001F80BF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84938749179F50DB001F80BF /* MainStoryboard.storyboard */; };
 		8493874E179F50DB001F80BF /* AHParser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8493874C179F50DB001F80BF /* AHParser.xcdatamodeld */; };
 		84938754179F50DC001F80BF /* AHPDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84938753179F50DC001F80BF /* AHPDetailViewController.m */; };
-		8493875C179F50DD001F80BF /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8493875B179F50DD001F80BF /* SenTestingKit.framework */; };
 		8493875D179F50DD001F80BF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8493872F179F50DA001F80BF /* UIKit.framework */; };
 		8493875E179F50DD001F80BF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938731179F50DA001F80BF /* Foundation.framework */; };
 		8493875F179F50DD001F80BF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84938735179F50DB001F80BF /* CoreData.framework */; };
@@ -115,8 +114,7 @@
 		8493874F179F50DC001F80BF /* AHPMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHPMasterViewController.h; sourceTree = "<group>"; };
 		84938752179F50DC001F80BF /* AHPDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHPDetailViewController.h; sourceTree = "<group>"; };
 		84938753179F50DC001F80BF /* AHPDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHPDetailViewController.m; sourceTree = "<group>"; };
-		8493875A179F50DD001F80BF /* AHParserTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AHParserTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8493875B179F50DD001F80BF /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		8493875A179F50DD001F80BF /* AHParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AHParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		84938764179F50DD001F80BF /* AHParserTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AHParserTests-Info.plist"; sourceTree = "<group>"; };
 		84938766179F50DD001F80BF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84938768179F50DD001F80BF /* AHParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHParserTests.h; sourceTree = "<group>"; };
@@ -177,7 +175,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8493875C179F50DD001F80BF /* SenTestingKit.framework in Frameworks */,
 				8493875D179F50DD001F80BF /* UIKit.framework in Frameworks */,
 				8493875E179F50DD001F80BF /* Foundation.framework in Frameworks */,
 				8493875F179F50DD001F80BF /* CoreData.framework in Frameworks */,
@@ -248,7 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				8493872C179F50DA001F80BF /* AHParser.app */,
-				8493875A179F50DD001F80BF /* AHParserTests.octest */,
+				8493875A179F50DD001F80BF /* AHParserTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -260,7 +257,6 @@
 				84938731179F50DA001F80BF /* Foundation.framework */,
 				84938733179F50DA001F80BF /* CoreGraphics.framework */,
 				84938735179F50DB001F80BF /* CoreData.framework */,
-				8493875B179F50DD001F80BF /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -477,8 +473,8 @@
 			);
 			name = AHParserTests;
 			productName = AHParserTests;
-			productReference = 8493875A179F50DD001F80BF /* AHParserTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 8493875A179F50DD001F80BF /* AHParserTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -487,6 +483,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = AHP;
+				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Steven Jordan Kozmary";
 				TargetAttributes = {
@@ -750,13 +747,13 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AHParser/AHParser-Prefix.pch";
 				INFOPLIST_FILE = "AHParserTests/AHParserTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -767,13 +764,13 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AHParser/AHParser-Prefix.pch";
 				INFOPLIST_FILE = "AHParserTests/AHParserTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};

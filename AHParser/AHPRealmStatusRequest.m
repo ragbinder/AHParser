@@ -12,10 +12,12 @@
 
 +(NSArray*) realmStatus
 {
-    //Used to track consumption of battle.net API.
-    NSLog(@"MAKING REALM STATUS API REQUEST");
+    NSString *locale = [[NSUserDefaults standardUserDefaults] stringForKey:@"locale"];
+    if(!locale){
+        locale = @"us.api.battle.net";
+    }
     
-    NSURL *url = [NSURL URLWithString:@"http://us.battle.net/api/wow/realm/status"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://%@/wow/realm/status?locale=en_US&apikey=8garu7z6rtewtep4zabznubprejp6w67",locale]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0];
     NSError *error = nil;
     NSURLResponse *urlResponse;

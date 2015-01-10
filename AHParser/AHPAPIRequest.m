@@ -97,6 +97,48 @@
     }
 }
 
++ (NSURL *)auctionDumpURLForSlug:(NSString *)slug
+{
+    NSString *locale = [[NSUserDefaults standardUserDefaults] stringForKey:@"locale"];
+    if(!locale){
+        locale = @"us.api.battle.net";
+    }
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://%@/wow/auction/data/%@?locale=en_US&apikey=8garu7z6rtewtep4zabznubprejp6w67",locale,slug]];
+    NSError *error = nil;
+    NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:url];
+    NSHTTPURLResponse *urlResponse = [[NSHTTPURLResponse alloc] init];
+    NSData *response = [NSURLConnection sendSynchronousRequest:auctionAPIRequest returningResponse:&urlResponse error:&error];
+    
+    if ([urlResponse statusCode] == 200) {
+        if (response) {
+            NSDictionary *responseJSON = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingAllowFragments error:&error];
+            return [NSURL URLWithString:[[[responseJSON valueForKey:@"files"] objectAtIndex:0] valueForKey:@"url"]];
+        }
+    }
+    
+    return nil;
+}
+
+
++ (NSArray *)auctionArrayForSlug:(NSString *)slug
+{
+    NSURL *auctionDumpURL = [AHPAPIRequest auctionDumpURLForSlug:slug];
+    NSError *error = nil;
+    NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:auctionDumpURL];
+    NSHTTPURLResponse *urlResponse = [[NSHTTPURLResponse alloc] init];
+    NSData *response = [NSURLConnection sendSynchronousRequest:auctionAPIRequest returningResponse:&urlResponse error:&error];
+    
+    if ([urlResponse statusCode] == 200) {
+        if (response) {
+            NSDictionary *responseJSON = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingAllowFragments error:&error];
+            return [responseJSON valueForKey:@"auctions"];
+        }
+    }
+    
+    return nil;
+}
+
 //This is a helper method meant to be called during initialization to check if there is a RealmURL object for the given slug. If there is, check if the realm name and slug are present and add them if necessary. This will allow the user to match RealmURLs to name/slugs without calling the battle.net API.
 - (NSManagedObject *)storeRealmURL:(NSString*) url
               forSlug:(NSString*) slug

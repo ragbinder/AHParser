@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Auction" syncable="YES">
         <attribute name="auc" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="bid" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -62,12 +62,13 @@
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="dumpRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AuctionDumpDate" inverseName="realmRelationship" inverseEntity="AuctionDumpDate" syncable="YES"/>
     </entity>
+    <fetchRequest name="NoStacks" entity="Auction" predicateString="quantity == 1"/>
     <elements>
-        <element name="Auction" positionX="178" positionY="36" width="128" height="314"/>
-        <element name="AuctionDumpDate" positionX="0" positionY="126" width="128" height="103"/>
+        <element name="Auction" positionX="178" positionY="36" width="137" height="326"/>
+        <element name="AuctionDumpDate" positionX="-56" positionY="95" width="128" height="103"/>
         <element name="Icon" positionX="423" positionY="270" width="128" height="90"/>
         <element name="Item" positionX="412" positionY="9" width="128" height="210"/>
-        <element name="RealmURL" positionX="36" positionY="-45" width="128" height="103"/>
-        <element name="Pet" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Pet" positionX="358" positionY="414" width="128" height="150"/>
+        <element name="RealmURL" positionX="-63" positionY="266" width="128" height="103"/>
     </elements>
 </model>

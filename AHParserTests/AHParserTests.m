@@ -7,6 +7,8 @@
 //
 
 #import "AHParserTests.h"
+#import "AHPAPIRequest.h"
+#import "AHPRealmStatusRequest.h"
 
 @implementation AHParserTests
 
@@ -23,10 +25,31 @@
     
     [super tearDown];
 }
-
+/*
 - (void)testExample
 {
-    STFail(@"Unit tests are not implemented yet in AHParserTests");
+    XCTFail(@"Unit tests are not implemented yet in AHParserTests");
+}
+*/
+- (void)testAuctionAPI
+{
+    NSURL *auctionURL = [AHPAPIRequest auctionDumpURLForSlug:@"medivh"];
+    XCTAssertNotNil(auctionURL);
+    
+    NSDictionary *auctionDictionary = [AHPAPIRequest auctionDictionaryForSlug:@"medivh"];
+    XCTAssertGreaterThan([[auctionDictionary allKeys] count],0);
+}
+
+- (void)testRealmStatus
+{
+    NSArray *realmStatus = [AHPRealmStatusRequest realmStatus];
+    XCTAssertGreaterThan([realmStatus count], 0);
+}
+
+- (void)testItemAPI
+{
+    NSDictionary *itemRequest = [AHPItemAPIRequest itemAPIRequest:18803];
+    XCTAssertEqual([[itemRequest objectForKey:@"buyPrice"] integerValue], 474384);
 }
 
 @end
