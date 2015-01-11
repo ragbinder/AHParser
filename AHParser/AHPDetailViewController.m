@@ -32,17 +32,20 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    if([[delegate.realmURL valueForKey:@"realm"] length] == 0 || [[delegate.realmSelectViewController faction] length] == 0)
-    {
-        [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:[NSString stringWithFormat:@"Please Select A Realm/Faction"]];
-    }
-    else
-    {
-        [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:
-         [NSString stringWithFormat:@"%@ - %@",
-          [delegate.realmURL valueForKey:@"realm"],
-          [delegate.realmSelectViewController faction]]];
-    }
+    
+    
+//    if([[delegate.realmURL valueForKey:@"realm"] length] == 0 || [[delegate.realmSelectViewController faction] length] == 0)
+//    {
+//        [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:[NSString stringWithFormat:@"Please Select A Realm/Faction"]];
+//
+//    }
+//    else
+//    {
+//        [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:
+//         [NSString stringWithFormat:@"%@ - %@",
+//          [delegate.realmURL valueForKey:@"realm"],
+//          [delegate.realmSelectViewController faction]]];
+//    }
     
     //NSLog(@"PREDICATES: \nFACTION:\n%@ \nREALM:\n%@ \nCATEGORY:\n%@ \nSEARCH:\n%@",[delegate factionPredicate],[delegate realmPredicate],[delegate categoryPredicate],[delegate searchPredicate]);
 }
@@ -57,14 +60,21 @@
     [_auctionTable setDataSource:self];
     [self.progressBar setHidden:YES];
     
+    //Set the realm select button
+    UIButton *realmSelectButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [realmSelectButton setFrame:CGRectMake(0, 0, 200, 40)];
+    [realmSelectButton setTitle:@"Choose a Realm" forState:UIControlStateNormal];
+    [realmSelectButton addTarget:self action:@selector(realmSelect:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.titleView = realmSelectButton;
+    
     //Set the upper right buttons - refresh table and return to realm/faction select
-    UIBarButtonItem *realmSelect = [[UIBarButtonItem alloc] initWithTitle:@"Default" style:UIBarButtonItemStyleBordered target:self action:@selector(realmSelect:)];
+//    UIBarButtonItem *realmSelect = [[UIBarButtonItem alloc] initWithTitle:@"Default" style:UIBarButtonItemStyleBordered target:self action:@selector(realmSelect:)];
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButton:)];
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButton:)];
-    NSArray *array = [[NSArray alloc] initWithObjects: realmSelect,searchButton,refreshButton, nil];
+    NSArray *array = [[NSArray alloc] initWithObjects: /*realmSelect,*/searchButton,refreshButton, nil];
     [self.navigationItem setRightBarButtonItems:array animated:YES];
     
-    _realmSelect = realmSelect;
+//    _realmSelect = realmSelect;
     
     //Create a GCD queue for background loading of cells
     _backgroundQueue = dispatch_queue_create("com.ragbinder.backgroundAuctionCell",nil);
@@ -110,7 +120,7 @@
             NSLog(@"AUCTION DATA NEEDS TO BE REFRESHED.\n%@ - latest dump\n%@ - current dump",[latestDump valueForKey:@"date"],[auctionData lastModified]);
             
             //Disable the button until the refresh is completed.
-            UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:2];
+            UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:1];
             [refreshButton setEnabled:NO];
             
             //Insert the new auctions into the persistent store. A new AuctionDump object will be created and assigned to the objects.
@@ -624,11 +634,17 @@
     if(![delegate realmSelectViewController])
     {
         //NSLog(@"creating realm select view controller");
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
-        AHPRealmSelectViewController *realmSelect = [storyboard instantiateViewControllerWithIdentifier:@"RealmSelectSB"];
-        [realmSelect setDetailView:self];
-        [delegate setRealmSelectViewController:realmSelect];
-        [self.navigationController pushViewController:realmSelect animated:YES];
+//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
+//        AHPRealmSelectViewController *realmSelect = [self.storyboard instantiateViewControllerWithIdentifier:@"RealmSelectSB"];
+//        [realmSelect setDetailView:self];
+//        [delegate setRealmSelectViewController:realmSelect];
+//        [self.navigationController pushViewController:realmSelect animated:YES];
+        
+        UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"RealmSelectSB"]];
+        [popoverController setPopoverContentSize:CGSizeMake(300, 300)];
+//        [popoverController presentPopoverFromBarButtonItem:[self.navigationItem.rightBarButtonItems objectAtIndex:0] permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+        [popoverController presentPopoverFromRect:[self.navigationItem.titleView frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+
     }
     else
     {

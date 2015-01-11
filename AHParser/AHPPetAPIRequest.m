@@ -15,7 +15,7 @@
     //Used to track consumption of battle.net API.
     NSLog(@"MAKING PET API REQUEST");
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://us.battle.net/api/wow/battlePet/species/%d",speciesID]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://us.battle.net/api/wow/battlePet/species/%ld",(long)speciesID]];
     //NSLog(@"Initializing ItemAPIRequest with url: %@", url);
     
     NSURLRequest *petAPIRequest = [[NSURLRequest alloc] initWithURL:url];
@@ -45,7 +45,7 @@
     if([[petDictionary valueForKey:@"status"] isEqualToString:@"nok"])
     {
         NSLog(@"Reason: %@",[petDictionary valueForKey:@"reason"]);
-        NSLog(@"No pet to store for %d",petID);
+        NSLog(@"No pet to store for %ld",(long)petID);
         return nil;
     }
     else
@@ -62,9 +62,9 @@
         
         if(![context save:&error])
         {
-            NSLog(@"Error saving new pet %d: %@",petID, error);
+            NSLog(@"Error saving new pet %ld: %@",(long)petID, error);
         }
-        NSLog(@"Saved Pet Data for %d: %@",petID,petData);
+        NSLog(@"Saved Pet Data for %ld: %@",(long)petID,petData);
         return petData;
     }
 }

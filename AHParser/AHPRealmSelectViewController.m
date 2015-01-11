@@ -43,21 +43,21 @@
     [_realmTable setDataSource:self];
     
     //Set up the faction select buttons
-    NSArray *factions = [NSArray arrayWithObjects:@"Alliance",@"Neutral",@"Horde", nil];
-    UISegmentedControl *factionSelect = [[UISegmentedControl alloc] initWithItems:factions];
-    UIBarButtonItem *factionSelectButton = [[UIBarButtonItem alloc] initWithCustomView:factionSelect];
+//    NSArray *factions = [NSArray arrayWithObjects:@"Alliance",@"Neutral",@"Horde", nil];
+//    UISegmentedControl *factionSelect = [[UISegmentedControl alloc] initWithItems:factions];
+//    UIBarButtonItem *factionSelectButton = [[UIBarButtonItem alloc] initWithCustomView:factionSelect];
     
     //Set up the Refresh Realms button
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButton)];
     
     //Add the bar buttons to the view
-    NSArray *barButtonArray = [[NSArray alloc] initWithObjects:factionSelectButton,refreshButton, nil];
+    NSArray *barButtonArray = [[NSArray alloc] initWithObjects:/*factionSelectButton,*/refreshButton, nil];
     [self.navigationItem setRightBarButtonItems:barButtonArray animated:NO];
     
     //Link the segmented control to the setFactionForDelegate: method
-    [factionSelect addTarget:self
-                      action:@selector(setFactionForDelegate:)
-            forControlEvents:UIControlEventValueChanged];
+//    [factionSelect addTarget:self
+//                      action:@selector(setFactionForDelegate:)
+//            forControlEvents:UIControlEventValueChanged];
     //Lazy way to load the realms in
     [self refreshButton];
 }
@@ -74,7 +74,7 @@
 -(void) refreshButton
 {
     //Disable the button until the refresh is completed.
-    UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:1];
+    UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:0];
     [refreshButton setEnabled:NO];
     
     dispatch_queue_t backgroundQueue;
