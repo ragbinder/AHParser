@@ -9,6 +9,7 @@
 #import "AHParserTests.h"
 #import "AHPAPIRequest.h"
 #import "AHPRealmStatusRequest.h"
+#import "AHPImageRequest.h"
 
 @implementation AHParserTests
 
@@ -51,6 +52,33 @@
 {
     NSDictionary *itemRequest = [AHPItemAPIRequest itemAPIRequest:18803];
     XCTAssertEqual([[itemRequest objectForKey:@"buyPrice"] integerValue], 474384);
+}
+
+- (void)testImageAPI
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *localFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",@"inv_gizmo_02"]];
+    NSError *error = nil;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]) {
+        if (![[NSFileManager defaultManager] removeItemAtPath:localFilePath error:&error]) {
+            XCTFail(@"Could not delete file!");
+        }
+        XCTAssertNil(error);
+    }
+    
+    UIImage *image = [AHPImageRequest imageWithName:@"inv_gizmo_02"];
+    NSLog(@"%@",image);
+    XCTAssertNotNil(image);
+    
+    UIImage *localImage = [AHPImageRequest localImageWithName:@"inv_gizmo_02"];
+    XCTAssertNil(localImage);
+    
+    XCTAssertTrue([AHPImageRequest saveImageWithName:@"inv_gizmo_02"]);
+    
+    localImage = [AHPImageRequest localImageWithName:@"inv_gizmo_02"];
+    XCTAssertNotNil(localImage);
 }
 
 @end

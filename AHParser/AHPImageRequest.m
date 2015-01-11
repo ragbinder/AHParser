@@ -56,4 +56,52 @@
     return newIcon;
 }
 
++(BOOL)saveImageWithName:(NSString *)name
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *localFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",name]];
+    NSData *thedata = [self imageRequestWithPath:name];
+    
+    if(thedata){
+        if([thedata writeToFile:localFilePath atomically:YES]) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
++(UIImage *)localImageWithName:(NSString *)name
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *localFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",name]];
+    
+    UIImage *image = [UIImage imageWithContentsOfFile:localFilePath];
+    
+    if (image) {
+        return image;
+    }
+    
+    return nil;
+}
+
++(UIImage *)imageWithName:(NSString *)name
+{
+    UIImage *returnImage = [self localImageWithName:name];
+    
+    if (returnImage) {
+        return returnImage;
+    }
+    else {
+        returnImage = [UIImage imageWithData:[AHPImageRequest imageRequestWithPath:name]];
+        
+        if(returnImage)
+            return returnImage;
+    }
+    
+    return nil;
+}
+
 @end

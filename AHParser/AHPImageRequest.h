@@ -15,5 +15,8 @@
 +(NSData*)imageRequestWithPath:(NSString *) path;
 +(NSManagedObject*)storeImageWithPath:(NSString *)path
                             inContext:(NSManagedObjectContext *)context;
++(BOOL)saveImageWithName:(NSString *)name;
++(UIImage *)localImageWithName:(NSString *)name;
++(UIImage *)imageWithName:(NSString *)name;
 
 @end
