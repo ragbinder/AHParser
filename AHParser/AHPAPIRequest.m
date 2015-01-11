@@ -121,7 +121,7 @@
 }
 
 
-+ (NSArray *)auctionArrayForSlug:(NSString *)slug
++ (NSArray *)auctionsForSlug:(NSString *)slug
 {
     NSURL *auctionDumpURL = [AHPAPIRequest auctionDumpURLForSlug:slug];
     NSError *error = nil;

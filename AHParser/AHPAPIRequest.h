@@ -43,6 +43,6 @@
 
 //New static library functions, similar to how the other API classes function.
 + (NSURL*)auctionDumpURLForSlug:(NSString *)slug;
-+ (NSArray*)auctionDictionaryForSlug:(NSString *)slug;
++ (NSArray*)auctionsForSlug:(NSString *)slug;
 
 @end

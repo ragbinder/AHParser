@@ -33,11 +33,12 @@
 */
 - (void)testAuctionAPI
 {
+    
     NSURL *auctionURL = [AHPAPIRequest auctionDumpURLForSlug:@"medivh"];
     XCTAssertNotNil(auctionURL);
     
-    NSDictionary *auctionDictionary = [AHPAPIRequest auctionDictionaryForSlug:@"medivh"];
-    XCTAssertGreaterThan([[auctionDictionary allKeys] count],0);
+    NSArray *auctionArray = [AHPAPIRequest auctionsForSlug:@"medivh"];
+    XCTAssertGreaterThan([auctionArray count],0);
 }
 
 - (void)testRealmStatus
