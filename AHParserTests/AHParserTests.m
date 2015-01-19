@@ -40,6 +40,7 @@
     
     NSArray *auctionArray = [AHPAPIRequest auctionsForSlug:@"medivh"];
     XCTAssertGreaterThan([auctionArray count],0);
+    NSLog(@"%zd auctions found for URL: %@",[auctionArray count],auctionURL);
 }
 
 - (void)testRealmStatus

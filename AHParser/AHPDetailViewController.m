@@ -80,7 +80,14 @@
     _backgroundQueue = dispatch_queue_create("com.ragbinder.backgroundAuctionCell",nil);
 }
 
+-(void) refreshAuctionDatabase
+{
+    NSArray *auctions = [AHPAPIRequest auctionsForSlug:[self slug]];
+    [self setAuctions:auctions];
+    [[self auctionTable] reloadData];
+}
 //Will refresh the auction database if and only if it is out of date.
+/*
 -(void) refreshAuctionDatabase
 {
     //NSLog(@"REALM SELECT: %@",_realmSelect.title);
@@ -94,12 +101,13 @@
         NSManagedObjectContext *context = [delegate managedObjectContext];
         NSString *urlString = [[auctionData auctionDataURL] description];
         NSString *slugString = [auctionData slug];
-        NSString *factionString = [delegate.realmSelectViewController faction];
         
         //Problem Here
-        NSMutableArray *array = [AHPAPIRequest findDumpsInContext:context
-                                                          withURL:urlString
-                                                       forFaction:factionString];
+//        NSMutableArray *array = [AHPAPIRequest findDumpsInContext:context
+//                                                          withURL:urlString];
+//    NSLog(@"%@",[AHPAPIRequest findDumpsInContext:context withURL:urlString]);
+        NSLog(@"%@",[AHPAPIRequest findDumpsInContext:context withURL:urlString]);
+        NSMutableArray *array;
         
         NSManagedObject *latestDump = [array objectAtIndex:0];
         NSLog(@"Latest Dump: %@",array);
@@ -107,13 +115,13 @@
         [delegate setDump:latestDump];
         
         //If the auction data dump is more recent than the one in coredata, delete all of the coredata Auction objects and repopulate the database.
-        /*
+ 
          NSLog(@"Auction Data last Generated: %@",
          [AHPAPIRequest convertWOWTime:[[auctionData lastModified] doubleValue]]);
          NSLog(@"Auction Data in persistent store last generated: %@",
          [AHPAPIRequest convertWOWTime:[[latestDump valueForKey:@"date"] doubleValue]]);
          NSLog(@"Auction Data pulled from: %@",[latestDump valueForKey:@"realmRelationship.url"]);
-         */
+ 
         
         if([[latestDump valueForKey:@"date"] doubleValue] != [[auctionData lastModified] doubleValue])
         {
@@ -134,12 +142,10 @@
                     [refreshButton setEnabled:YES];
                     //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dumpRelationship == %@",[[AHPAPIRequest findDumpsInContext:[delegate managedObjectContext] WithURL:[[auctionData auctionDataURL] description]] objectAtIndex:0]];
                     NSLog(@"latest dump after filter (fetched) %@",[[AHPAPIRequest findDumpsInContext:context
-                                                                                             withSlug:slugString
-                                                                                           forFaction:factionString] objectAtIndex:0]);
+                                                                                             withSlug:slugString] objectAtIndex:0]);
                     NSLog(@"Latest Dump after fitlering: %@",latestDump);
                     [delegate setDump:[[AHPAPIRequest findDumpsInContext:context
-                                                                withSlug:slugString
-                                                              forFaction:factionString] objectAtIndex:0]];
+                                                                withSlug:slugString] objectAtIndex:0]];
                     NSError *error;
                     if(![delegate.managedObjectContext save:&error])
                     {   NSLog(@"Error saving context after refresh: %@",error);}
@@ -162,6 +168,7 @@
         [noSelectionAlert show];
     }
 }
+*/
 
 //This method is only for the noSelectionAlert UIAlertView. The other alert view (upToDateAlert) has a nil delegate so this will not be called.
 //#JustUIAlertViewDelegateThings
@@ -330,7 +337,8 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     //NSLog(@"%@",[_fetchedResultsController fetchedObjects]);
-    return [[_fetchedResultsController fetchedObjects] count];
+//    return [[_fetchedResultsController fetchedObjects] count];
+    return [[self auctions] count];
 }
 
 //Second Mandatory method for UITableView. This handles constructing the individual cells as they are needed.
@@ -361,7 +369,8 @@
         //(not including some battlePet information)
         //
         //#######################################
-        NSManagedObject *auction = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//        NSManagedObject *auction = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        NSManagedObject *auction = [self.auctions objectAtIndex:[indexPath row]];
         
         NSString *owner = [auction valueForKey:@"owner"];
         int timeLeft = [[auction valueForKey:@"timeLeft"] integerValue];
@@ -640,11 +649,12 @@
 //        [delegate setRealmSelectViewController:realmSelect];
 //        [self.navigationController pushViewController:realmSelect animated:YES];
         
-        UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"RealmSelectSB"]];
+        AHPRealmSelectViewController *realmSelectVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RealmSelectSB"];
+        UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:realmSelectVC];
+        [realmSelectVC setDetailView:self];
         [popoverController setPopoverContentSize:CGSizeMake(300, 300)];
 //        [popoverController presentPopoverFromBarButtonItem:[self.navigationItem.rightBarButtonItems objectAtIndex:0] permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
         [popoverController presentPopoverFromRect:[self.navigationItem.titleView frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
-
     }
     else
     {

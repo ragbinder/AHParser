@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Auction" syncable="YES">
         <attribute name="auc" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="bid" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -24,7 +24,6 @@
     </entity>
     <entity name="AuctionDumpDate" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="faction" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="auctionRelationship" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Auction" inverseName="dumpRelationship" inverseEntity="Auction" syncable="YES"/>
         <relationship name="realmRelationship" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RealmURL" inverseName="dumpRelationship" inverseEntity="RealmURL" syncable="YES"/>
     </entity>
@@ -65,7 +64,7 @@
     <fetchRequest name="NoStacks" entity="Auction" predicateString="quantity == 1"/>
     <elements>
         <element name="Auction" positionX="178" positionY="36" width="137" height="326"/>
-        <element name="AuctionDumpDate" positionX="-56" positionY="95" width="128" height="103"/>
+        <element name="AuctionDumpDate" positionX="-56" positionY="95" width="128" height="88"/>
         <element name="Icon" positionX="423" positionY="270" width="128" height="90"/>
         <element name="Item" positionX="412" positionY="9" width="128" height="210"/>
         <element name="Pet" positionX="358" positionY="414" width="128" height="150"/>

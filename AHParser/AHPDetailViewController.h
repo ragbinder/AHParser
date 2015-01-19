@@ -27,6 +27,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *auctionTable;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressBar;
 @property (weak, nonatomic) UIBarButtonItem *realmSelect;
+@property (strong, nonatomic) NSString *slug;
+@property (strong, nonatomic) NSArray *auctions;
 
 //Call this method to apply the current filters stored in the AppDelegate to the current auction table view. The data will be reloaded and the user will be presented with new data.
 - (void)applyCurrentFilters;

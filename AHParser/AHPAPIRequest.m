@@ -9,12 +9,12 @@
 #import "AHPAPIRequest.h"
 
 @implementation AHPAPIRequest
-@synthesize lastModified;
-@synthesize realm = _realm;
-@synthesize slug = _slug;
-@synthesize auctionDataURL = _auctionDataURL;
+//@synthesize lastModified;
+//@synthesize realm = _realm;
+//@synthesize slug = _slug;
+//@synthesize auctionDataURL = _auctionDataURL;
 
-
+/*
 -(id) initWithRealmURL:(NSManagedObject *)realmURL
              inContext:(NSManagedObjectContext *)context
 {
@@ -45,11 +45,11 @@
         if (![context save:&error]) {
             NSLog(@"FAILED TO SAVE CONTEXT WHEN INTIAILIZING REALMURL: %@",error);
         }
-        /*
+ 
         //See if the RealmURL object for this URL/slug pair exists. If not, create it.
         //NSLog(@"%@\n%@",_auctionDataURL,[[_auctionDataURL path] substringFromIndex:22]);
         //[self storeRealmURL:[_auctionDataURL path] forSlug:[[_auctionDataURL path] substringFromIndex:22] inContext:context];
-        */
+ 
         
         //Fetch the data from the URL provided by the API
         NSMutableURLRequest *auctionDataRequest = [NSURLRequest requestWithURL:_auctionDataURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
@@ -96,6 +96,7 @@
         return self;
     }
 }
+*/
 
 + (NSURL *)auctionDumpURLForSlug:(NSString *)slug
 {
@@ -132,7 +133,7 @@
     if ([urlResponse statusCode] == 200) {
         if (response) {
             NSDictionary *responseJSON = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingAllowFragments error:&error];
-            return [responseJSON valueForKey:@"auctions"];
+            return [[responseJSON valueForKey:@"auctions"] valueForKey:@"auctions"];
         }
     }
     
@@ -194,6 +195,7 @@
     }
 }
 
+/*
 - (void)storeAuctions:(NSManagedObjectContext*) context1
          withProgress:(UIProgressView*) progressBar
            forFaction:(NSString*) faction
@@ -205,25 +207,9 @@
     
     NSError *error;
     
-    NSArray *auctionsArray;
-    //_faction = faction;
-    if([faction isEqualToString:@"Horde"])
-    {
-        NSLog(@"Storing Horde Auctions");
-        auctionsArray = [NSArray arrayWithArray:_hordeAuctions];
-    }
-    else if ([faction isEqualToString:@"Alliance"])
-    {
-        NSLog(@"Storing Alliance Auctions");
-        auctionsArray = [NSArray arrayWithArray:_allianceAuctions];
-    }
-    else if ([faction isEqualToString:@"Neutral"])
-    {
-        NSLog(@"Storing Neutral Auctions");
-        auctionsArray = [NSArray arrayWithArray:_neutralAuctions];
-    }
+    NSArray *auctionsArray = [AHPAPIRequest auctionsForSlug:@"medivh"];
     
-    int numAuctions = [auctionsArray count];
+    NSInteger numAuctions = [auctionsArray count];
     
     //Stop if there are no auctions to store (Likely an API 404)
     if(numAuctions == 0)
@@ -245,7 +231,7 @@
     NSEntityDescription *auctionEntity = [NSEntityDescription entityForName:@"Auction" inManagedObjectContext:context];
     NSEntityDescription *itemEntity = [NSEntityDescription entityForName:@"Item" inManagedObjectContext:context];
     //Calling setLastDumpInContext: should also delete all of the previous auctions in the database for this realm/faction.
-    NSManagedObject *auctionDumpObject = [self setLastDumpInContext:context forFaction:faction];
+    NSManagedObject *auctionDumpObject = [self setLastDumpInContext:context];
     [auctionDumpObject setValue:faction forKey:@"faction"];
     
     if(![context save:&error])
@@ -260,7 +246,7 @@
     NSLog(@"Fetched Items Count: %d",[fetchedItems count]);
     NSMutableArray *cachedItems = [[NSMutableArray alloc] initWithCapacity:130000];
     
-    for (int i=0; i<107500; i++) {
+    for (int i=0; i<200000; i++) {
         [cachedItems addObject:[NSNull null]];
     }
     
@@ -371,15 +357,15 @@
         [progressBar setHidden:YES];
     });
 }
-
+*/
 //Call this method to set the Last Dumped date to the current dump generation date (from the JSON), formatted as a double. Also includes the faction the dump was generated for, so the user can load only part of an auction dump.
+/*
 -(NSManagedObject*) setLastDumpInContext:(NSManagedObjectContext*) context
-                              forFaction:(NSString*) faction
 {
     NSError *error = nil;
     
     //Remove all previous auction dumps with the same slug and faction
-    NSMutableArray *dumpsForURL = [AHPAPIRequest findDumpsInContext:context withSlug:_slug forFaction:faction];
+    NSMutableArray *dumpsForURL = [AHPAPIRequest findDumpsInContext:context withSlug:_slug];
     [dumpsForURL removeObjectAtIndex:[dumpsForURL count]-1];
     
     for(NSManagedObject *dump in dumpsForURL)
@@ -396,7 +382,6 @@
     NSEntityDescription *auctionDumpDate = [NSEntityDescription entityForName:@"AuctionDumpDate" inManagedObjectContext:context];
     NSManagedObject *dumpObject = [[NSManagedObject alloc] initWithEntity:auctionDumpDate insertIntoManagedObjectContext:context];
     [dumpObject setValue:[NSNumber numberWithDouble:[lastModified doubleValue]] forKey:@"date"];
-    [dumpObject setValue:faction forKey:@"faction"];
     
     //Create a new realmURL object
     NSManagedObject *realmURLObject = [self storeRealmURL:[_auctionDataURL description] forSlug:_slug andName:_realm inContext:context];
@@ -417,11 +402,11 @@
     
     return dumpObject;
 }
+*/
 
 //Returns an array of all dumps for the given slug, ordered by date (newest first).
 +(NSMutableArray *)findDumpsInContext:(NSManagedObjectContext *)context
                              withSlug:(NSString *)slug
-                           forFaction:(NSString *)faction
 {
     //Find any other AuctionDumpDate objects with both:
     //1. a relationship to a RealmURL object with this slug.
@@ -430,7 +415,7 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *auctionDump = [NSEntityDescription entityForName:@"AuctionDumpDate" inManagedObjectContext:context];
     [request setEntity:auctionDump];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(ANY realmRelationship.slug == %@) AND (faction == %@)",slug,faction];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(ANY realmRelationship.slug == %@)",slug];
     [request setPredicate:predicate];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
     [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -442,7 +427,7 @@
     }
     else
     {
-        NSLog(@"Found %d dumps", [dumps count]);
+        NSLog(@"Found %zd dumps", [dumps count]);
         for(NSManagedObject *aucDump in dumps)
         {
             NSLog(@"%@ - %@",
@@ -465,7 +450,7 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *auctionDump = [NSEntityDescription entityForName:@"AuctionDumpDate" inManagedObjectContext:context];
     [request setEntity:auctionDump];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(ANY realmRelationship.url == %@) AND (faction == %@)",url,faction];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY realmRelationship.url == %@",url];
     [request setPredicate:predicate];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
     [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];

@@ -17,6 +17,7 @@
 @implementation AHPRealmSelectViewController
 @synthesize faction = _faction;
 @synthesize realms = _realms;
+@synthesize detailView;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -74,12 +75,12 @@
 -(void) refreshButton
 {
     //Disable the button until the refresh is completed.
-    UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:0];
-    [refreshButton setEnabled:NO];
+//    UIBarButtonItem *refreshButton = [self.navigationItem.rightBarButtonItems objectAtIndex:0];
+//    [refreshButton setEnabled:NO];
     
-    dispatch_queue_t backgroundQueue;
-    backgroundQueue = dispatch_queue_create("com.ragbinder.AHParser.background.realm", NULL);
-    dispatch_async(backgroundQueue, ^(void){
+//    dispatch_queue_t backgroundQueue;
+//    backgroundQueue = dispatch_queue_create("com.ragbinder.AHParser.background.realm", NULL);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND,0), ^(void){
         _realms = [AHPRealmStatusRequest realmStatus];
         //[_realmTable reloadData];
         //NSLog(@"Realms :%@",_realms);
@@ -92,7 +93,7 @@
                 [noServersAlert show];
             }
             
-            [refreshButton setEnabled:YES];
+//            [refreshButton setEnabled:YES];
             [_realmTable reloadData];
         });
     });
@@ -235,6 +236,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     NSString *realm = [[_realms objectAtIndex:indexPath.row] objectForKey:@"name"];
     NSString *slug = [[_realms objectAtIndex:indexPath.row] objectForKey:@"slug"];
     
+    [detailView setSlug:slug];
+    
     //Check if there are any existing realmURL objects for the given slug.
     NSError *error;
     NSFetchRequest *fetchURLBySlug = [[NSFetchRequest alloc] init];
@@ -269,10 +272,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     }
     else
     {
-        NSLog(@"Error, %d realmURL objects found.",[results count]);
+        NSLog(@"Error, %zd realmURL objects found.",[results count]);
         //Still give it the first object
         delegate.realmURL = [results objectAtIndex:0];
     }
+    
+    [self dismissViewControllerAnimated:NO completion:nil];
+    NSLog(@"Delegate reamlURL: %@",delegate.realmURL);
 }
 
 @end

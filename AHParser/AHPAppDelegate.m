@@ -163,7 +163,7 @@
         NSURL *defaultStoreURL = [[NSBundle mainBundle] URLForResource:@"AHParser" withExtension:@"sqlite"];
         if (defaultStoreURL) {
             NSLog(@"Imported Default Database");
-            [fileManager copyItemAtURL:defaultStoreURL toURL:storeURL error:nil];
+//            [fileManager copyItemAtURL:defaultStoreURL toURL:storeURL error:nil];
         }
     }
     

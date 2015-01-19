@@ -14,27 +14,23 @@
 
 @interface AHPAPIRequest : UIResponder
 
-@property (strong, nonatomic) NSString *realm, *slug;
-@property (strong, nonatomic) NSURL *auctionDataURL;
-//Last modified is in unix time, in milliseconds
-@property (strong, nonatomic) NSNumber *lastModified;
-@property (strong, nonatomic) NSArray *allianceAuctions, *hordeAuctions, *neutralAuctions;
+//@property (strong, nonatomic) NSString *realm, *slug;
+//@property (strong, nonatomic) NSURL *auctionDataURL;
+////Last modified is in unix time, in milliseconds
+//@property (strong, nonatomic) NSNumber *lastModified;
+//@property (strong, nonatomic) NSArray *allianceAuctions, *hordeAuctions, *neutralAuctions;
 
 //This method needs to be called with the API URL, not the data dump URL. This is responsible for fetching the auction data and setting all of the properties of the AHPAPIRequest object.
-- (id)initWithRealmURL: (NSManagedObject*) realmURL inContext:(NSManagedObjectContext*) context;
+//- (id)initWithRealmURL: (NSManagedObject*) realmURL inContext:(NSManagedObjectContext*) context;
 
 //This method is the one that stores the auctions in the managed object context. It is designed to be run via GCD from the detail view controller class. This part was taken out of the init method because it takes a long time to run.
-- (void)storeAuctions:(NSManagedObjectContext *)context withProgress:(UIProgressView*) progressBar forFaction:(NSString*)faction;
+//- (void)storeAuctions:(NSManagedObjectContext *)context withProgress:(UIProgressView*) progressBar forFaction:(NSString*)faction;
 //-(void) setLastDumpInContext: (NSManagedObjectContext*)context;
 
 //Useful static functions that don't belong in any particular place
-+ (NSMutableArray*)findDumpsInContext:(NSManagedObjectContext*)context
-                             withSlug:(NSString*)slug
-                           forFaction:(NSString*)faction;
++ (NSMutableArray*)findDumpsInContext:(NSManagedObjectContext*)context withSlug:(NSString*)slug;
 
-+(NSMutableArray *)findDumpsInContext:(NSManagedObjectContext *)context
-                              withURL:(NSString *)url
-                           forFaction:(NSString *)faction;
++ (NSMutableArray *)findDumpsInContext:(NSManagedObjectContext *)context withURL:(NSString *)url;
 
 //This converts the unix time that the API uses to a human-readable time.
 + (NSString*) convertWOWTime:(double)time;
@@ -44,5 +40,6 @@
 //New static library functions, similar to how the other API classes function.
 + (NSURL*)auctionDumpURLForSlug:(NSString *)slug;
 + (NSArray*)auctionsForSlug:(NSString *)slug;
++ (NSInteger*)lastModifiedForSlug:(NSString *)slug;
 
 @end
