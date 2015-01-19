@@ -140,6 +140,29 @@
     return nil;
 }
 
++ (NSInteger)lastModifiedForSlug:(NSString *)slug
+{
+    NSString *locale = [[NSUserDefaults standardUserDefaults] stringForKey:@"locale"];
+    if(!locale){
+        locale = @"us.api.battle.net";
+    }
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://%@/wow/auction/data/%@?locale=en_US&apikey=8garu7z6rtewtep4zabznubprejp6w67",locale,slug]];
+    NSError *error = nil;
+    NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:url];
+    NSHTTPURLResponse *urlResponse = [[NSHTTPURLResponse alloc] init];
+    NSData *response = [NSURLConnection sendSynchronousRequest:auctionAPIRequest returningResponse:&urlResponse error:&error];
+    
+    if ([urlResponse statusCode] == 200) {
+        if (response) {
+            NSDictionary *responseJSON = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingAllowFragments error:&error];
+            return [[[[responseJSON valueForKey:@"files"] objectAtIndex:0] valueForKey:@"lastModified"] integerValue];
+        }
+    }
+    
+    return 0;
+}
+
 //This is a helper method meant to be called during initialization to check if there is a RealmURL object for the given slug. If there is, check if the realm name and slug are present and add them if necessary. This will allow the user to match RealmURLs to name/slugs without calling the battle.net API.
 - (NSManagedObject *)storeRealmURL:(NSString*) url
               forSlug:(NSString*) slug
@@ -157,7 +180,7 @@
     
     if(results != nil)
     {
-        int numResults = [results count];
+        NSInteger numResults = [results count];
         //NSLog(@"%d",numResults);
         
         //If there are no RealmURL objects for this URL.
@@ -441,7 +464,6 @@
 //Returns an array of all dumps for the given slug, ordered by date (newest first).
 +(NSMutableArray *)findDumpsInContext:(NSManagedObjectContext *)context
                              withURL:(NSString *)url
-                           forFaction:(NSString *)faction
 {
     //Find any other AuctionDumpDate objects with both:
     //1. a relationship to a RealmURL object with this URL.
@@ -462,7 +484,7 @@
     }
     else
     {
-        NSLog(@"Found %d dumps", [dumps count]);
+        NSLog(@"Found %zd dumps", [dumps count]);
         for(NSManagedObject *aucDump in dumps)
         {
             NSLog(@"%@ - %@",

@@ -15,7 +15,7 @@
     //Used to track consumption of battle.net API.
     NSLog(@"MAKING ITEM API REQUEST");
     
-    NSString *itemString = [NSString stringWithFormat:@"%05d",itemID];
+    NSString *itemString = [NSString stringWithFormat:@"%05zd",itemID];
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://us.battle.net/api/wow/item/%@",itemString]];
     NSLog(@"Initializing ItemAPIRequest with url: %@", url);
@@ -47,7 +47,7 @@
     if([[itemDictionary valueForKey:@"status"] isEqualToString:@"nok"])
     {
         NSLog(@"Reason: %@",[itemDictionary valueForKey:@"reason"]);
-        NSLog(@"No item to store for %d",itemID);
+        NSLog(@"No item to store for %zd",itemID);
         return nil;
     }
     //Check if the isAuctionable Field is false.
@@ -72,7 +72,7 @@
         [itemData setValue:[itemDictionary valueForKey:@"inventoryType"] forKey:@"inventoryType"];
         if(![context save:&error])
         {
-            NSLog(@"Error saving new item %d: %@",itemID, error);
+            NSLog(@"Error saving new item %zd: %@",itemID, error);
         }
         return itemData;
     }

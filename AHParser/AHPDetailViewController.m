@@ -373,18 +373,18 @@
         NSManagedObject *auction = [self.auctions objectAtIndex:[indexPath row]];
         
         NSString *owner = [auction valueForKey:@"owner"];
-        int timeLeft = [[auction valueForKey:@"timeLeft"] integerValue];
+        NSInteger timeLeft = [[auction valueForKey:@"timeLeft"] integerValue];
         
         NSString *bidC,*bidS,*bidG,*buyoutC,*buyoutS,*buyoutG;
         //int quant = [[auction valueForKey:@"quantity"] integerValue];
         NSString *quantity = [NSString stringWithFormat:@"%@",[auction valueForKey:@"quantity"]];
         
-        bidG = [NSString stringWithFormat:@"%d",[[auction valueForKey:@"bid"] integerValue]/10000];
-        bidS = [NSString stringWithFormat:@"%02d",[[auction valueForKey:@"bid"] integerValue]/100 %100];
-        bidC = [NSString stringWithFormat:@"%02d",[[auction valueForKey:@"bid"] integerValue]%100];
-        buyoutG = [NSString stringWithFormat:@"%d",[[auction valueForKey:@"buyout"] integerValue]/10000];
-        buyoutS = [NSString stringWithFormat:@"%02d",[[auction valueForKey:@"buyout"] integerValue]/100 %100];
-        buyoutC = [NSString stringWithFormat:@"%02d",[[auction valueForKey:@"buyout"] integerValue]%100];
+        bidG = [NSString stringWithFormat:@"%zd",[[auction valueForKey:@"bid"] integerValue]/10000];
+        bidS = [NSString stringWithFormat:@"%02zd",[[auction valueForKey:@"bid"] integerValue]/100 %100];
+        bidC = [NSString stringWithFormat:@"%02zd",[[auction valueForKey:@"bid"] integerValue]%100];
+        buyoutG = [NSString stringWithFormat:@"%zd",[[auction valueForKey:@"buyout"] integerValue]/10000];
+        buyoutS = [NSString stringWithFormat:@"%02zd",[[auction valueForKey:@"buyout"] integerValue]/100 %100];
+        buyoutC = [NSString stringWithFormat:@"%02zd",[[auction valueForKey:@"buyout"] integerValue]%100];
         
         
         //Hide the quantity number for single items
@@ -475,7 +475,7 @@
             [cell.level setText:
              [NSString stringWithFormat:@"%@",[auction valueForKey:@"petLevel"]]];
             [cell.itemName setText: [itemDictionary valueForKey:@"name"]];
-            [cell.level setText: [NSString stringWithFormat:@"%d",[[auction valueForKey:@"petLevel"] integerValue]]];
+            [cell.level setText: [NSString stringWithFormat:@"%zd",[[auction valueForKey:@"petLevel"] integerValue]]];
         }
         else
         {
