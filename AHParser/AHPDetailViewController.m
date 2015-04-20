@@ -233,7 +233,7 @@
 {
     NSLog(@"Delegate Dump object: %@",[delegate dump]);
     NSLog(@"Delegate Realm object: %@",[delegate realmURL]);
-    NSPredicate *factionPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",[delegate.dump valueForKey:@"faction"]];
+//    NSPredicate *factionPredicate = [NSPredicate predicateWithFormat:@"dumpRelationship.faction == %@",[delegate.dump valueForKey:@"faction"]];
     NSPredicate *realmPredicate = [NSPredicate predicateWithFormat:@"ANY dumpRelationship.realmRelationship.url == %@",[delegate.realmURL valueForKey:@"url"]];
     NSPredicate *searchPredicate = [delegate searchPredicate];
     NSPredicate *filterPredicate = [delegate categoryPredicate];
@@ -241,8 +241,8 @@
     //NSLog(@"SORT DESCRIPTOR ARRAY: %@",sortDescriptorArray);
     //Need to combine the predicates into an array, making sure that none of them are nil. If any are nil, then any predicates after them will be ignored.
     NSMutableArray *predicatesArray = [[NSMutableArray alloc] initWithCapacity:4];
-    if(factionPredicate)
-    {   [predicatesArray addObject:factionPredicate];}
+//    if(factionPredicate)
+//    {   [predicatesArray addObject:factionPredicate];}
     if(realmPredicate)
     {   [predicatesArray addObject:realmPredicate];}
     if(searchPredicate)

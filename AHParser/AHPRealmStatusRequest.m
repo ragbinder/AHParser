@@ -14,10 +14,10 @@
 {
     NSString *locale = [[NSUserDefaults standardUserDefaults] stringForKey:@"locale"];
     if(!locale){
-        locale = @"us.api.battle.net";
+        locale = @"en_US";
     }
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://%@/wow/realm/status?locale=en_US&apikey=8garu7z6rtewtep4zabznubprejp6w67",locale]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://us.api.battle.net/wow/realm/status?locale=%@&apikey=8garu7z6rtewtep4zabznubprejp6w67",locale]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0];
     NSError *error = nil;
     NSURLResponse *urlResponse;

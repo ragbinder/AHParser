@@ -102,10 +102,10 @@
 {
     NSString *locale = [[NSUserDefaults standardUserDefaults] stringForKey:@"locale"];
     if(!locale){
-        locale = @"us.api.battle.net";
+        locale = @"en_US";
     }
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://%@/wow/auction/data/%@?locale=en_US&apikey=8garu7z6rtewtep4zabznubprejp6w67",locale,slug]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://us.api.battle.net/wow/auction/data/%@?locale=%@&apikey=8garu7z6rtewtep4zabznubprejp6w67",slug,locale]];
     NSError *error = nil;
     NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:url];
     NSHTTPURLResponse *urlResponse = [[NSHTTPURLResponse alloc] init];
