@@ -32,22 +32,29 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    
-    
-//    if([[delegate.realmURL valueForKey:@"realm"] length] == 0 || [[delegate.realmSelectViewController faction] length] == 0)
-//    {
-//        [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:[NSString stringWithFormat:@"Please Select A Realm/Faction"]];
-//
-//    }
-//    else
-//    {
-//        [[self.navigationItem.rightBarButtonItems objectAtIndex:0] setTitle:
-//         [NSString stringWithFormat:@"%@ - %@",
-//          [delegate.realmURL valueForKey:@"realm"],
-//          [delegate.realmSelectViewController faction]]];
-//    }
-    
-    //NSLog(@"PREDICATES: \nFACTION:\n%@ \nREALM:\n%@ \nCATEGORY:\n%@ \nSEARCH:\n%@",[delegate factionPredicate],[delegate realmPredicate],[delegate categoryPredicate],[delegate searchPredicate]);
+    if(![[NSUserDefaults standardUserDefaults] objectForKey:@"locale"])
+    {
+        UIAlertController *localeAlert = [UIAlertController alertControllerWithTitle:@"Select Locale!" message:@"Please select your locale" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *en_US = [UIAlertAction actionWithTitle:@"en_US" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [[NSUserDefaults standardUserDefaults] setValue:@"en_US" forKey:@"locale"];
+        }];
+        UIAlertAction *en_GB = [UIAlertAction actionWithTitle:@"en_GB" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [[NSUserDefaults standardUserDefaults] setValue:@"en_GB" forKey:@"locale"];
+        }];
+        UIAlertAction *ko_KR = [UIAlertAction actionWithTitle:@"ko_KR" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [[NSUserDefaults standardUserDefaults] setValue:@"ko_KR" forKey:@"locale"];
+        }];
+        UIAlertAction *zh_TW = [UIAlertAction actionWithTitle:@"zh_TW" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [[NSUserDefaults standardUserDefaults] setValue:@"zh_TW" forKey:@"locale"];
+        }];
+        
+        [localeAlert addAction:en_US];
+        [localeAlert addAction:en_GB];
+        [localeAlert addAction:ko_KR];
+        [localeAlert addAction:zh_TW];
+        
+        [self presentViewController:localeAlert animated:YES completion:nil];
+    }
 }
 
 - (void)viewDidLoad
@@ -274,7 +281,7 @@
     [[self fetchedResultsController].fetchRequest setPredicate:compoundPredicate];
     [[self fetchedResultsController] performFetch:&error];
     NSLog(@"Performing Fetch with FetchRequest: %@",[_fetchedResultsController fetchRequest]);
-    NSLog(@"Fetch Returned %d Results",[[_fetchedResultsController fetchedObjects] count]);
+    NSLog(@"Fetch Returned %lu Results",(unsigned long)[[_fetchedResultsController fetchedObjects] count]);
     if(error)
     {
         NSLog(@"Error filtering auction table: %@",error);

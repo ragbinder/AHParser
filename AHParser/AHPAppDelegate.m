@@ -31,21 +31,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-   
-    //NSInteger inte = 200;
-    //NSLog(@"inte: %05d",inte);
-    
-    
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     splitViewController.delegate = (id)navigationController.topViewController;
-    
-    /*
-    AHPMasterViewController *newView = [[[AHPMasterViewController alloc] initWithStyle:UITableViewStyleGrouped] initWithTitle:[selectedRow valueForKey:@"name"] andDictionary:[AHPCategoryLoader findDictionaryWithValue:[selectedRow valueForKey:@"name"] forKey:@"name" inArray:[_dictionary objectForKey:@"subclasses"]]];
-    newView.detailViewController = self.detailViewController;
-    [self.navigationController pushViewController:newView animated:YES];
-     */
     
     UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
     AHPMasterViewController *controller = (AHPMasterViewController *)masterNavigationController.topViewController;
@@ -53,6 +41,15 @@
     NSDictionary *dict = [AHPCategoryLoader importCategories];
     
     NSLog(@"Master Controller View OK!: %@",[controller initWithTitle:@"All" andDictionary:dict]);
+
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"firstRun"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstRun"];
+        NSLog(@"first run!");
+    }
+    else
+    {
+        NSLog(@"not first run!");
+    }
     
     return YES;
 }
