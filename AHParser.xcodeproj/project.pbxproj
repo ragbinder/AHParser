@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		07DE46CB17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */; };
 		07DE46CC17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */; };
+		564F0C09102E3D50CAB5C88D /* libPods-AHParser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC9542C77BAFA40129575EE /* libPods-AHParser.a */; };
 		84071B72183CF442005C644B /* AHPCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84071B71183CF442005C644B /* AHPCategoryCell.m */; };
 		84071B75183D2636005C644B /* AHPSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84071B74183D2636005C644B /* AHPSplitViewController.m */; };
 		84071B78183E6242005C644B /* AHPPetAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84071B77183E6242005C644B /* AHPPetAPIRequest.m */; };
@@ -40,8 +41,10 @@
 		84BCA7AA1863513300224337 /* AHPSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BCA7A91863513300224337 /* AHPSearchViewController.m */; };
 		84CA583517C414DD000C4DCF /* AHPMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583417C414DD000C4DCF /* AHPMasterViewController.m */; };
 		84CA583B17C58DB1000C4DCF /* AHPAuctionTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */; };
+		9609663C55D73F3683FA9690 /* libPods-AHParserTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 531BC5F501481B8E6DEB6B72 /* libPods-AHParserTests.a */; };
 		E226DAE51B4B15B70073ACA9 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E226DAE41B4B15B70073ACA9 /* Media.xcassets */; };
 		E226DAED1B4B17DB0073ACA9 /* AuctionCategories.JSON in Resources */ = {isa = PBXBuildFile; fileRef = E226DAEC1B4B17DB0073ACA9 /* AuctionCategories.JSON */; };
+		E23407D21B4B4949000DC3C5 /* AHPRequestContext.m in Sources */ = {isa = PBXBuildFile; fileRef = E23407D11B4B4949000DC3C5 /* AHPRequestContext.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +59,9 @@
 
 /* Begin PBXFileReference section */
 		07DE46CA17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "World-Of-Warcraft-Logo.jpg"; sourceTree = "<group>"; };
+		1EE124189C64BB3CB050EC9B /* Pods-AHParser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AHParser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AHParser/Pods-AHParser.debug.xcconfig"; sourceTree = "<group>"; };
+		531BC5F501481B8E6DEB6B72 /* libPods-AHParserTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AHParserTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		79C49FBF437E617A9FB556F4 /* Pods-AHParserTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AHParserTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AHParserTests/Pods-AHParserTests.release.xcconfig"; sourceTree = "<group>"; };
 		84071B70183CF442005C644B /* AHPCategoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPCategoryCell.h; sourceTree = "<group>"; };
 		84071B71183CF442005C644B /* AHPCategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPCategoryCell.m; sourceTree = "<group>"; };
 		84071B73183D2636005C644B /* AHPSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPSplitViewController.h; sourceTree = "<group>"; };
@@ -107,8 +113,13 @@
 		84CA583417C414DD000C4DCF /* AHPMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPMasterViewController.m; sourceTree = "<group>"; };
 		84CA583917C58DB1000C4DCF /* AHPAuctionTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPAuctionTableCell.h; sourceTree = "<group>"; };
 		84CA583A17C58DB1000C4DCF /* AHPAuctionTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPAuctionTableCell.m; sourceTree = "<group>"; };
+		8BAEDC52602EB7AE7BFF1F36 /* Pods-AHParserTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AHParserTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AHParserTests/Pods-AHParserTests.debug.xcconfig"; sourceTree = "<group>"; };
+		8D662A4E4642C97919998B69 /* Pods-AHParser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AHParser.release.xcconfig"; path = "Pods/Target Support Files/Pods-AHParser/Pods-AHParser.release.xcconfig"; sourceTree = "<group>"; };
+		BBC9542C77BAFA40129575EE /* libPods-AHParser.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AHParser.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E226DAE41B4B15B70073ACA9 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		E226DAEC1B4B17DB0073ACA9 /* AuctionCategories.JSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AuctionCategories.JSON; sourceTree = "<group>"; };
+		E23407D01B4B4949000DC3C5 /* AHPRequestContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPRequestContext.h; sourceTree = "<group>"; };
+		E23407D11B4B4949000DC3C5 /* AHPRequestContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPRequestContext.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +131,7 @@
 				84938732179F50DA001F80BF /* Foundation.framework in Frameworks */,
 				84938734179F50DB001F80BF /* CoreGraphics.framework in Frameworks */,
 				84938736179F50DB001F80BF /* CoreData.framework in Frameworks */,
+				564F0C09102E3D50CAB5C88D /* libPods-AHParser.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +142,7 @@
 				8493875D179F50DD001F80BF /* UIKit.framework in Frameworks */,
 				8493875E179F50DD001F80BF /* Foundation.framework in Frameworks */,
 				8493875F179F50DD001F80BF /* CoreData.framework in Frameworks */,
+				9609663C55D73F3683FA9690 /* libPods-AHParserTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +192,7 @@
 				84938762179F50DD001F80BF /* AHParserTests */,
 				8493872E179F50DA001F80BF /* Frameworks */,
 				8493872D179F50DA001F80BF /* Products */,
+				EE48A0E0A625F9892AA2587F /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -198,6 +212,8 @@
 				84938731179F50DA001F80BF /* Foundation.framework */,
 				84938733179F50DA001F80BF /* CoreGraphics.framework */,
 				84938735179F50DB001F80BF /* CoreData.framework */,
+				BBC9542C77BAFA40129575EE /* libPods-AHParser.a */,
+				531BC5F501481B8E6DEB6B72 /* libPods-AHParserTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -264,6 +280,8 @@
 		8499E32517B981E200E9FCC5 /* API Requests */ = {
 			isa = PBXGroup;
 			children = (
+				E23407D01B4B4949000DC3C5 /* AHPRequestContext.h */,
+				E23407D11B4B4949000DC3C5 /* AHPRequestContext.m */,
 				8499E32617B9822D00E9FCC5 /* AHPAPIRequest.h */,
 				8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */,
 				8496F1AF17CC0E8A007C47D7 /* AHPItemAPIRequest.h */,
@@ -332,6 +350,17 @@
 			name = "Table Cells";
 			sourceTree = "<group>";
 		};
+		EE48A0E0A625F9892AA2587F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1EE124189C64BB3CB050EC9B /* Pods-AHParser.debug.xcconfig */,
+				8D662A4E4642C97919998B69 /* Pods-AHParser.release.xcconfig */,
+				8BAEDC52602EB7AE7BFF1F36 /* Pods-AHParserTests.debug.xcconfig */,
+				79C49FBF437E617A9FB556F4 /* Pods-AHParserTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -339,9 +368,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8493876D179F50DD001F80BF /* Build configuration list for PBXNativeTarget "AHParser" */;
 			buildPhases = (
+				3BAC43F800923DB60EDB0C26 /* Check Pods Manifest.lock */,
 				84938728179F50DA001F80BF /* Sources */,
 				84938729179F50DA001F80BF /* Frameworks */,
 				8493872A179F50DA001F80BF /* Resources */,
+				BCB13139CC2854CAD4DED765 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -356,10 +387,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 84938770179F50DD001F80BF /* Build configuration list for PBXNativeTarget "AHParserTests" */;
 			buildPhases = (
+				15CAB18A20B2E044FAF7A642 /* Check Pods Manifest.lock */,
 				84938755179F50DD001F80BF /* Sources */,
 				84938756179F50DD001F80BF /* Frameworks */,
 				84938757179F50DD001F80BF /* Resources */,
 				84938758179F50DD001F80BF /* ShellScript */,
+				9D14536206C66B14D9C0119F /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -431,6 +464,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		15CAB18A20B2E044FAF7A642 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		3BAC43F800923DB60EDB0C26 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		84938758179F50DD001F80BF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -443,6 +506,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		9D14536206C66B14D9C0119F /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AHParserTests/Pods-AHParserTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BCB13139CC2854CAD4DED765 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AHParser/Pods-AHParser-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -464,6 +557,7 @@
 				8496F1B417CEB9D4007C47D7 /* AHPImageRequest.m in Sources */,
 				84A0105117E90213005A33E7 /* AHPCategoryLoader.m in Sources */,
 				845CA7B7180C9B2100E9E2F1 /* AHPRealmSelectCell.m in Sources */,
+				E23407D21B4B4949000DC3C5 /* AHPRequestContext.m in Sources */,
 				84071B75183D2636005C644B /* AHPSplitViewController.m in Sources */,
 				845CA7BA180C9CB000E9E2F1 /* AHPRealmStatusRequest.m in Sources */,
 				84BCA7AA1863513300224337 /* AHPSearchViewController.m in Sources */,
@@ -579,6 +673,7 @@
 		};
 		8493876E179F50DD001F80BF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1EE124189C64BB3CB050EC9B /* Pods-AHParser.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -592,6 +687,7 @@
 		};
 		8493876F179F50DD001F80BF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8D662A4E4642C97919998B69 /* Pods-AHParser.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -605,6 +701,7 @@
 		};
 		84938771179F50DD001F80BF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8BAEDC52602EB7AE7BFF1F36 /* Pods-AHParserTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/AHParser.app/AHParser";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -622,6 +719,7 @@
 		};
 		84938772179F50DD001F80BF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79C49FBF437E617A9FB556F4 /* Pods-AHParserTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/AHParser.app/AHParser";
 				FRAMEWORK_SEARCH_PATHS = (

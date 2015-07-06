@@ -46,7 +46,7 @@
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]
                                    initWithTitle:@"Apply"
-                                   style:UIBarButtonItemStyleBordered
+                                   style:UIBarButtonItemStylePlain
                                    target:self
                                    action:@selector(applyFilters:)];
     self.navigationItem.rightBarButtonItem = doneButton;
