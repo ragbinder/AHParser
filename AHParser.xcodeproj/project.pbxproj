@@ -585,10 +585,6 @@
 				GCC_PREFIX_HEADER = "AHParser/AHParser-Prefix.pch";
 				INFOPLIST_FILE = "AHParser/AHParser-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/admin/Desktop/AHP/AHParser2/AHParser/TestFlightSDK2.2.1,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -602,10 +598,6 @@
 				GCC_PREFIX_HEADER = "AHParser/AHParser-Prefix.pch";
 				INFOPLIST_FILE = "AHParser/AHParser-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/admin/Desktop/AHP/AHParser2/AHParser/TestFlightSDK2.2.1,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

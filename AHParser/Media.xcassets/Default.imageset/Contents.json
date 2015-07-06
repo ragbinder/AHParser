@@ -23,17 +23,12 @@
     {
       "idiom" : "ipad",
       "scale" : "1x",
-      "filename" : "Default~ipad.png"
+      "filename" : "Default-1.png"
     },
     {
       "idiom" : "ipad",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "Default-1.png",
-      "unassigned" : true,
-      "scale" : "1x"
+      "scale" : "2x",
+      "filename" : "Default~ipad.png"
     }
   ],
   "info" : {

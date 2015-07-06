@@ -24,7 +24,6 @@
 @property (strong, nonatomic) NSDictionary *dictionary;
 @property (strong, nonatomic) NSMutableArray *rows;
 @property (strong, nonatomic) AHPDetailViewController *detailViewController;
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 -(id)initWithTitle:(NSString*)title andDictionary:(NSDictionary*)dictionary;
 -(IBAction)applyFilters:(id)sender;
