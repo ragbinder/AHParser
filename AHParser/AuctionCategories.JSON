@@ -1,5 +1,5 @@
-{"classes":[
-	{"class":2,"name":"Weapon","subclasses":[
+{"menus":[
+	{"class":2,"name":"Weapon","menus":[
 		{"subclass":0,"name":"One-Handed Axe"},
 		{"subclass":1,"name":"Two-Handed Axe"},
 		{"subclass":2,"name":"Bow"},
@@ -18,15 +18,15 @@
 		{"subclass":19,"name":"Wand"},
 		{"subclass":20,"name":"Fishing Pole"}]},
 		
-	{"class":4,"name":"Armor","subclasses":[
-		{"subclass":0,"name":"Miscellaneous","subcategories":[
+	{"class":4,"name":"Armor","menus":[
+		{"subclass":0,"name":"Miscellaneous","menus":[
 			{"inventoryType":1,"name":"Head"},
 			{"inventoryType":2,"name":"Neck"},
 			{"inventoryType":4,"name":"Shirt"},
 			{"inventoryType":11,"name":"Finger"},
 			{"inventoryType":13,"name":"Trinket"},
 			{"inventoryType":17,"name":"Held In Off-Hand"}]},
-		{"subclass":1,"name":"Cloth","subcategories":[
+		{"subclass":1,"name":"Cloth","menus":[
 			{"inventoryType":1,"name":"Head"},
 			{"inventoryType":3,"name":"Shoulder"},
 			{"inventoryType":5,"name":"Chest"},
@@ -36,7 +36,7 @@
 			{"inventoryType":9,"name":"Wrist"},
 			{"inventoryType":10,"name":"Hands"},
 			{"inventoryType":15,"name":"Back"}]},
-		{"subclass":2,"name":"Leather","subcategories":[
+		{"subclass":2,"name":"Leather","menus":[
 			{"inventoryType":1,"name":"Head"},
 			{"inventoryType":3,"name":"Shoulder"},
 			{"inventoryType":5,"name":"Chest"},
@@ -45,7 +45,7 @@
 			{"inventoryType":8,"name":"Feet"},
 			{"inventoryType":9,"name":"Wrist"},
 			{"inventoryType":10,"name":"Hands"}]},
-		{"subclass":3,"name":"Mail","subcategories":[
+		{"subclass":3,"name":"Mail","menus":[
 			{"inventoryType":1,"name":"Head"},
 			{"inventoryType":3,"name":"Shoulder"},
 			{"inventoryType":5,"name":"Chest"},
@@ -54,7 +54,7 @@
 			{"inventoryType":8,"name":"Feet"},
 			{"inventoryType":9,"name":"Wrist"},
 			{"inventoryType":10,"name":"Hands"}]},
-		{"subclass":4,"name":"Plate","subcategories":[
+		{"subclass":4,"name":"Plate","menus":[
 			{"inventoryType":1,"name":"Head"},
 			{"inventoryType":3,"name":"Shoulder"},
 			{"inventoryType":5,"name":"Chest"},
@@ -66,7 +66,7 @@
 		{"subclass":5,"name":"Cosmetic"},
 		{"subclass":6,"name":"Shield"}]},
 		
-	{"class":1,"name":"Container","subclasses":[
+	{"class":1,"name":"Container","menus":[
 		{"subclass":0,"name":"Bag"},
 		{"subclass":2,"name":"Herb Bag"},
 		{"subclass":3,"name":"Enchanting Bag"},
@@ -78,7 +78,7 @@
 		{"subclass":9,"name":"Tackle Box"},
 		{"subclass":10,"name":"Cooking Bag"}]},
 		
-	{"class":0,"name":"Consumable","subclasses":[
+	{"class":0,"name":"Consumable","menus":[
 		{"subclass":5,"name":"Food & Drink"},
 		{"subclass":1,"name":"Potion"},
 		{"subclass":2,"name":"Elixir"},
@@ -88,7 +88,7 @@
 		{"subclass":4,"name":"Scroll"},
 		{"subclass":8,"name":"Other"}]},
 		
-	{"class":16,"name":"Glyph","subclasses":[
+	{"class":16,"name":"Glyph","menus":[
 		{"subclass":1,"name":"Warrior"},
 		{"subclass":2,"name":"Paladin"},
 		{"subclass":3,"name":"Hunter"},
@@ -101,7 +101,7 @@
 		{"subclass":10,"name":"Monk"},
 		{"subclass":11,"name":"Druid"}]},
 		
-	{"class":7,"name":"Trade Goods","subclasses":[
+	{"class":7,"name":"Trade Goods","menus":[
 		{"subclass":0,"name":"Trade Goods"},
 		{"subclass":10,"name":"Elemental"},
 		{"subclass":5,"name":"Cloth"},
@@ -118,7 +118,7 @@
 		{"subclass":11,"name":"Other"},
 		{"subclass":14,"name":"Item Enchantment"}]},
 	
-	{"class":9,"name":"Recipe","subclasses":[
+	{"class":9,"name":"Recipe","menus":[
 		{"subclass":0,"name":"Book"},
 		{"subclass":1,"name":"Leatherworking"},
 		{"subclass":2,"name":"Tailoring"},
@@ -132,7 +132,7 @@
 		{"subclass":10,"name":"Jewelcrafting"},
 		{"subclass":11,"name":"Inscription"}]},
 	
-	{"class":3,"name":"Gem","subclasses":[
+	{"class":3,"name":"Gem","menus":[
 		{"subclass":0,"name":"Red"},
 		{"subclass":1,"name":"Blue"},
 		{"subclass":2,"name":"Yellow"},
@@ -144,7 +144,7 @@
 		{"subclass":8,"name":"Prismatic"},
 		{"subclass":10,"name":"Cogwheel"}]},
 		
-	{"class":15,"name":"Miscellaneous","subclasses":[
+	{"class":15,"name":"Miscellaneous","menus":[
 		{"subclass":0,"name":"Junk"},
 		{"subclass":1,"name":"Reagent"},
 		{"subclass":2,"name":"Companion Pets"},
@@ -152,9 +152,9 @@
 		{"subclass":4,"name":"Other"},
 		{"subclass":5,"name":"Mount"}]},
 		
-	{"class":12,"name":"Quest","subclasses":[
+	{"class":12,"name":"Quest","menus":[
 		{"subclass":0,"name":"Quest"}]},
 		
-	{"class":17,"name":"Battle Pets","subclasses":[
+	{"class":17,"name":"Battle Pets","menus":[
 		{"subclass":0,"name":"BattlePet"}]}
                                              ]}
