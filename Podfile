@@ -3,6 +3,7 @@
 
 target 'AHParser' do
     pod 'AFNetworking', '2.5.4'
+    pod 'AsyncDisplayKit', '1.2.2'
 end
 
 target 'AHParserTests' do

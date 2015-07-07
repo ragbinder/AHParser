@@ -20,11 +20,16 @@ PODS:
   - AFNetworking/UIKit (2.5.4):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - AsyncDisplayKit (1.2.2):
+    - AsyncDisplayKit/ASDealloc2MainObject (= 1.2.2)
+  - AsyncDisplayKit/ASDealloc2MainObject (1.2.2)
 
 DEPENDENCIES:
   - AFNetworking (= 2.5.4)
+  - AsyncDisplayKit (= 1.2.2)
 
 SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
+  AsyncDisplayKit: 6b943f45844558fde1d82468820dbefcc77c7271
 
 COCOAPODS: 0.37.2
