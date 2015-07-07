@@ -285,16 +285,7 @@
 			children = (
 				E23407D01B4B4949000DC3C5 /* AHPRequestContext.h */,
 				E23407D11B4B4949000DC3C5 /* AHPRequestContext.m */,
-				8499E32617B9822D00E9FCC5 /* AHPAPIRequest.h */,
-				8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */,
-				8496F1AF17CC0E8A007C47D7 /* AHPItemAPIRequest.h */,
-				8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */,
-				84071B76183E6242005C644B /* AHPPetAPIRequest.h */,
-				84071B77183E6242005C644B /* AHPPetAPIRequest.m */,
-				8496F1B217CEB9D4007C47D7 /* AHPImageRequest.h */,
-				8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */,
-				845CA7B8180C9CB000E9E2F1 /* AHPRealmStatusRequest.h */,
-				845CA7B9180C9CB000E9E2F1 /* AHPRealmStatusRequest.m */,
+				E26A5E7F1B4C5273008EE6E1 /* Old API */,
 			);
 			name = "API Requests";
 			sourceTree = "<group>";
@@ -351,6 +342,23 @@
 				84071B71183CF442005C644B /* AHPCategoryCell.m */,
 			);
 			name = "Table Cells";
+			sourceTree = "<group>";
+		};
+		E26A5E7F1B4C5273008EE6E1 /* Old API */ = {
+			isa = PBXGroup;
+			children = (
+				8499E32617B9822D00E9FCC5 /* AHPAPIRequest.h */,
+				8499E32717B9822D00E9FCC5 /* AHPAPIRequest.m */,
+				8496F1AF17CC0E8A007C47D7 /* AHPItemAPIRequest.h */,
+				8496F1B017CC0E8A007C47D7 /* AHPItemAPIRequest.m */,
+				84071B76183E6242005C644B /* AHPPetAPIRequest.h */,
+				84071B77183E6242005C644B /* AHPPetAPIRequest.m */,
+				8496F1B217CEB9D4007C47D7 /* AHPImageRequest.h */,
+				8496F1B317CEB9D4007C47D7 /* AHPImageRequest.m */,
+				845CA7B8180C9CB000E9E2F1 /* AHPRealmStatusRequest.h */,
+				845CA7B9180C9CB000E9E2F1 /* AHPRealmStatusRequest.m */,
+			);
+			name = "Old API";
 			sourceTree = "<group>";
 		};
 		EE48A0E0A625F9892AA2587F /* Pods */ = {

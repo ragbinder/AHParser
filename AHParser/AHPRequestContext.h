@@ -9,15 +9,18 @@
 #import <Foundation/Foundation.h>
 #import <AFNetworking.h>
 
-#define GETAPIKEY [[[NSProcessInfo processInfo] environment] objectForKey:@"apiKey"]
+#define GETAPIKEY @"8garu7z6rtewtep4zabznubprejp6w67"
 
 @interface AHPRequestContext : AFHTTPSessionManager
 @property NSDictionary* parameters;
 
-typedef void (^auctionCompletion)(NSArray*);
-typedef void (^lastModifiedCompletion)(NSInteger);
-typedef void (^itemCompletion)(NSDictionary*);
-typedef void (^petCompletion)(NSDictionary*);
+typedef void (^realmCompletion)(NSArray* realms);
+typedef void (^auctionCompletion)(NSArray* auctions);
+typedef void (^lastModifiedCompletion)(NSInteger lastModified);
+typedef void (^itemCompletion)(NSDictionary* item);
+typedef void (^petCompletion)(NSDictionary* pet);
+typedef void (^imageCompletion)(NSData* image);
+typedef void (^failureBlock)(NSError* error);
 
 + (instancetype)contextWithBaseURL:(NSURL*)baseURL;
 
@@ -25,18 +28,22 @@ typedef void (^petCompletion)(NSDictionary*);
                             locale:(NSString*)localePath
                             apiKey:(NSString*)apiKey;
 
+- (void) realmsCompletion:(realmCompletion) completionBlock
+                  failure:(failureBlock) failureBlock;
+
 - (void) auctionsForSlug:(NSString*) slug
-              completion:(auctionCompletion) completionBlock;
+              completion:(auctionCompletion) completionBlock
+                 failure:(failureBlock) failureBlock;
 
 - (void) lastModifiedForSlug:(NSString*) slug
-                  completion:(lastModifiedCompletion) completionBlock;
+                  completion:(lastModifiedCompletion) completionBlock
+                     failure:(failureBlock) failureBlock;
 
 - (void) itemAPIRequest:(NSInteger) itemID
-             completion:(itemCompletion) completionBlock;
+             completion:(itemCompletion) completionBlock
+                failure:(failureBlock) failureBlock;
 
 - (void) petAPIRequest: (NSInteger) petID
-            completion:(petCompletion) completionBlock;
-
-- (void)imageRequestWithPath:(NSString *) path
-                  completion:(NSData*) completionBlock;
+            completion:(petCompletion) completionBlock
+               failure:(failureBlock) failureBlock;
 @end

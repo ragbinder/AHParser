@@ -106,7 +106,6 @@
         locale = @"en_US";
     }
     
-    NSString *apiKey = GETAPIKEY;
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://us.api.battle.net/wow/auction/data/%@?locale=%@&apikey=%@",slug,locale,GETAPIKEY]];
     NSError *error = nil;
     NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:url];
