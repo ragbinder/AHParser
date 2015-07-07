@@ -43,3 +43,5 @@ xcuserdata
 Carthage/Build
 
 AHParser/apiKey.plist
+
+.DS_Store
