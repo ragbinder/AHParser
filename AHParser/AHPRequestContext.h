@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <AFNetworking.h>
 
+#define GETAPIKEY [[[NSProcessInfo processInfo] environment] objectForKey:@"apiKey"]
+
 @interface AHPRequestContext : AFHTTPSessionManager
 @property NSDictionary* parameters;
 
@@ -17,8 +19,11 @@ typedef void (^lastModifiedCompletion)(NSInteger);
 typedef void (^itemCompletion)(NSDictionary*);
 typedef void (^petCompletion)(NSDictionary*);
 
-+ (instancetype)contextWithAPIKey:(NSString*) apiKey
-                       localePath:(NSString*) localePath;
++ (instancetype)contextWithBaseURL:(NSURL*)baseURL;
+
++ (instancetype)contextWithBaseURL:(NSURL*)baseURL
+                            locale:(NSString*)localePath
+                            apiKey:(NSString*)apiKey;
 
 - (void) auctionsForSlug:(NSString*) slug
               completion:(auctionCompletion) completionBlock;

@@ -7,15 +7,23 @@
 //
 
 #import "AHPRequestContext.h"
-#define BNETURL @"sldflasn"
+#define BNETURL @"https://us.api.battle.net/wow/auction/data/%@"
 
 @implementation AHPRequestContext
 @synthesize parameters;
 
-+ (instancetype)contextWithAPIKey:(NSString*) apiKey
-                       localePath:(NSString*) localePath
++ (instancetype)contextWithBaseURL:(NSURL*)baseURL
 {
-    AHPRequestContext *context = [[AHPRequestContext alloc] init];
+    AHPRequestContext *context = [[super alloc] initWithBaseURL:baseURL];
+    
+    return context;
+}
+
++ (instancetype)contextWithBaseURL:(NSURL*)baseURL
+                            locale:(NSString*)localePath
+                            apiKey:(NSString*)apiKey
+{
+    AHPRequestContext *context = [AHPRequestContext contextWithBaseURL:baseURL];
     [context setParameters: @{@"locale" : localePath,
                               @"apikey" : apiKey}];
     
@@ -25,10 +33,17 @@
 - (void) auctionsForSlug:(NSString*) slug
               completion:(auctionCompletion) completionBlock
 {
-//    [self GET:<#(NSString *)#>
-//   parameters:[self parameters]
-//      success:<#^(NSURLSessionDataTask *task, id responseObject)success#>
-//      failure:<#^(NSURLSessionDataTask *task, NSError *error)failure#>];
+    NSString *url = [NSString stringWithFormat:BNETURL,slug];
+    [self GET:url
+   parameters:parameters
+      success:^(NSURLSessionDataTask *task, id response)
+     {
+         completionBlock(response);
+     }
+      failure:^(NSURLSessionDataTask *task, NSError *error)
+     {
+         NSLog(@"Error: %@",error);
+     }];
 }
 
 - (void) lastModifiedForSlug:(NSString*) slug

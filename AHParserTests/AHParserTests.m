@@ -34,7 +34,6 @@
 */
 - (void)testAuctionAPI
 {
-    
     NSURL *auctionURL = [AHPAPIRequest auctionDumpURLForSlug:@"medivh"];
     XCTAssertNotNil(auctionURL);
     

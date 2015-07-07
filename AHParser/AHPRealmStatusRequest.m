@@ -7,6 +7,7 @@
 //
 
 #import "AHPRealmStatusRequest.h"
+#import "AHPRequestContext.h"
 
 @implementation AHPRealmStatusRequest
 
@@ -17,7 +18,7 @@
         locale = @"en_US";
     }
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://us.api.battle.net/wow/realm/status?locale=%@&apikey=8garu7z6rtewtep4zabznubprejp6w67",locale]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://us.api.battle.net/wow/realm/status?locale=%@&apikey=%@",locale,GETAPIKEY]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0];
     NSError *error = nil;
     NSURLResponse *urlResponse;

@@ -7,6 +7,7 @@
 //
 
 #import "AHPAPIRequest.h"
+#import "AHPRequestContext.h"
 
 @implementation AHPAPIRequest
 //@synthesize lastModified;
@@ -105,7 +106,8 @@
         locale = @"en_US";
     }
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://us.api.battle.net/wow/auction/data/%@?locale=%@&apikey=8garu7z6rtewtep4zabznubprejp6w67",slug,locale]];
+    NSString *apiKey = GETAPIKEY;
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://us.api.battle.net/wow/auction/data/%@?locale=%@&apikey=%@",slug,locale,GETAPIKEY]];
     NSError *error = nil;
     NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:url];
     NSHTTPURLResponse *urlResponse = [[NSHTTPURLResponse alloc] init];
@@ -147,7 +149,7 @@
         locale = @"us.api.battle.net";
     }
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://%@/wow/auction/data/%@?locale=en_US&apikey=8garu7z6rtewtep4zabznubprejp6w67",locale,slug]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://%@/wow/auction/data/%@?locale=en_US&apikey=%@",locale,slug,GETAPIKEY]];
     NSError *error = nil;
     NSURLRequest *auctionAPIRequest = [NSURLRequest requestWithURL:url];
     NSHTTPURLResponse *urlResponse = [[NSHTTPURLResponse alloc] init];
