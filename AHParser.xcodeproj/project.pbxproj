@@ -48,6 +48,12 @@
 		E23407D61B4B4F0A000DC3C5 /* AHPAsyncAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = E23407D51B4B4F0A000DC3C5 /* AHPAsyncAPITests.m */; };
 		E26A5E811B4C8889008EE6E1 /* apiKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = E26A5E801B4C8889008EE6E1 /* apiKey.plist */; };
 		E26A5E821B4C8889008EE6E1 /* apiKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = E26A5E801B4C8889008EE6E1 /* apiKey.plist */; };
+		E26A5E8F1B4D9920008EE6E1 /* AHPDataClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E26A5E8E1B4D9920008EE6E1 /* AHPDataClient.m */; };
+		E26A5E911B4D9F53008EE6E1 /* AHPDataClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E26A5E901B4D9F53008EE6E1 /* AHPDataClientTests.m */; };
+		E26A5E971B4DA8D0008EE6E1 /* AHPDataClient+Storage.m in Sources */ = {isa = PBXBuildFile; fileRef = E26A5E961B4DA8D0008EE6E1 /* AHPDataClient+Storage.m */; };
+		E26A5E981B4DA8D0008EE6E1 /* AHPDataClient+Storage.m in Sources */ = {isa = PBXBuildFile; fileRef = E26A5E961B4DA8D0008EE6E1 /* AHPDataClient+Storage.m */; };
+		E26A5E9A1B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m in Sources */ = {isa = PBXBuildFile; fileRef = E26A5E991B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m */; };
+		E26A5E9B1B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m in Sources */ = {isa = PBXBuildFile; fileRef = E26A5E991B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +131,11 @@
 		E23407D11B4B4949000DC3C5 /* AHPRequestContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPRequestContext.m; sourceTree = "<group>"; };
 		E23407D51B4B4F0A000DC3C5 /* AHPAsyncAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPAsyncAPITests.m; sourceTree = "<group>"; };
 		E26A5E801B4C8889008EE6E1 /* apiKey.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKey.plist; sourceTree = "<group>"; };
+		E26A5E8D1B4D9920008EE6E1 /* AHPDataClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHPDataClient.h; sourceTree = "<group>"; };
+		E26A5E8E1B4D9920008EE6E1 /* AHPDataClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPDataClient.m; sourceTree = "<group>"; };
+		E26A5E901B4D9F53008EE6E1 /* AHPDataClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPDataClientTests.m; sourceTree = "<group>"; };
+		E26A5E961B4DA8D0008EE6E1 /* AHPDataClient+Storage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AHPDataClient+Storage.m"; sourceTree = "<group>"; };
+		E26A5E991B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AHPDataClient+Retreival.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,6 +270,7 @@
 				84938768179F50DD001F80BF /* AHParserTests.h */,
 				84938769179F50DD001F80BF /* AHParserTests.m */,
 				E23407D51B4B4F0A000DC3C5 /* AHPAsyncAPITests.m */,
+				E26A5E901B4D9F53008EE6E1 /* AHPDataClientTests.m */,
 				84938763179F50DD001F80BF /* Supporting Files */,
 			);
 			path = AHParserTests;
@@ -287,6 +299,10 @@
 		8499E32517B981E200E9FCC5 /* API Requests */ = {
 			isa = PBXGroup;
 			children = (
+				E26A5E8D1B4D9920008EE6E1 /* AHPDataClient.h */,
+				E26A5E8E1B4D9920008EE6E1 /* AHPDataClient.m */,
+				E26A5E961B4DA8D0008EE6E1 /* AHPDataClient+Storage.m */,
+				E26A5E991B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m */,
 				E23407D01B4B4949000DC3C5 /* AHPRequestContext.h */,
 				E23407D11B4B4949000DC3C5 /* AHPRequestContext.m */,
 				E26A5E7F1B4C5273008EE6E1 /* Old API */,
@@ -563,9 +579,11 @@
 			files = (
 				8493873E179F50DB001F80BF /* main.m in Sources */,
 				84938742179F50DB001F80BF /* AHPAppDelegate.m in Sources */,
+				E26A5E971B4DA8D0008EE6E1 /* AHPDataClient+Storage.m in Sources */,
 				849470221893314F0039EEB7 /* AHPCustomCellBackground.m in Sources */,
 				84071B78183E6242005C644B /* AHPPetAPIRequest.m in Sources */,
 				8493874E179F50DB001F80BF /* AHParser.xcdatamodeld in Sources */,
+				E26A5E9A1B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m in Sources */,
 				84938754179F50DC001F80BF /* AHPDetailViewController.m in Sources */,
 				8499E32817B9822D00E9FCC5 /* AHPAPIRequest.m in Sources */,
 				84CA583517C414DD000C4DCF /* AHPMasterViewController.m in Sources */,
@@ -580,6 +598,7 @@
 				84BCA7AA1863513300224337 /* AHPSearchViewController.m in Sources */,
 				845CA7BD180CA06400E9E2F1 /* AHPRealmSelectViewController.m in Sources */,
 				84071B72183CF442005C644B /* AHPCategoryCell.m in Sources */,
+				E26A5E8F1B4D9920008EE6E1 /* AHPDataClient.m in Sources */,
 				84947025189694C00039EEB7 /* AHPCustomCategoryCellBackground.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -588,8 +607,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E26A5E981B4DA8D0008EE6E1 /* AHPDataClient+Storage.m in Sources */,
+				E26A5E9B1B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m in Sources */,
 				8493876A179F50DD001F80BF /* AHParserTests.m in Sources */,
 				E23407D61B4B4F0A000DC3C5 /* AHPAsyncAPITests.m in Sources */,
+				E26A5E911B4D9F53008EE6E1 /* AHPDataClientTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
