@@ -58,7 +58,7 @@ NSInteger const kDefaultTestTimeout = 15.0;
     [context getAuctionsForSlug:@"medivh"
                      completion:^(NSArray *array) {
                          XCTAssertFalse([NSThread isMainThread]);
-                         NSLog(@"%lu auctions found",[array count]);
+                         NSLog(@"%d auctions found",[array count]);
                          XCTAssertGreaterThan([array count], 0);
                          [expectation fulfill];
                      }
@@ -83,7 +83,7 @@ NSInteger const kDefaultTestTimeout = 15.0;
     [context getLastModifiedForSlug:@"medivh" completion:^(NSInteger lastModified) {
         XCTAssertGreaterThan(lastModified, 0);
         XCTAssertFalse([NSThread isMainThread]);
-        NSLog(@"Last Modified: %lu",lastModified);
+        NSLog(@"Last Modified: %lu",(long)lastModified);
         [expectation fulfill];
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
@@ -141,6 +141,73 @@ NSInteger const kDefaultTestTimeout = 15.0;
             NSLog(@"Timed out");
         }
     }];
+}
+
+- (void)testGetImageAsync
+{
+    AHPRequestContext *context = [AHPRequestContext contextWithBaseURL:nil];
+    XCTAssertNotNil(context);
+    
+    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"ability_mount_rocketmount" ofType:@"jpg"];
+    __block NSData *expectedResponse = [NSData dataWithContentsOfFile:filePath];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"image fetch"];
+    [context getImageForName:@"ability_mount_rocketmount"
+                        size:AHPImageSizeLarge
+                  completion:^(NSData *image) {
+                      XCTAssertNotNil(image);
+                      XCTAssertFalse([NSThread isMainThread]);
+                      XCTAssertTrue([image isEqualToData:expectedResponse]);
+                      [expectation fulfill];
+    }
+                     failure:^(NSError *error) {
+                         XCTFail(@"Error: %@",error);
+                     }];
+    
+    [self waitForExpectationsWithTimeout:kDefaultTestTimeout handler:^(NSError *error) {
+        if (error) {
+            NSLog(@"Timed out: %@",error);
+        }
+    }];
+}
+
+- (void)testImageSizes
+{
+    AHPRequestContext *context = [AHPRequestContext contextWithBaseURL:nil];
+    XCTAssertNotNil(context);
+    
+    NSUInteger MAX_CONCURRENT_REQUESTS = 64;
+    dispatch_semaphore_t sem = dispatch_semaphore_create(MAX_CONCURRENT_REQUESTS);
+    dispatch_group_t requestGroup = dispatch_group_create();
+    __block NSUInteger completedRequests = 0;
+    id syncToken;
+    
+    for (NSUInteger i = 1; i <= 200; i++) {
+        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+        dispatch_group_enter(requestGroup);
+        [context getImageForName:@"ability_mount_rocketmount"
+                            size:i
+                      completion:^(NSData *image) {
+                          NSLog(@"Image for size %lu",(unsigned long)i);
+                          @synchronized(syncToken)
+                          {
+                              completedRequests++;
+                          }
+                          dispatch_semaphore_signal(sem);
+                          dispatch_group_leave(requestGroup);
+                      } failure:^(NSError *error) {
+//                          NSLog(@"No Image for Size: %lu",(unsigned long)i);
+                          @synchronized(syncToken)
+                          {
+                              completedRequests++;
+                          }
+                          dispatch_semaphore_signal(sem);
+                          dispatch_group_leave(requestGroup);
+                      }];
+    }
+    
+    dispatch_group_wait(requestGroup, DISPATCH_TIME_FOREVER);
+    XCTAssertEqual(completedRequests, 200);
 }
 
 @end

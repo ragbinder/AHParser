@@ -19,8 +19,14 @@ typedef void (^auctionCompletion)(NSArray* auctions);
 typedef void (^lastModifiedCompletion)(NSInteger lastModified);
 typedef void (^itemCompletion)(NSDictionary* item);
 typedef void (^petCompletion)(NSDictionary* pet);
-//typedef void (^imageCompletion)(NSData* image);
+typedef void (^imageCompletion)(NSData* image);
 typedef void (^failureBlock)(NSError* error);
+
+typedef NS_ENUM(NSUInteger, AHPImageSize) {
+    AHPImageSizeSmall = 18,
+    AHPImageSizeMedium = 38,
+    AHPImageSizeLarge = 56
+};
 
 + (instancetype)contextWithBaseURL:(NSURL*) baseURL;
 
@@ -45,4 +51,9 @@ typedef void (^failureBlock)(NSError* error);
 - (void) getPetForId: (NSInteger) petID
           completion:(petCompletion) completionBlock
              failure:(failureBlock) failureBlock;
+
+- (void) getImageForName:(NSString*) name
+                    size:(NSUInteger) size
+              completion:(imageCompletion) completionBlock
+                 failure:(failureBlock) failureBlock;
 @end

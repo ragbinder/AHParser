@@ -51,6 +51,7 @@
     
     NSSet *connectedRealms = [AHPDataClient createConnectedRealms:testRealms];
     
+    XCTAssertEqual([testRealms count], 246);
     XCTAssertEqual([connectedRealms count], 120); //There are currently 120 connected realm groups
 }
 

@@ -54,6 +54,7 @@
 		E26A5E981B4DA8D0008EE6E1 /* AHPDataClient+Storage.m in Sources */ = {isa = PBXBuildFile; fileRef = E26A5E961B4DA8D0008EE6E1 /* AHPDataClient+Storage.m */; };
 		E26A5E9A1B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m in Sources */ = {isa = PBXBuildFile; fileRef = E26A5E991B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m */; };
 		E26A5E9B1B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m in Sources */ = {isa = PBXBuildFile; fileRef = E26A5E991B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m */; };
+		E2F645031B4EED1A0022B733 /* ability_mount_rocketmount.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E2F645021B4EED1A0022B733 /* ability_mount_rocketmount.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,6 +137,7 @@
 		E26A5E901B4D9F53008EE6E1 /* AHPDataClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHPDataClientTests.m; sourceTree = "<group>"; };
 		E26A5E961B4DA8D0008EE6E1 /* AHPDataClient+Storage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AHPDataClient+Storage.m"; sourceTree = "<group>"; };
 		E26A5E991B4DA8EC008EE6E1 /* AHPDataClient+Retreival.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AHPDataClient+Retreival.m"; sourceTree = "<group>"; };
+		E2F645021B4EED1A0022B733 /* ability_mount_rocketmount.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ability_mount_rocketmount.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,6 +281,7 @@
 		84938763179F50DD001F80BF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E2F645021B4EED1A0022B733 /* ability_mount_rocketmount.jpg */,
 				84938764179F50DD001F80BF /* AHParserTests-Info.plist */,
 				84938765179F50DD001F80BF /* InfoPlist.strings */,
 			);
@@ -490,6 +493,7 @@
 			files = (
 				E26A5E821B4C8889008EE6E1 /* apiKey.plist in Resources */,
 				84938767179F50DD001F80BF /* InfoPlist.strings in Resources */,
+				E2F645031B4EED1A0022B733 /* ability_mount_rocketmount.jpg in Resources */,
 				07DE46CC17A45AE2001251F4 /* World-Of-Warcraft-Logo.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,6 +11,7 @@
 //Core data will be used to cache all other data retreived from the battle.net api
 
 #import <Foundation/Foundation.h>
+#import "AHPRequestContext.h" //For image size typedef
 
 @interface AHPDataClient : NSObject
 
@@ -31,8 +32,7 @@
 //If false is returned, the error will be populated.
 //Auctions, realm lists, items, and pets will all be stored in the managedObjectContext belonging to sharedClient.
 //Images will all be stored in the filesystem under "Documents/Images/<size>/<name>".
-//Valid image sizes are 56, 72, ???
-#warning TODO: find all valid image sizes and create typedef per device.
+//Valid image sizes are 18,36, and 56, as typedef'd in AHPRequestContext.h
 - (BOOL) cacheAuction:(NSDictionary*) auction error:(NSError*)error;
 - (BOOL) cacheRealmList:(NSArray*) realmList error:(NSError*)error;
 - (BOOL) cacheItem:(NSDictionary*) item forId:(NSInteger) itemId error:(NSError*)error;
@@ -49,7 +49,6 @@
 - (NSDictionary*) getItemForId:(NSInteger) itemId;
 - (NSDictionary*) getPetForId:(NSInteger) petId;
 - (UIImage*) getImageForName:(NSString*) imageName;
-#warning TODO: replace NSInteger with typedef
 - (UIImage*) getImageForName:(NSString*) imageName
-                        size:(NSInteger) size;
+                        size:(AHPImageSize) size;
 @end

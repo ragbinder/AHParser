@@ -12,7 +12,7 @@ NSString *const kRealmUrl = @"https://us.api.battle.net/wow/realm/status";
 NSString *const kAuctionUrl = @"https://us.api.battle.net/wow/auction/data/%@";
 NSString *const kItemUrl = @"https://us.api.battle.net/wow/item/%lu";
 NSString *const kPetUrl = @"https://us.api.battle.net/wow/battlePet/species/%lu";
-//NSString *const kImageUrl = @"http://us.media.blizzard.com/wow/icons/56/%@.jpg";
+NSString *const kImageUrl = @"http://us.media.blizzard.com/wow/icons/%lu/%@.jpg";
 #define FAIL ^(AFHTTPRequestOperation *operation, NSError *error) {failureBlock(error);}
 
 @implementation AHPRequestContext
@@ -21,8 +21,6 @@ NSString *const kPetUrl = @"https://us.api.battle.net/wow/battlePet/species/%lu"
 + (instancetype)contextWithBaseURL:(NSURL*) baseURL
 {
     AHPRequestContext *context = [[super alloc] init];
-    AFHTTPResponseSerializer *serializer = [AFHTTPResponseSerializer serializer];
-    serializer.acceptableContentTypes = [serializer.acceptableContentTypes setByAddingObject:@"image/jpeg"];
     
     return context;
 }
@@ -89,15 +87,6 @@ NSString *const kPetUrl = @"https://us.api.battle.net/wow/battlePet/species/%lu"
     } failure:FAIL];
     
     [operation start];
-    
-//    ^(NSURLSessionDataTask *task, id response)
-//     {
-//         NSArray *filesArray = [response valueForKey:@"files"];
-//         NSString *auctionURL = filesArray[0][@"url"];
-//         [self GET:auctionURL parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-//             completionBlock(responseObject[@"auctions"][@"auctions"]);
-//         } failure:FAIL];
-//     } failure:FAIL];
 }
 
 - (void) getLastModifiedForSlug:(NSString*) slug
@@ -148,6 +137,26 @@ NSString *const kPetUrl = @"https://us.api.battle.net/wow/battlePet/species/%lu"
     [request setHTTPMethod:@"GET"];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     [operation setResponseSerializer:[AFJSONResponseSerializer serializer]];
+    [operation setCompletionQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        completionBlock(responseObject);
+    } failure:FAIL];
+    
+    [operation start];
+}
+
+- (void) getImageForName:(NSString *)name
+                    size:(NSUInteger)size
+              completion:(imageCompletion)completionBlock
+                 failure:(failureBlock)failureBlock
+{
+    NSString *requestString = [NSString stringWithFormat:kImageUrl,(unsigned long)size,name];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    AFHTTPResponseSerializer *serializer = [AFHTTPResponseSerializer serializer];
+//    serializer.acceptableContentTypes = [NSSet setWithObjects:@"image/jpeg",@"image/jpg",nil];
+    [operation setResponseSerializer:serializer];
     [operation setCompletionQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
