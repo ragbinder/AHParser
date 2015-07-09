@@ -150,6 +150,7 @@ NSInteger const kDefaultTestTimeout = 15.0;
     }];
 }
 
+//Exploratory test to see which image sizes the battle.net media server has
 - (void)testImageSizes
 {
     NSUInteger MAX_CONCURRENT_REQUESTS = 64;
@@ -159,8 +160,8 @@ NSInteger const kDefaultTestTimeout = 15.0;
     id syncToken;
     
     for (NSUInteger i = 1; i <= 200; i++) {
-        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-        dispatch_group_enter(requestGroup);
+        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER); //Makes sure we don't send more than 64 requests at once
+        dispatch_group_enter(requestGroup); //Makes sure that we wait for all requests to complete before finishing the test.
         [_context getImageForName:@"ability_mount_rocketmount"
                             size:i
                       completion:^(NSData *image) {

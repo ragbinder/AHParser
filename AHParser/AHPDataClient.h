@@ -41,10 +41,11 @@
 @end
 
 @interface AHPDataClient (Retreival)
-//Caching logic will not be handled here?
+//Caching logic will not be handled here. This interface defines interactions with persistent storage.
 - (NSArray*) getAuctionsForGroup:(NSSet*) connectedRealms;
 - (NSArray*) getAuctionsForGroup:(NSSet*) connectedRealms
                    withPredicate:(NSPredicate*) searchPredicate;
+- (NSInteger) getLastModifiedForGroup:(NSSet*) connectedRealms;
 - (NSArray*) getRealms;
 - (NSDictionary*) getItemForId:(NSInteger) itemId;
 - (NSDictionary*) getPetForId:(NSInteger) petId;

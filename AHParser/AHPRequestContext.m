@@ -147,7 +147,7 @@ NSString *const kImageUrl = @"http://us.media.blizzard.com/wow/icons/%lu/%@.jpg"
 }
 
 - (void) getImageForName:(NSString *)name
-                    size:(NSUInteger)size
+                    size:(AHPImageSize)size
               completion:(imageCompletion)completionBlock
                  failure:(failureBlock)failureBlock
 {

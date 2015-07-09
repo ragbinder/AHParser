@@ -22,6 +22,11 @@
     return nil;
 }
 
+- (NSInteger) getLastModifiedForGroup:(NSSet *)connectedRealms
+{
+    return 0;
+}
+
 - (NSArray*) getRealms
 {
     return nil;
@@ -43,7 +48,7 @@
 }
 
 - (UIImage*) getImageForName:(NSString*) imageName
-                        size:(NSInteger) size
+                        size:(AHPImageSize) size
 {
     return nil;
 }

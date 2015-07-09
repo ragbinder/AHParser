@@ -53,7 +53,7 @@ typedef NS_ENUM(NSUInteger, AHPImageSize) {
              failure:(failureBlock) failureBlock;
 
 - (void) getImageForName:(NSString*) name
-                    size:(NSUInteger) size
+                    size:(AHPImageSize) size
               completion:(imageCompletion) completionBlock
                  failure:(failureBlock) failureBlock;
 @end
