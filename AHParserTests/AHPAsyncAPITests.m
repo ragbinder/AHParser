@@ -13,7 +13,7 @@
 NSInteger const kDefaultTestTimeout = 15.0;
 
 @interface AHPAsyncAPITests : XCTestCase
-
+@property AHPRequestContext *context;
 @end
 
 @implementation AHPAsyncAPITests
@@ -21,6 +21,8 @@ NSInteger const kDefaultTestTimeout = 15.0;
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    _context = [AHPRequestContext contextWithBaseURL:nil locale:@"en_US"];
+    XCTAssertNotNil(_context);
 }
 
 - (void)tearDown {
@@ -29,12 +31,8 @@ NSInteger const kDefaultTestTimeout = 15.0;
 }
 
 - (void)testGetRealmsAsync {
-    AHPRequestContext *context = [AHPRequestContext contextWithBaseURL:[NSURL URLWithString:@"https://us.api.battle.net/wow/auction/data/"]
-                                                                locale:@"en_US"];
-    XCTAssertNotNil(context);
-    
     XCTestExpectation *expectation = [self expectationWithDescription:@"realms API CALL"];
-    [context getRealmsCompletion:^(NSArray *realms) {
+    [_context getRealmsCompletion:^(NSArray *realms) {
         XCTAssertFalse([NSThread isMainThread]);
         XCTAssertGreaterThan([realms count], 0);
         [expectation fulfill];
@@ -50,12 +48,8 @@ NSInteger const kDefaultTestTimeout = 15.0;
 }
 
 - (void)testGetAuctionsAsync {
-    AHPRequestContext *context = [AHPRequestContext contextWithBaseURL:[NSURL URLWithString:@"https://us.api.battle.net/wow/auction/data/"]
-                                                                locale:@"en_US"];
-    XCTAssertNotNil(context);
-    
     XCTestExpectation *expectation = [self expectationWithDescription:@"auctions API CALL"];
-    [context getAuctionsForSlug:@"medivh"
+    [_context getAuctionsForSlug:@"medivh"
                      completion:^(NSArray *array) {
                          XCTAssertFalse([NSThread isMainThread]);
                          NSLog(@"%d auctions found",[array count]);
@@ -75,12 +69,8 @@ NSInteger const kDefaultTestTimeout = 15.0;
 
 - (void)testGetLastModifiedAsync
 {
-    AHPRequestContext *context = [AHPRequestContext contextWithBaseURL:[NSURL URLWithString:@"https://us.api.battle.net/wow/auction/data/"]
-                                                                locale:@"en_US"];
-    XCTAssertNotNil(context);
-    
     XCTestExpectation *expectation = [self expectationWithDescription:@"lastmodified API CALL"];
-    [context getLastModifiedForSlug:@"medivh" completion:^(NSInteger lastModified) {
+    [_context getLastModifiedForSlug:@"medivh" completion:^(NSInteger lastModified) {
         XCTAssertGreaterThan(lastModified, 0);
         XCTAssertFalse([NSThread isMainThread]);
         NSLog(@"Last Modified: %lu",(long)lastModified);
@@ -98,12 +88,8 @@ NSInteger const kDefaultTestTimeout = 15.0;
 
 - (void)testGetItemAsync
 {
-    AHPRequestContext *context = [AHPRequestContext contextWithBaseURL:[NSURL URLWithString:@"https://us.api.battle.net/wow/auction/data/"]
-                                                                locale:@"en_US"];
-    XCTAssertNotNil(context);
-    
     XCTestExpectation *expectation = [self expectationWithDescription:@"item API CALL"];
-    [context getItemForId:18803
+    [_context getItemForId:18803
                completion:^(NSDictionary *item) {
                    XCTAssertEqual([item[@"id"] integerValue], 18803);
                    XCTAssertFalse([NSThread isMainThread]);
@@ -122,12 +108,8 @@ NSInteger const kDefaultTestTimeout = 15.0;
 
 - (void)testGetPetAsync
 {
-    AHPRequestContext *context = [AHPRequestContext contextWithBaseURL:[NSURL URLWithString:@"https://us.api.battle.net/wow/auction/data/"]
-                                                                locale:@"en_US"];
-    XCTAssertNotNil(context);
-    
     XCTestExpectation *expectation = [self expectationWithDescription:@"pet API CALL"];
-    [context getPetForId:258
+    [_context getPetForId:258
               completion:^(NSDictionary *pet) {
                   XCTAssertEqual([pet[@"speciesId"] intValue], 258);
                   XCTAssertFalse([NSThread isMainThread]);
@@ -145,14 +127,11 @@ NSInteger const kDefaultTestTimeout = 15.0;
 
 - (void)testGetImageAsync
 {
-    AHPRequestContext *context = [AHPRequestContext contextWithBaseURL:nil];
-    XCTAssertNotNil(context);
-    
     NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"ability_mount_rocketmount" ofType:@"jpg"];
     __block NSData *expectedResponse = [NSData dataWithContentsOfFile:filePath];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"image fetch"];
-    [context getImageForName:@"ability_mount_rocketmount"
+    [_context getImageForName:@"ability_mount_rocketmount"
                         size:AHPImageSizeLarge
                   completion:^(NSData *image) {
                       XCTAssertNotNil(image);
@@ -173,9 +152,6 @@ NSInteger const kDefaultTestTimeout = 15.0;
 
 - (void)testImageSizes
 {
-    AHPRequestContext *context = [AHPRequestContext contextWithBaseURL:nil];
-    XCTAssertNotNil(context);
-    
     NSUInteger MAX_CONCURRENT_REQUESTS = 64;
     dispatch_semaphore_t sem = dispatch_semaphore_create(MAX_CONCURRENT_REQUESTS);
     dispatch_group_t requestGroup = dispatch_group_create();
@@ -185,7 +161,7 @@ NSInteger const kDefaultTestTimeout = 15.0;
     for (NSUInteger i = 1; i <= 200; i++) {
         dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
         dispatch_group_enter(requestGroup);
-        [context getImageForName:@"ability_mount_rocketmount"
+        [_context getImageForName:@"ability_mount_rocketmount"
                             size:i
                       completion:^(NSData *image) {
                           NSLog(@"Image for size %lu",(unsigned long)i);
