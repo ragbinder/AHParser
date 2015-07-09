@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "AHPDataClient.h"
+#import "AHPRequestContext.h"
 
 @interface AHPDataClientTests : XCTestCase
-
+@property AHPRequestContext *context;
 @end
 
 @implementation AHPDataClientTests
@@ -19,6 +20,7 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    _context = [AHPRequestContext contextWithBaseURL:nil locale:@"en_US"];
 }
 
 - (void)tearDown {
@@ -34,12 +36,23 @@
 }
 
 - (void)testCreateRealmsList {
-    NSArray *realms;
+    __block NSArray *testRealms = nil;
+    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     
-    NSArray *connectedRealms = [AHPDataClient createConnectedRealms:realms];
+    [_context getRealmsCompletion:^(NSArray *realms) {
+        testRealms = realms;
+        dispatch_semaphore_signal(sem);
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+        dispatch_semaphore_signal(sem);
+    }];
+    
+//    dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW, 1000000000));
+    [NSThread sleepForTimeInterval:5];
+    
+    NSSet *connectedRealms = [AHPDataClient createConnectedRealms:testRealms];
     
     XCTAssertEqual([connectedRealms count], 16); //There should be 16 connected realm groups, with 3 realms each in the test data.
-    XCTFail(@"NYI");
 }
 
 #pragma mark - File Storage Tests

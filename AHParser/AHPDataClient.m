@@ -14,16 +14,23 @@
 + (instancetype) sharedClient
 {
     static dispatch_once_t onceToken;
-    static AHPDataClient *sharedClient;
+    static AHPDataClient *sharedClient = nil;
     dispatch_once(&onceToken, ^{
         sharedClient = [[AHPDataClient alloc] init];
     });
     return sharedClient;
 }
 
-+ (NSArray*) createConnectedRealms:(NSArray *)realms
++ (NSSet*) createConnectedRealms:(NSArray *)realms
 {
-    return nil;
+    NSMutableSet *connectedRealms = [[NSMutableSet alloc] init];
+    
+    [realms enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSSet *connectedRealmsForRealm = [NSSet setWithArray:[obj valueForKey:@"connected_realms"]];
+        [connectedRealms addObject:connectedRealmsForRealm];
+    }];
+    
+    return connectedRealms;
 }
 
 @end

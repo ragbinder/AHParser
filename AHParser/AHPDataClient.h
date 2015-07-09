@@ -22,8 +22,8 @@
 //Most of the WoW realms have linked auction houses with several other realms. These groupings are called Connected Realms
 //Since connected realms will have identical auction listings, we should cache auction lists for entire realm groups.
 //Parameter: realms should be the output of [AHPRequestContext getRealmsCompletion:failure:]
-//Returns an NSArray* containing NSSets of connected realms.
-+ (NSArray*) createConnectedRealms:(NSArray*) realms;
+//Returns an NSSet* containing NSSets of connected realms.
++ (NSSet*) createConnectedRealms:(NSArray*) realms;
 @end
 
 @interface AHPDataClient (Storage)

@@ -11,7 +11,7 @@
 
 #define GETAPIKEY @""
 
-@interface AHPRequestContext : AFHTTPSessionManager
+@interface AHPRequestContext : NSObject
 @property NSDictionary* parameters;
 
 typedef void (^realmCompletion)(NSArray* realms);

@@ -35,6 +35,7 @@ NSInteger const kDefaultTestTimeout = 15.0;
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"realms API CALL"];
     [context getRealmsCompletion:^(NSArray *realms) {
+        XCTAssertFalse([NSThread isMainThread]);
         XCTAssertGreaterThan([realms count], 0);
         [expectation fulfill];
     } failure:^(NSError *error) {
@@ -43,7 +44,7 @@ NSInteger const kDefaultTestTimeout = 15.0;
     
     [self waitForExpectationsWithTimeout:kDefaultTestTimeout handler:^(NSError *error) {
         if (error) {
-            NSLog(@"Timed out");
+            NSLog(@"Timed out: %@",error);
         }
     }];
 }
@@ -56,6 +57,7 @@ NSInteger const kDefaultTestTimeout = 15.0;
     XCTestExpectation *expectation = [self expectationWithDescription:@"auctions API CALL"];
     [context getAuctionsForSlug:@"medivh"
                      completion:^(NSArray *array) {
+                         XCTAssertFalse([NSThread isMainThread]);
                          NSLog(@"%lu auctions found",[array count]);
                          XCTAssertGreaterThan([array count], 0);
                          [expectation fulfill];
@@ -80,6 +82,7 @@ NSInteger const kDefaultTestTimeout = 15.0;
     XCTestExpectation *expectation = [self expectationWithDescription:@"lastmodified API CALL"];
     [context getLastModifiedForSlug:@"medivh" completion:^(NSInteger lastModified) {
         XCTAssertGreaterThan(lastModified, 0);
+        XCTAssertFalse([NSThread isMainThread]);
         NSLog(@"Last Modified: %lu",lastModified);
         [expectation fulfill];
     } failure:^(NSError *error) {
@@ -103,6 +106,7 @@ NSInteger const kDefaultTestTimeout = 15.0;
     [context getItemForId:18803
                completion:^(NSDictionary *item) {
                    XCTAssertEqual([item[@"id"] integerValue], 18803);
+                   XCTAssertFalse([NSThread isMainThread]);
                    [expectation fulfill];
                }
                   failure:^(NSError *error) {
@@ -126,6 +130,7 @@ NSInteger const kDefaultTestTimeout = 15.0;
     [context getPetForId:258
               completion:^(NSDictionary *pet) {
                   XCTAssertEqual([pet[@"speciesId"] intValue], 258);
+                  XCTAssertFalse([NSThread isMainThread]);
                   [expectation fulfill];
               } failure:^(NSError *error) {
                   NSLog(@"%@",error);
