@@ -47,12 +47,11 @@
         dispatch_semaphore_signal(sem);
     }];
     
-//    dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW, 1000000000));
-    [NSThread sleepForTimeInterval:5];
+    dispatch_semaphore_wait(sem,DISPATCH_TIME_FOREVER);
     
     NSSet *connectedRealms = [AHPDataClient createConnectedRealms:testRealms];
     
-    XCTAssertEqual([connectedRealms count], 16); //There should be 16 connected realm groups, with 3 realms each in the test data.
+    XCTAssertEqual([connectedRealms count], 120); //There are currently 120 connected realm groups
 }
 
 #pragma mark - File Storage Tests
